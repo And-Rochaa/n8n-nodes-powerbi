@@ -1,8 +1,12 @@
-![Power BI Logo](https://sdmntprsouthcentralus.oaiusercontent.com/files/00000000-dcc0-61f7-b9c3-60887e232c88/raw?se=2025-05-09T19%3A08%3A26Z&sp=r&sv=2024-08-04&sr=b&scid=00000000-0000-0000-0000-000000000000&skoid=c953efd6-2ae8-41b4-a6d6-34b1475ac07c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-05-08T21%3A01%3A16Z&ske=2025-05-09T21%3A01%3A16Z&sks=b&skv=2024-08-04&sig=SlrhWF2RQBVQ3N6vEPrLcXjnz7gy2I2Mag516PLgYX0%3D)
+![Power BI Logo](https://uploaddeimagens.com.br/images/004/897/873/original/Integra%C3%A7%C3%A3o_n8n_e_Power_BI.png)
 
 # n8n-nodes-powerbi
 
 Este pacote contém nodes para o n8n que permitem integração completa com as APIs REST do Microsoft Power BI. Estes nodes possibilitam automação, integração e orquestração de fluxos de dados com o Power BI diretamente no n8n.
+
+## Sobre o Autor
+
+Este Community Nodes foi criado e disponibilizado gratuitamente por Anderson Rocha do Universo Automático para a comunidade e foi pensado para simplificar e abstrair toda a complexidade de utilizaçao das Apis do Power BI.
 
 ## Índice
 
@@ -69,21 +73,17 @@ Ambos os nodes podem ser usados como ferramentas de IA no n8n AI Assistant, perm
 - **Listar Relatórios**: Recupera todos os relatórios em um workspace
 - **Obter Relatório**: Recupera detalhes de um relatório específico
 - **Obter Páginas**: Lista páginas em um relatório
-- **Exportar para PDF**: Exporta um relatório para formato PDF
+- **Exportar Arquivo**: Exporta um relatório em diversos formatos
 
 ## Métodos de Autenticação
 
 Este node suporta três métodos de autenticação:
 
 1. **OAuth2**: Para aplicativos que atuam em nome de um usuário por meio de fluxo interativo.
-2. **Service Principal**: Para aplicativos que atuam sem interação do usuário, ideal para automações agendadas.
-3. **ROPC** (Resource Owner Password Credentials): Para automação com credenciais de usuário diretas.
 
 ### Renovação de Tokens
 
-Este node utiliza o mecanismo padrão de renovação de tokens do n8n. Anteriormente, implementávamos um sistema personalizado para converter erros 403 em 401, mas isso foi removido pois o n8n agora captura os erros de autenticação de forma mais eficiente.
-
-Para mais detalhes sobre o histórico e as mudanças, consulte a [documentação sobre renovação de tokens](./docs/TOKEN_REFRESH.md).
+É importante observar que as credenciais do Power BI geralmente expiram em torno de 1 hora a 1 hora e 30 minutos. O n8n atualiza os tokens dos serviços somente quando ocorre um erro 401 ao expirar o token, porém o Power BI por padrão retorna o erro 403. A credencial será mantida assim que o n8n incluir esse status de erro 403 em suas tratativas de autenticação.
 
 ### Integração com Ferramentas de IA
 
@@ -92,39 +92,6 @@ Os nodes Power BI e Power BI (Header Auth) foram configurados como ferramentas d
 1. Sejam facilmente acessados pelo assistente de IA do n8n
 2. Possam ser usados em automações orientadas por linguagem natural
 3. Apareçam na paleta de ferramentas de IA no editor de fluxos
-
-Para mais detalhes sobre a implementação, consulte a [documentação sobre nodes usáveis como ferramentas de IA](./docs/USABLE_AS_TOOL.md).
-
-## Prerequisites
-
-You need the following installed on your development machine:
-
-* [git](https://git-scm.com/downloads)
-* Node.js and pnpm. Minimum version Node 18. You can find instructions on how to install both using nvm (Node Version Manager) for Linux, Mac, and WSL [here](https://github.com/nvm-sh/nvm). For Windows users, refer to Microsoft's guide to [Install NodeJS on Windows](https://docs.microsoft.com/en-us/windows/dev-environment/javascript/nodejs-on-windows).
-* Install n8n with:
-  ```
-  pnpm install n8n -g
-  ```
-* Recommended: follow n8n's guide to [set up your development environment](https://docs.n8n.io/integrations/creating-nodes/build/node-development-environment/).
-
-## Using this starter
-
-These are the basic steps for working with the starter. For detailed guidance on creating and publishing nodes, refer to the [documentation](https://docs.n8n.io/integrations/creating-nodes/).
-
-1. [Generate a new repository](https://github.com/n8n-io/n8n-nodes-starter/generate) from this template repository.
-2. Clone your new repo:
-   ```
-   git clone https://github.com/<your organization>/<your-repo-name>.git
-   ```
-3. Run `pnpm i` to install dependencies.
-4. Open the project in your editor.
-5. Browse the examples in `/nodes` and `/credentials`. Modify the examples, or replace them with your own nodes.
-6. Update the `package.json` to match your details.
-7. Run `pnpm lint` to check for errors or `pnpm lintfix` to automatically fix errors when possible.
-8. Test your node locally. Refer to [Run your node locally](https://docs.n8n.io/integrations/creating-nodes/test/run-node-locally/) for guidance.
-9. Replace this README with documentation for your node. Use the [README_TEMPLATE](README_TEMPLATE.md) to get started.
-10. Update the LICENSE file to use your details.
-11. [Publish](https://docs.npmjs.com/packages-and-modules/contributing-packages-to-the-registry) your package to npm.
 
 ## Configurando o Aplicativo no Microsoft Entra ID (Azure AD)
 
@@ -237,6 +204,10 @@ Anote os seguintes valores que serão necessários para configurar o node no n8n
 3. **Erro ao atualizar datasets**:
    - Certifique-se de que o dataset permite atualizações via API
    - Verifique se as credenciais das fontes de dados estão atualizadas no dataset
+
+### Redes Sociais
+- YouTube: [https://www.youtube.com/@universoautomatico](https://www.youtube.com/@universoautomatico)
+- Instagram: [https://www.instagram.com/universoautomatico/](https://www.instagram.com/universoautomatico/)
 
 ## Recursos Adicionais
 
