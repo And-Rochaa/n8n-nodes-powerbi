@@ -20,7 +20,7 @@ import {
 } from './GenericFunctions';
 
 // Import resources
-import { resources } from './resources';
+import * as resources from './resources';
 
 export class PowerBIHeaderAuth implements INodeType {
 	
@@ -1530,22 +1530,6 @@ export class PowerBIHeaderAuth implements INodeType {
 			},
 		},
 	};
-
-	constructor() {
-		// @ts-ignore
-		this.description.usableAsTool = true;
-		
-		// @ts-ignore
-		this.description.displayName = 'Power BI Header Auth';
-		
-		// @ts-ignore
-		this.description.codex = {
-			categories: ['Power BI'],
-			subcategories: {
-				'Power BI': ['Authentication', 'API'],
-			},
-		};
-	}
 
 	async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
 		const items = this.getInputData();

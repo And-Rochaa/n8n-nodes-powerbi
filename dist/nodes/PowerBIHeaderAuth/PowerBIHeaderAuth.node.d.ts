@@ -1,0 +1,16 @@
+import { IExecuteFunctions, ILoadOptionsFunctions, INodeExecutionData, INodeType, INodeTypeDescription } from 'n8n-workflow';
+export declare class PowerBIHeaderAuth implements INodeType {
+    description: INodeTypeDescription;
+    methods: {
+        loadOptions: {
+            getGroups(this: ILoadOptionsFunctions): Promise<any>;
+            getGroupsMultiSelect(this: ILoadOptionsFunctions): Promise<any>;
+            getDashboards(this: ILoadOptionsFunctions): Promise<any>;
+            getDatasets(this: ILoadOptionsFunctions): Promise<any>;
+            getTables(this: ILoadOptionsFunctions): Promise<any>;
+            getReports(this: ILoadOptionsFunctions): Promise<any>;
+        };
+    };
+    constructor();
+    execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]>;
+}
