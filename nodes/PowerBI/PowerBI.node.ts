@@ -285,15 +285,14 @@ export class PowerBI implements INodeType {	description: INodeTypeDescription = 
 		
 		// @ts-ignore
 		this.description.displayName = 'Power BI';
-		
-		// @ts-ignore
+				// @ts-ignore
 		this.description.codex = {
 			categories: ['Power BI'],
 			subcategories: {
 				'Power BI': ['Dashboards', 'Reports', 'Datasets']
 			},
 			// Nome simplificado para uso com AI (array de strings)
-			alias: ['powerbi_api', 'powerbi']
+			alias: ['powerbi']
 		};
 		
 		// Se necessário, adicione outras propriedades exigidas para tools

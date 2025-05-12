@@ -1,5 +1,6 @@
-{  "name": "n8n-nodes-powerbi",
-  "version": "0.3.1",
+{
+  "name": "n8n-nodes-powerbi",
+  "version": "1.1.0",
   "description": "n8n nodes for integration with Power BI APIs",
   "keywords": [
     "n8n",

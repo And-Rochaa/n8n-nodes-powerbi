@@ -239,7 +239,7 @@ class PowerBI {
             subcategories: {
                 'Power BI': ['Dashboards', 'Reports', 'Datasets']
             },
-            alias: ['powerbi_api', 'powerbi']
+            alias: ['powerbi']
         };
         if (!this.description.triggerPanel) {
             Object.defineProperty(this.description, 'triggerPanel', {

@@ -675,8 +675,7 @@ export class PowerBIHeaderAuth implements INodeType {
 			...reportOperations,
 			...reportFields,
 		],	};
-	
-	constructor() {
+		constructor() {
 		// @ts-ignore
 		this.description.usableAsTool = true;
 		// @ts-ignore
@@ -690,6 +689,16 @@ export class PowerBIHeaderAuth implements INodeType {
 			// Nome simplificado para uso com AI (array de strings)
 			alias: ['powerbi_header_auth', 'powerbi_token']
 		};
+		
+		// Se necessário, adicione outras propriedades exigidas para tools
+		// @ts-ignore
+		if (!this.description.triggerPanel) {
+			// @ts-ignore
+			Object.defineProperty(this.description, 'triggerPanel', {
+				value: {},
+				configurable: true
+			});
+		}
 	}
 
 	methods = {

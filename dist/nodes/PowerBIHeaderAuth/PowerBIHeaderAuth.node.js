@@ -752,6 +752,12 @@ class PowerBIHeaderAuth {
             },
             alias: ['powerbi_header_auth', 'powerbi_token']
         };
+        if (!this.description.triggerPanel) {
+            Object.defineProperty(this.description, 'triggerPanel', {
+                value: {},
+                configurable: true
+            });
+        }
     }
     async execute() {
         var _a, _b;
