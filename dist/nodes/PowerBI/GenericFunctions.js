@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getDashboards = exports.getReports = exports.getTables = exports.getDatasets = exports.getGroupsMultiSelect = exports.getGroups = exports.powerBiApiRequestAllItems = exports.powerBiApiRequest = exports.getRopcAccessToken = void 0;
 const n8n_workflow_1 = require("n8n-workflow");
 async function getRopcAccessToken() {
-    const credentials = await this.getCredentials('powerBIApi');
+    const credentials = await this.getCredentials('powerBI');
     if (credentials.authType !== 'ropc') {
         throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'O método de autenticação não está configurado como ROPC');
     }

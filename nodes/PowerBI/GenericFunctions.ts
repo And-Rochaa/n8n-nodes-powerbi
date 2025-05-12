@@ -19,7 +19,7 @@ import {
 export async function getRopcAccessToken(
 	this: IExecuteFunctions | IExecuteSingleFunctions | ILoadOptionsFunctions,
 ): Promise<string> {
-	const credentials = await this.getCredentials('powerBIApi') as IDataObject;
+	const credentials = await this.getCredentials('powerBI') as IDataObject;
 
 	if (credentials.authType !== 'ropc') {
 		throw new NodeOperationError(this.getNode(), 'O método de autenticação não está configurado como ROPC');

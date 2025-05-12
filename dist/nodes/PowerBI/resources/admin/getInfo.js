@@ -30,7 +30,7 @@ async function getInfo(i) {
             'Content-Type': 'application/json',
         },
     };
-    const responseData = await this.helpers.requestWithAuthentication.call(this, 'powerBIApi', options);
+    const responseData = await this.helpers.requestWithAuthentication.call(this, 'powerBI', options);
     returnData.push({
         json: responseData,
     });

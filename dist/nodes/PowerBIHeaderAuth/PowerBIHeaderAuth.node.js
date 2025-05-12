@@ -31,8 +31,7 @@ class PowerBIHeaderAuth {
                     'Content-Type': 'application/json',
                 },
             },
-            properties: [
-                {
+            properties: [{
                     displayName: 'Authentication Token',
                     name: 'authToken',
                     type: 'string',
@@ -41,20 +40,15 @@ class PowerBIHeaderAuth {
                     },
                     default: '',
                     description: 'Bearer token for authentication (without the "Bearer" prefix)',
-                    required: true, displayOptions: {
+                    required: true,
+                    displayOptions: {
                         hide: {
                             resource: [
-                                'admin',
-                            ],
-                            operation: [
-                                'generateAuthUrl',
-                                'getToken',
-                                'refreshToken',
+                                'token',
                             ],
                         },
                     },
-                },
-                {
+                }, {
                     displayName: 'Resource',
                     name: 'resource',
                     type: 'options',
@@ -79,6 +73,10 @@ class PowerBIHeaderAuth {
                         {
                             name: 'Report',
                             value: 'report',
+                        },
+                        {
+                            name: 'Token',
+                            value: 'token',
                         },
                     ],
                     default: 'dashboard',
@@ -106,22 +104,6 @@ class PowerBIHeaderAuth {
                             value: 'getScanResult',
                             description: 'Get the result of a workspace scan',
                             action: 'Get scan result',
-                        }, {
-                            name: 'Generate Auth URL',
-                            value: 'generateAuthUrl',
-                            description: 'Generate OAuth2 authentication URL for Microsoft Entra ID',
-                            action: 'Generate authentication URL',
-                        }, {
-                            name: 'Get Token',
-                            value: 'getToken',
-                            description: 'Get an access token using an authorization code',
-                            action: 'Get access token',
-                        },
-                        {
-                            name: 'Refresh Token',
-                            value: 'refreshToken',
-                            description: 'Refresh an access token using a refresh token',
-                            action: 'Refresh access token',
                         },
                     ],
                     default: 'getInfo',
@@ -196,8 +178,7 @@ class PowerBIHeaderAuth {
                         },
                     },
                     description: 'Incluir informações de linhagem',
-                },
-                {
+                }, {
                     displayName: 'Datasource Details',
                     name: 'datasourceDetails',
                     type: 'boolean',
@@ -213,6 +194,39 @@ class PowerBIHeaderAuth {
                         },
                     },
                     description: 'Incluir detalhes das fontes de dados',
+                },
+                {
+                    displayName: 'Operation',
+                    name: 'operation',
+                    type: 'options',
+                    noDataExpression: true,
+                    displayOptions: {
+                        show: {
+                            resource: [
+                                'token',
+                            ],
+                        },
+                    },
+                    options: [
+                        {
+                            name: 'Generate Auth URL',
+                            value: 'generateAuthUrl',
+                            description: 'Generate OAuth2 authentication URL for Microsoft Entra ID',
+                            action: 'Generate authentication URL',
+                        }, {
+                            name: 'Get Token',
+                            value: 'getToken',
+                            description: 'Get an access token using an authorization code',
+                            action: 'Get access token',
+                        },
+                        {
+                            name: 'Refresh Token',
+                            value: 'refreshToken',
+                            description: 'Refresh an access token using a refresh token',
+                            action: 'Refresh access token',
+                        },
+                    ],
+                    default: 'generateAuthUrl',
                 }, {
                     displayName: 'ID do Scan',
                     name: 'scanId',
@@ -239,7 +253,7 @@ class PowerBIHeaderAuth {
                     displayOptions: {
                         show: {
                             resource: [
-                                'admin',
+                                'token',
                             ],
                             operation: [
                                 'generateAuthUrl',
@@ -257,7 +271,7 @@ class PowerBIHeaderAuth {
                     displayOptions: {
                         show: {
                             resource: [
-                                'admin',
+                                'token',
                             ],
                             operation: [
                                 'generateAuthUrl',
@@ -275,7 +289,7 @@ class PowerBIHeaderAuth {
                     displayOptions: {
                         show: {
                             resource: [
-                                'admin',
+                                'token',
                             ],
                             operation: [
                                 'generateAuthUrl',
@@ -293,7 +307,7 @@ class PowerBIHeaderAuth {
                     displayOptions: {
                         show: {
                             resource: [
-                                'admin',
+                                'token',
                             ],
                             operation: [
                                 'generateAuthUrl',
@@ -311,7 +325,7 @@ class PowerBIHeaderAuth {
                     displayOptions: {
                         show: {
                             resource: [
-                                'admin',
+                                'token',
                             ],
                             operation: [
                                 'generateAuthUrl',
@@ -329,7 +343,7 @@ class PowerBIHeaderAuth {
                     displayOptions: {
                         show: {
                             resource: [
-                                'admin',
+                                'token',
                             ],
                             operation: [
                                 'generateAuthUrl',
@@ -347,7 +361,7 @@ class PowerBIHeaderAuth {
                     displayOptions: {
                         show: {
                             resource: [
-                                'admin',
+                                'token',
                             ],
                             operation: [
                                 'generateAuthUrl',
@@ -365,7 +379,7 @@ class PowerBIHeaderAuth {
                     displayOptions: {
                         show: {
                             resource: [
-                                'admin',
+                                'token',
                             ],
                             operation: [
                                 'getToken',
@@ -383,7 +397,7 @@ class PowerBIHeaderAuth {
                     displayOptions: {
                         show: {
                             resource: [
-                                'admin',
+                                'token',
                             ],
                             operation: [
                                 'getToken',
@@ -404,7 +418,7 @@ class PowerBIHeaderAuth {
                     displayOptions: {
                         show: {
                             resource: [
-                                'admin',
+                                'token',
                             ],
                             operation: [
                                 'getToken',
@@ -422,7 +436,7 @@ class PowerBIHeaderAuth {
                     displayOptions: {
                         show: {
                             resource: [
-                                'admin',
+                                'token',
                             ],
                             operation: [
                                 'getToken',
@@ -440,7 +454,7 @@ class PowerBIHeaderAuth {
                     displayOptions: {
                         show: {
                             resource: [
-                                'admin',
+                                'token',
                             ],
                             operation: [
                                 'getToken',
@@ -458,7 +472,7 @@ class PowerBIHeaderAuth {
                     displayOptions: {
                         show: {
                             resource: [
-                                'admin',
+                                'token',
                             ],
                             operation: [
                                 'getToken',
@@ -476,7 +490,7 @@ class PowerBIHeaderAuth {
                     displayOptions: {
                         show: {
                             resource: [
-                                'admin',
+                                'token',
                             ],
                             operation: [
                                 'getToken',
@@ -494,7 +508,7 @@ class PowerBIHeaderAuth {
                     displayOptions: {
                         show: {
                             resource: [
-                                'admin',
+                                'token',
                             ],
                             operation: [
                                 'refreshToken',
@@ -512,7 +526,7 @@ class PowerBIHeaderAuth {
                     displayOptions: {
                         show: {
                             resource: [
-                                'admin',
+                                'token',
                             ],
                             operation: [
                                 'refreshToken',
@@ -533,7 +547,7 @@ class PowerBIHeaderAuth {
                     displayOptions: {
                         show: {
                             resource: [
-                                'admin',
+                                'token',
                             ],
                             operation: [
                                 'refreshToken',
@@ -551,7 +565,7 @@ class PowerBIHeaderAuth {
                     displayOptions: {
                         show: {
                             resource: [
-                                'admin',
+                                'token',
                             ],
                             operation: [
                                 'refreshToken',
@@ -569,7 +583,7 @@ class PowerBIHeaderAuth {
                     displayOptions: {
                         show: {
                             resource: [
-                                'admin',
+                                'token',
                             ],
                             operation: [
                                 'refreshToken',
@@ -587,7 +601,7 @@ class PowerBIHeaderAuth {
                     displayOptions: {
                         show: {
                             resource: [
-                                'admin',
+                                'token',
                             ],
                             operation: [
                                 'refreshToken',
@@ -605,7 +619,7 @@ class PowerBIHeaderAuth {
                     displayOptions: {
                         show: {
                             resource: [
-                                'admin',
+                                'token',
                             ],
                             operation: [
                                 'refreshToken',
@@ -765,10 +779,7 @@ class PowerBIHeaderAuth {
         let responseData;
         const resource = this.getNodeParameter('resource', 0);
         const operation = this.getNodeParameter('operation', 0);
-        const isGenerateAuthUrlOperation = (resource === 'admin' && operation === 'generateAuthUrl');
-        const isGetTokenOperation = (resource === 'admin' && operation === 'getToken');
-        const isRefreshTokenOperation = (resource === 'admin' && operation === 'refreshToken');
-        const isAuthExemptOperation = isGenerateAuthUrlOperation || isGetTokenOperation || isRefreshTokenOperation;
+        const isAuthExemptOperation = (resource === 'token');
         let authToken = '';
         if (!isAuthExemptOperation) {
             try {
@@ -826,6 +837,13 @@ class PowerBIHeaderAuth {
                 else if (resource === 'admin') {
                     if (operation in resources_1.resources.admin) {
                         const results = await resources_1.resources.admin[operation].call(this, i);
+                        returnData.push(...results);
+                        responseData = null;
+                    }
+                }
+                else if (resource === 'token') {
+                    if (operation in resources_1.resources.token) {
+                        const results = await resources_1.resources.token[operation].call(this, i);
                         returnData.push(...results);
                         responseData = null;
                     }

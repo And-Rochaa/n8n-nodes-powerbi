@@ -69,8 +69,7 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 				'Content-Type': 'application/json',
 			},
 		},
-	properties: [
-			{
+	properties: [			{
 				displayName: 'Authentication Token',
 				name: 'authToken',
 				type: 'string',
@@ -79,20 +78,15 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 				},
 				default: '',
 				description: 'Bearer token for authentication (without the "Bearer" prefix)',
-				required: true,				displayOptions: {
+				required: true,
+				displayOptions: {
 					hide: {
 						resource: [
-							'admin',
-						],
-						operation: [
-							'generateAuthUrl',
-							'getToken',
-							'refreshToken',
+							'token',
 						],
 					},
 				},
-			},
-			{
+			},{
 				displayName: 'Resource',
 				name: 'resource',
 				type: 'options',
@@ -117,6 +111,10 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 					{
 						name: 'Report',
 						value: 'report',
+					},
+					{
+						name: 'Token',
+						value: 'token',
 					},
 				],
 				default: 'dashboard',
@@ -144,26 +142,10 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 						value: 'getScanResult',
 						description: 'Get the result of a workspace scan',
 						action: 'Get scan result',
-					},					{
-						name: 'Generate Auth URL',
-						value: 'generateAuthUrl',
-						description: 'Generate OAuth2 authentication URL for Microsoft Entra ID',
-						action: 'Generate authentication URL',
-					},					{
-						name: 'Get Token',
-						value: 'getToken',
-						description: 'Get an access token using an authorization code',
-						action: 'Get access token',
-					},
-					{
-						name: 'Refresh Token',
-						value: 'refreshToken',
-						description: 'Refresh an access token using a refresh token',
-						action: 'Refresh access token',
 					},
 				],
 				default: 'getInfo',
-			},			{
+			},{
 				displayName: 'Workspaces',
 				name: 'workspaces',
 				type: 'multiOptions',
@@ -234,8 +216,7 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 					},
 				},
 				description: 'Incluir informações de linhagem',
-			},
-			{
+			},			{
 				displayName: 'Datasource Details',
 				name: 'datasourceDetails',
 				type: 'boolean',
@@ -251,7 +232,42 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 					},
 				},
 				description: 'Incluir detalhes das fontes de dados',
-			},			{
+			},
+			
+			// TOKEN OPERATIONS
+			{
+				displayName: 'Operation',
+				name: 'operation',
+				type: 'options',
+				noDataExpression: true,
+				displayOptions: {
+					show: {
+						resource: [
+							'token',
+						],
+					},
+				},
+				options: [
+					{
+						name: 'Generate Auth URL',
+						value: 'generateAuthUrl',
+						description: 'Generate OAuth2 authentication URL for Microsoft Entra ID',
+						action: 'Generate authentication URL',
+					},					{
+						name: 'Get Token',
+						value: 'getToken',
+						description: 'Get an access token using an authorization code',
+						action: 'Get access token',
+					},
+					{
+						name: 'Refresh Token',
+						value: 'refreshToken',
+						description: 'Refresh an access token using a refresh token',
+						action: 'Refresh access token',
+					},
+				],
+				default: 'generateAuthUrl',
+			},{
 				displayName: 'ID do Scan',
 				name: 'scanId',
 				type: 'string',
@@ -268,8 +284,7 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 				},
 				default: '',
 				description: 'ID do resultado do scan gerado pela operação getInfo',
-			},
-			// Campos para a operação generateAuthUrl
+			},			// Campos para a operação generateAuthUrl no resource token
 			{
 				displayName: 'Authorization URL',
 				name: 'url',
@@ -278,7 +293,7 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 				displayOptions: {
 					show: {
 						resource: [
-							'admin',
+							'token',
 						],
 						operation: [
 							'generateAuthUrl',
@@ -296,7 +311,7 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 				displayOptions: {
 					show: {
 						resource: [
-							'admin',
+							'token',
 						],
 						operation: [
 							'generateAuthUrl',
@@ -314,7 +329,7 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 				displayOptions: {
 					show: {
 						resource: [
-							'admin',
+							'token',
 						],
 						operation: [
 							'generateAuthUrl',
@@ -332,7 +347,7 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 				displayOptions: {
 					show: {
 						resource: [
-							'admin',
+							'token',
 						],
 						operation: [
 							'generateAuthUrl',
@@ -350,7 +365,7 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 				displayOptions: {
 					show: {
 						resource: [
-							'admin',
+							'token',
 						],
 						operation: [
 							'generateAuthUrl',
@@ -368,7 +383,7 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 				displayOptions: {
 					show: {
 						resource: [
-							'admin',
+							'token',
 						],
 						operation: [
 							'generateAuthUrl',
@@ -386,7 +401,7 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 				displayOptions: {
 					show: {
 						resource: [
-							'admin',
+							'token',
 						],
 						operation: [
 							'generateAuthUrl',
@@ -397,7 +412,7 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 				description: 'A value included in the request that is also returned in the token response to prevent cross-site request forgery attacks',
 			},
 			
-			// Campos para a operação getToken
+			// Campos para a operação getToken no resource token
 			{
 				displayName: 'Token URL',
 				name: 'tokenUrl',
@@ -406,7 +421,7 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 				displayOptions: {
 					show: {
 						resource: [
-							'admin',
+							'token',
 						],
 						operation: [
 							'getToken',
@@ -424,7 +439,7 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 				displayOptions: {
 					show: {
 						resource: [
-							'admin',
+							'token',
 						],
 						operation: [
 							'getToken',
@@ -445,7 +460,7 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 				displayOptions: {
 					show: {
 						resource: [
-							'admin',
+							'token',
 						],
 						operation: [
 							'getToken',
@@ -463,7 +478,7 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 				displayOptions: {
 					show: {
 						resource: [
-							'admin',
+							'token',
 						],
 						operation: [
 							'getToken',
@@ -481,7 +496,7 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 				displayOptions: {
 					show: {
 						resource: [
-							'admin',
+							'token',
 						],
 						operation: [
 							'getToken',
@@ -499,7 +514,7 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 				displayOptions: {
 					show: {
 						resource: [
-							'admin',
+							'token',
 						],
 						operation: [
 							'getToken',
@@ -517,7 +532,7 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 				displayOptions: {
 					show: {
 						resource: [
-							'admin',
+							'token',
 						],
 						operation: [
 							'getToken',
@@ -528,7 +543,7 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 				description: 'Space-separated list of scopes that you want access to',
 			},
 			
-			// Campos para a operação refreshToken
+			// Campos para a operação refreshToken no resource token
 			{
 				displayName: 'Token URL',
 				name: 'tokenUrl',
@@ -537,7 +552,7 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 				displayOptions: {
 					show: {
 						resource: [
-							'admin',
+							'token',
 						],
 						operation: [
 							'refreshToken',
@@ -555,7 +570,7 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 				displayOptions: {
 					show: {
 						resource: [
-							'admin',
+							'token',
 						],
 						operation: [
 							'refreshToken',
@@ -576,7 +591,7 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 				displayOptions: {
 					show: {
 						resource: [
-							'admin',
+							'token',
 						],
 						operation: [
 							'refreshToken',
@@ -594,7 +609,7 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 				displayOptions: {
 					show: {
 						resource: [
-							'admin',
+							'token',
 						],
 						operation: [
 							'refreshToken',
@@ -612,7 +627,7 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 				displayOptions: {
 					show: {
 						resource: [
-							'admin',
+							'token',
 						],
 						operation: [
 							'refreshToken',
@@ -630,7 +645,7 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 				displayOptions: {
 					show: {
 						resource: [
-							'admin',
+							'token',
 						],
 						operation: [
 							'refreshToken',
@@ -648,7 +663,7 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 				displayOptions: {
 					show: {
 						resource: [
-							'admin',
+							'token',
 						],
 						operation: [
 							'refreshToken',
@@ -848,12 +863,8 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 		const returnData: INodeExecutionData[] = [];
 		let responseData;
 		const resource = this.getNodeParameter('resource', 0) as string;
-		const operation = this.getNodeParameter('operation', 0) as string;
-		// Verificar se é uma das operações que não precisam de autenticação
-		const isGenerateAuthUrlOperation = (resource === 'admin' && operation === 'generateAuthUrl');
-		const isGetTokenOperation = (resource === 'admin' && operation === 'getToken');
-		const isRefreshTokenOperation = (resource === 'admin' && operation === 'refreshToken');
-		const isAuthExemptOperation = isGenerateAuthUrlOperation || isGetTokenOperation || isRefreshTokenOperation;
+		const operation = this.getNodeParameter('operation', 0) as string;		// Verificar se é uma operação do resource token (não precisa de autenticação)
+		const isAuthExemptOperation = (resource === 'token');
 		
 		// Obter o token do parâmetro de entrada (ou do valor padrão no nó) apenas se não for uma operação isenta de autenticação
 		let authToken = '';
@@ -932,12 +943,21 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
                         
                         // Importante: marcar responseData como null para evitar processamento adicional
                         responseData = null;
-                    }
-                } else if (resource === 'admin') {
+                    }                } else if (resource === 'admin') {
                     // Admin operations - usando os recursos modularizados
                     if (operation in resources.admin) {
                         // Execute a operação correspondente
                         const results = await resources.admin[operation].call(this, i);
+                        returnData.push(...results);
+                        
+                        // Importante: marcar responseData como null para evitar processamento adicional
+                        responseData = null;
+                    }
+                } else if (resource === 'token') {
+                    // Token operations - usando os recursos modularizados
+                    if (operation in resources.token) {
+                        // Execute a operação correspondente
+                        const results = await resources.token[operation].call(this, i);
                         returnData.push(...results);
                         
                         // Importante: marcar responseData como null para evitar processamento adicional

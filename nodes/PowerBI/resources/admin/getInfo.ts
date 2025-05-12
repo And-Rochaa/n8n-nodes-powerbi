@@ -53,11 +53,10 @@ export async function getInfo(
 			'Content-Type': 'application/json',
 		},
 	};
-	
-	// Usar autenticação direta para garantir que o método POST seja usado corretamente
+		// Usar autenticação direta para garantir que o método POST seja usado corretamente
 	const responseData = await this.helpers.requestWithAuthentication.call(
 		this,
-		'powerBIApi',
+		'powerBI',
 		options
 	);
 	

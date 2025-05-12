@@ -3,6 +3,7 @@ import { dashboardOperations } from './dashboard';
 import { datasetOperations } from './dataset';
 import { groupOperations } from './group';
 import { reportOperations } from './report';
+import { token } from './token';
 
 // Exportamos um objeto com todos os recursos
 export const resources = {
@@ -11,4 +12,5 @@ export const resources = {
     dataset: datasetOperations,
     group: groupOperations,
     report: reportOperations,
+    token: token,
 };

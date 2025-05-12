@@ -2,9 +2,6 @@ export declare const resources: {
     admin: {
         getInfo: typeof import("./admin/getInfo").getInfo;
         getScanResult: typeof import("./admin/getScanResult").getScanResult;
-        generateAuthUrl: typeof import("./admin/generateAuthUrl").generateAuthUrl;
-        getToken: typeof import("./admin/getToken").getToken;
-        refreshToken: typeof import("./admin/refreshToken").refreshToken;
     };
     dashboard: {
         get: typeof import("./dashboard/get").get;
@@ -32,5 +29,10 @@ export declare const resources: {
         list: typeof import("./report/list").list;
         getPages: typeof import("./report/getPages").getPages;
         exportToFile: typeof import("./report/exportToFile").exportToFile;
+    };
+    token: {
+        generateAuthUrl: typeof import("./token/generateAuthUrl").generateAuthUrl;
+        getToken: typeof import("./token/getToken").getToken;
+        refreshToken: typeof import("./token/refreshToken").refreshToken;
     };
 };
