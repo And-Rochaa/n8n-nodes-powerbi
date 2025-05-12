@@ -101,11 +101,10 @@ export async function powerBiApiRequest(
 				resolveWithFullResponse: true,
 				encoding: null,
 			};
-			
-			// Utilizando o método requestOAuth2 com opções específicas para binário
+					// Utilizando o método requestOAuth2 com opções específicas para binário
 			const response = await this.helpers.requestOAuth2.call(
 				this,
-				'powerBIApi',
+				'powerBI',
 				oauth2Options,
 				{ tokenType: 'Bearer', includeCredentialsOnRefreshOnBody: true }
 			);
@@ -118,11 +117,10 @@ export async function powerBiApiRequest(
 			}
 			
 			// Caso contrário, retornar apenas o conteúdo do arquivo
-			return response.body || response;		} else {
-			// Para solicitações JSON regulares
+			return response.body || response;		} else {			// Para solicitações JSON regulares
 			const response = await this.helpers.requestOAuth2.call(
 				this,
-				'powerBIApi',
+				'powerBI',
 				options,
 				{ tokenType: 'Bearer', includeCredentialsOnRefreshOnBody: true }
 			);

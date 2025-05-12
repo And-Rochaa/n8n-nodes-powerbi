@@ -69,14 +69,14 @@ async function powerBiApiRequest(method, endpoint, body = {}, qs = {}, requestOp
                 resolveWithFullResponse: true,
                 encoding: null,
             };
-            const response = await this.helpers.requestOAuth2.call(this, 'powerBIApi', oauth2Options, { tokenType: 'Bearer', includeCredentialsOnRefreshOnBody: true });
+            const response = await this.helpers.requestOAuth2.call(this, 'powerBI', oauth2Options, { tokenType: 'Bearer', includeCredentialsOnRefreshOnBody: true });
             if (requestOptions.returnFullResponse) {
                 return response;
             }
             return response.body || response;
         }
         else {
-            const response = await this.helpers.requestOAuth2.call(this, 'powerBIApi', options, { tokenType: 'Bearer', includeCredentialsOnRefreshOnBody: true });
+            const response = await this.helpers.requestOAuth2.call(this, 'powerBI', options, { tokenType: 'Bearer', includeCredentialsOnRefreshOnBody: true });
             return response;
         }
     }

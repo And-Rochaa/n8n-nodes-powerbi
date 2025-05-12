@@ -5,6 +5,7 @@ import {
 } from 'n8n-workflow';
 
 export class PowerBI implements ICredentialType {
+	// O nome interno da credencial deve corresponder ao nome da classe
 	name = 'powerBI';
 	displayName = 'Power BI';
 	documentationUrl = 'powerbi';
