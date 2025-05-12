@@ -49,8 +49,7 @@ import {
 // Para uso do setTimeout nas polling operations
 const setTimeout = globalThis.setTimeout;
 
-export class PowerBIHeaderAuth implements INodeType {
-	description: INodeTypeDescription = {
+export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDescription = {
 		displayName: 'Power BI Header Auth',
 		name: 'powerBIHeaderAuth',
 		icon: 'file:powerbi.svg',
@@ -59,7 +58,7 @@ export class PowerBIHeaderAuth implements INodeType {
 		subtitle: '={{$parameter["resource"] + ": " + $parameter["operation"]}}',
 		description: 'Work with the Power BI API using header authentication',
 		defaults: {
-			name: 'Power BI Header Auth',
+			name: 'Power BI (Header Auth)',
 		},
 		inputs: [NodeConnectionType.Main],
 		outputs: [NodeConnectionType.Main],
@@ -675,11 +674,9 @@ export class PowerBIHeaderAuth implements INodeType {
 			...reportOperations,
 			...reportFields,
 		],	};
-		constructor() {
+	constructor() {
 		// @ts-ignore
 		this.description.usableAsTool = true;
-		// @ts-ignore
-		this.description.displayName = 'Power BI Header Auth';
 		// @ts-ignore
 		this.description.codex = {
 			categories: ['Power BI'],

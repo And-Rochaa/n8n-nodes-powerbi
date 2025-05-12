@@ -60,10 +60,9 @@ export class PowerBI implements INodeType {	description: INodeTypeDescription = 
 			name: 'Power BI',
 		},
 		inputs: [NodeConnectionType.Main],
-		outputs: [NodeConnectionType.Main],
-		credentials: [
+		outputs: [NodeConnectionType.Main],		credentials: [
 			{
-				name: 'powerBIApi',
+				name: 'powerBI',
 				required: true,
 			},
 		],

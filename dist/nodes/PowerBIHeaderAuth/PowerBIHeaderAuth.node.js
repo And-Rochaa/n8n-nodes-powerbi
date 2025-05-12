@@ -20,7 +20,7 @@ class PowerBIHeaderAuth {
             subtitle: '={{$parameter["resource"] + ": " + $parameter["operation"]}}',
             description: 'Work with the Power BI API using header authentication',
             defaults: {
-                name: 'Power BI Header Auth',
+                name: 'Power BI (Header Auth)',
             },
             inputs: ["main"],
             outputs: ["main"],
@@ -744,7 +744,6 @@ class PowerBIHeaderAuth {
             },
         };
         this.description.usableAsTool = true;
-        this.description.displayName = 'Power BI Header Auth';
         this.description.codex = {
             categories: ['Power BI'],
             subcategories: {

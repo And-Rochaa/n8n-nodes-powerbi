@@ -23,10 +23,9 @@ class PowerBI {
                 name: 'Power BI',
             },
             inputs: ["main"],
-            outputs: ["main"],
-            credentials: [
+            outputs: ["main"], credentials: [
                 {
-                    name: 'powerBIApi',
+                    name: 'powerBI',
                     required: true,
                 },
             ],
