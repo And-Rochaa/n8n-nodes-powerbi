@@ -6,7 +6,7 @@ Este pacote contém nodes para o n8n que permitem integração completa com as A
 
 ## Sobre o Autor
 
-Este Community Nodes foi criado e disponibilizado gratuitamente por Anderson Rocha do Universo Automático para a comunidade e foi pensado para simplificar e abstrair toda a complexidade de utilizaçao das Apis do Power BI.
+Este Community Nodes foi criado e disponibilizado gratuitamente por **Anderson Rocha do Universo Automático** para a comunidade e foi pensado para simplificar e abstrair toda a complexidade de utilizaçao das Apis do Power BI.
 
 ## Índice
 

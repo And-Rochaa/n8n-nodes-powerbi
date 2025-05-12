@@ -6,7 +6,7 @@
 
 export class PowerBIApi implements ICredentialType {
 	name = 'powerBIApi';
-	displayName = 'Power BI API';
+	displayName = 'Power BI';
 	documentationUrl = 'powerbi';
 	extends = ['oAuth2Api'];
 	icon = 'file:powerbi.svg';

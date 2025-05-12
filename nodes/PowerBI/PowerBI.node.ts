@@ -284,7 +284,7 @@ export class PowerBI implements INodeType {	description: INodeTypeDescription = 
 		this.description.usableAsTool = true;
 		
 		// @ts-ignore
-		this.description.displayName = 'Power BI API';
+		this.description.displayName = 'Power BI';
 		
 		// @ts-ignore
 		this.description.codex = {

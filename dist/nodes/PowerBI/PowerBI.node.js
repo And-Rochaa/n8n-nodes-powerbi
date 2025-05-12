@@ -233,7 +233,7 @@ class PowerBI {
             },
         };
         this.description.usableAsTool = true;
-        this.description.displayName = 'Power BI API';
+        this.description.displayName = 'Power BI';
         this.description.codex = {
             categories: ['Power BI'],
             subcategories: {

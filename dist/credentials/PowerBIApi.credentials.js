@@ -4,7 +4,7 @@ exports.PowerBIApi = void 0;
 class PowerBIApi {
     constructor() {
         this.name = 'powerBIApi';
-        this.displayName = 'Power BI API';
+        this.displayName = 'Power BI';
         this.documentationUrl = 'powerbi';
         this.extends = ['oAuth2Api'];
         this.icon = 'file:powerbi.svg';

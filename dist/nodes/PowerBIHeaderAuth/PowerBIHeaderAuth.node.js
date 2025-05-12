@@ -4,41 +4,58 @@ exports.PowerBIHeaderAuth = void 0;
 const n8n_workflow_1 = require("n8n-workflow");
 const GenericFunctions_1 = require("./GenericFunctions");
 const resources_1 = require("./resources");
+const DashboardDescription_1 = require("../PowerBI/descriptions/DashboardDescription");
+const DatasetDescription_1 = require("../PowerBI/descriptions/DatasetDescription");
+const GroupDescription_1 = require("../PowerBI/descriptions/GroupDescription");
+const ReportDescription_1 = require("../PowerBI/descriptions/ReportDescription");
+const setTimeout = globalThis.setTimeout;
 class PowerBIHeaderAuth {
     constructor() {
         this.description = {
-            displayName: 'Power BI (Header Auth)',
+            displayName: 'Power BI Header Auth',
             name: 'powerBIHeaderAuth',
             icon: 'file:powerbi.svg',
             group: ['transform'],
             version: 1,
-            subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
-            description: 'Consumo da API do Power BI usando autenticação por token no cabeçalho',
+            subtitle: '={{$parameter["resource"] + ": " + $parameter["operation"]}}',
+            description: 'Work with the Power BI API using header authentication',
             defaults: {
-                name: 'Power BI (Header Auth)',
+                name: 'Power BI Header Auth',
             },
-            inputs: ['main'],
-            outputs: ['main'],
+            inputs: ["main"],
+            outputs: ["main"],
             credentials: [],
+            requestDefaults: {
+                baseURL: 'https://api.powerbi.com/v1.0/myorg',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            },
             properties: [
                 {
-                    displayName: 'Token de Autenticação',
+                    displayName: 'Authentication Token',
                     name: 'authToken',
                     type: 'string',
-                    default: '',
-                    required: true,
-                    description: 'Token de acesso do Power BI. Ex.: "Bearer eyJ0eXAi..." ou apenas "eyJ0eXAi..."',
-                    displayOptions: {
-                        show: {
-                            '@version': [1],
-                        },
-                    },
                     typeOptions: {
                         password: true,
                     },
+                    default: '',
+                    description: 'Bearer token for authentication (without the "Bearer" prefix)',
+                    required: true, displayOptions: {
+                        hide: {
+                            resource: [
+                                'admin',
+                            ],
+                            operation: [
+                                'generateAuthUrl',
+                                'getToken',
+                                'refreshToken',
+                            ],
+                        },
+                    },
                 },
                 {
-                    displayName: 'Recurso',
+                    displayName: 'Resource',
                     name: 'resource',
                     type: 'options',
                     noDataExpression: true,
@@ -56,19 +73,18 @@ class PowerBIHeaderAuth {
                             value: 'dataset',
                         },
                         {
-                            name: 'Grupo (Workspace)',
+                            name: 'Group',
                             value: 'group',
                         },
                         {
-                            name: 'Relatório',
+                            name: 'Report',
                             value: 'report',
                         },
                     ],
-                    default: 'report',
-                    required: true,
+                    default: 'dashboard',
                 },
                 {
-                    displayName: 'Operação',
+                    displayName: 'Operation',
                     name: 'operation',
                     type: 'options',
                     noDataExpression: true,
@@ -83,208 +99,39 @@ class PowerBIHeaderAuth {
                         {
                             name: 'Get Info',
                             value: 'getInfo',
-                            description: 'Obter informações sobre a API do Power BI',
-                            action: 'Get info from power bi',
-                        },
-                        {
+                            description: 'Get detailed information about workspaces',
+                            action: 'Get workspace information',
+                        }, {
                             name: 'Get Scan Result',
                             value: 'getScanResult',
-                            description: 'Obter detalhes do escaneamento de DLP de um artefato',
-                            action: 'Get scan result from power bi',
-                        },
-                        {
+                            description: 'Get the result of a workspace scan',
+                            action: 'Get scan result',
+                        }, {
                             name: 'Generate Auth URL',
                             value: 'generateAuthUrl',
-                            description: 'Gerar URL para obter o código de autorização',
-                            action: 'Generate auth URL',
-                        },
-                        {
+                            description: 'Generate OAuth2 authentication URL for Microsoft Entra ID',
+                            action: 'Generate authentication URL',
+                        }, {
                             name: 'Get Token',
                             value: 'getToken',
-                            description: 'Obter token de acesso usando um código de autorização',
-                            action: 'Get token',
+                            description: 'Get an access token using an authorization code',
+                            action: 'Get access token',
                         },
                         {
                             name: 'Refresh Token',
                             value: 'refreshToken',
-                            description: 'Renovar token de acesso usando um refresh token',
-                            action: 'Refresh token',
+                            description: 'Refresh an access token using a refresh token',
+                            action: 'Refresh access token',
                         },
                     ],
                     default: 'getInfo',
-                },
-                {
-                    displayName: 'Client ID',
-                    name: 'clientId',
-                    type: 'string',
-                    default: '',
-                    required: true,
-                    displayOptions: {
-                        show: {
-                            resource: [
-                                'admin',
-                            ],
-                            operation: [
-                                'generateAuthUrl',
-                            ],
-                        },
-                    },
-                    description: 'Client ID do aplicativo registrado no Azure AD',
-                },
-                {
-                    displayName: 'Redirect URI',
-                    name: 'redirectUri',
-                    type: 'string',
-                    default: '',
-                    required: true,
-                    placeholder: 'https://example.com/callback',
-                    displayOptions: {
-                        show: {
-                            resource: [
-                                'admin',
-                            ],
-                            operation: [
-                                'generateAuthUrl',
-                            ],
-                        },
-                    },
-                    description: 'URI de redirecionamento configurado no registro do aplicativo',
-                },
-                {
-                    displayName: 'Tenant',
-                    name: 'tenant',
-                    type: 'string',
-                    default: 'common',
-                    displayOptions: {
-                        show: {
-                            resource: [
-                                'admin',
-                            ],
-                            operation: [
-                                'generateAuthUrl',
-                            ],
-                        },
-                    },
-                    description: 'ID do inquilino do Azure AD ou "common" para contas pessoais',
-                },
-                {
-                    displayName: 'Extras',
-                    name: 'extras',
-                    type: 'collection',
-                    placeholder: 'Adicionar opção',
-                    default: {},
-                    displayOptions: {
-                        show: {
-                            resource: [
-                                'admin',
-                            ],
-                            operation: [
-                                'generateAuthUrl',
-                            ],
-                        },
-                    },
-                    options: [
-                        {
-                            displayName: 'State',
-                            name: 'state',
-                            type: 'string',
-                            default: '',
-                            description: 'Valor de estado para verificação anti-CSRF',
-                        },
-                        {
-                            displayName: 'Prompt',
-                            name: 'prompt',
-                            type: 'options',
-                            options: [
-                                {
-                                    name: 'None',
-                                    value: 'none',
-                                    description: 'Não mostra a interface de autenticação',
-                                },
-                                {
-                                    name: 'Login',
-                                    value: 'login',
-                                    description: 'Mostra a tela de login',
-                                },
-                                {
-                                    name: 'Consent',
-                                    value: 'consent',
-                                    description: 'Mostra a tela de consentimento',
-                                },
-                                {
-                                    name: 'Select Account',
-                                    value: 'select_account',
-                                    description: 'Mostra a seleção de conta',
-                                },
-                            ],
-                            default: 'consent',
-                            description: 'Tipo de interação do usuário',
-                        },
-                    ],
-                },
-                {
-                    displayName: 'Client ID',
-                    name: 'clientId',
-                    type: 'string',
-                    default: '',
-                    required: true,
-                    displayOptions: {
-                        show: {
-                            resource: [
-                                'admin',
-                            ],
-                            operation: [
-                                'getToken',
-                            ],
-                        },
-                    },
-                    description: 'Client ID do aplicativo registrado no Azure AD',
-                },
-                {
-                    displayName: 'Client Secret',
-                    name: 'clientSecret',
-                    type: 'string',
-                    default: '',
-                    required: true,
+                }, {
+                    displayName: 'Workspaces',
+                    name: 'workspaces',
+                    type: 'multiOptions',
                     typeOptions: {
-                        password: true,
+                        loadOptionsMethod: 'getGroupsMultiSelect',
                     },
-                    displayOptions: {
-                        show: {
-                            resource: [
-                                'admin',
-                            ],
-                            operation: [
-                                'getToken',
-                            ],
-                        },
-                    },
-                    description: 'Secret do aplicativo registrado no Azure AD',
-                },
-                {
-                    displayName: 'Redirect URI',
-                    name: 'redirectUri',
-                    type: 'string',
-                    default: '',
-                    required: true,
-                    placeholder: 'https://example.com/callback',
-                    displayOptions: {
-                        show: {
-                            resource: [
-                                'admin',
-                            ],
-                            operation: [
-                                'getToken',
-                            ],
-                        },
-                    },
-                    description: 'URI de redirecionamento configurado no registro do aplicativo',
-                },
-                {
-                    displayName: 'Authorization Code',
-                    name: 'code',
-                    type: 'string',
-                    default: '',
                     required: true,
                     displayOptions: {
                         show: {
@@ -292,125 +139,84 @@ class PowerBIHeaderAuth {
                                 'admin',
                             ],
                             operation: [
-                                'getToken',
+                                'getInfo',
                             ],
                         },
                     },
-                    description: 'Código de autorização obtido pelo fluxo OAuth2',
+                    default: [],
+                    description: 'Selecione os workspaces para obter informações',
                 },
                 {
-                    displayName: 'Tenant',
-                    name: 'tenant',
-                    type: 'string',
-                    default: 'common',
+                    displayName: 'Dataset Schema',
+                    name: 'datasetSchema',
+                    type: 'boolean',
+                    default: false,
                     displayOptions: {
                         show: {
                             resource: [
                                 'admin',
                             ],
                             operation: [
-                                'getToken',
+                                'getInfo',
                             ],
                         },
                     },
-                    description: 'ID do inquilino do Azure AD ou "common" para contas pessoais',
+                    description: 'Incluir esquema de dataset',
                 },
                 {
-                    displayName: 'Client ID',
-                    name: 'clientId',
-                    type: 'string',
-                    default: '',
-                    required: true,
+                    displayName: 'Dataset Expressions',
+                    name: 'datasetExpressions',
+                    type: 'boolean',
+                    default: false,
                     displayOptions: {
                         show: {
                             resource: [
                                 'admin',
                             ],
                             operation: [
-                                'refreshToken',
+                                'getInfo',
                             ],
                         },
                     },
-                    description: 'Client ID do aplicativo registrado no Azure AD',
+                    description: 'Incluir expressões DAX dos datasets',
                 },
                 {
-                    displayName: 'Client Secret',
-                    name: 'clientSecret',
-                    type: 'string',
-                    default: '',
-                    required: true,
-                    typeOptions: {
-                        password: true,
-                    },
+                    displayName: 'Lineage',
+                    name: 'lineage',
+                    type: 'boolean',
+                    default: false,
                     displayOptions: {
                         show: {
                             resource: [
                                 'admin',
                             ],
                             operation: [
-                                'refreshToken',
+                                'getInfo',
                             ],
                         },
                     },
-                    description: 'Secret do aplicativo registrado no Azure AD',
+                    description: 'Incluir informações de linhagem',
                 },
                 {
-                    displayName: 'Refresh Token',
-                    name: 'refreshToken',
-                    type: 'string',
-                    default: '',
-                    required: true,
+                    displayName: 'Datasource Details',
+                    name: 'datasourceDetails',
+                    type: 'boolean',
+                    default: false,
                     displayOptions: {
                         show: {
                             resource: [
                                 'admin',
                             ],
                             operation: [
-                                'refreshToken',
+                                'getInfo',
                             ],
                         },
                     },
-                    description: 'Token de atualização obtido anteriormente',
-                },
-                {
-                    displayName: 'Tenant',
-                    name: 'tenant',
-                    type: 'string',
-                    default: 'common',
-                    displayOptions: {
-                        show: {
-                            resource: [
-                                'admin',
-                            ],
-                            operation: [
-                                'refreshToken',
-                            ],
-                        },
-                    },
-                    description: 'ID do inquilino do Azure AD ou "common" para contas pessoais',
-                },
-                {
-                    displayName: 'Resource',
-                    name: 'resource',
-                    type: 'string',
-                    default: 'https://analysis.windows.net/powerbi/api',
-                    description: 'Resource identifier',
-                    displayOptions: {
-                        show: {
-                            resource: [
-                                'admin',
-                            ],
-                            operation: [
-                                'refreshToken',
-                            ],
-                        },
-                    },
-                },
-                {
-                    displayName: 'Scan ID',
+                    description: 'Incluir detalhes das fontes de dados',
+                }, {
+                    displayName: 'ID do Scan',
                     name: 'scanId',
                     type: 'string',
-                    default: '',
                     required: true,
                     displayOptions: {
                         show: {
@@ -422,917 +228,408 @@ class PowerBIHeaderAuth {
                             ],
                         },
                     },
-                    description: 'ID do escaneamento DLP',
-                },
-                {
-                    displayName: 'Operação',
-                    name: 'operation',
-                    type: 'options',
-                    noDataExpression: true,
-                    displayOptions: {
-                        show: {
-                            resource: [
-                                'dashboard',
-                            ],
-                        },
-                    },
-                    options: [
-                        {
-                            name: 'Get',
-                            value: 'get',
-                            description: 'Obter um dashboard específico',
-                            action: 'Get a dashboard',
-                        },
-                        {
-                            name: 'Get Tiles',
-                            value: 'getTiles',
-                            description: 'Obter tiles de um dashboard',
-                            action: 'Get tiles from a dashboard',
-                        },
-                        {
-                            name: 'List',
-                            value: 'list',
-                            description: 'Listar todos os dashboards',
-                            action: 'List all dashboards',
-                        },
-                    ],
-                    default: 'list',
-                },
-                {
-                    displayName: 'Operação',
-                    name: 'operation',
-                    type: 'options',
-                    noDataExpression: true,
-                    displayOptions: {
-                        show: {
-                            resource: [
-                                'dataset',
-                            ],
-                        },
-                    },
-                    options: [
-                        {
-                            name: 'Add Rows',
-                            value: 'addRows',
-                            description: 'Adicionar linhas a uma tabela',
-                            action: 'Add rows to a table',
-                        },
-                        {
-                            name: 'Execute Queries',
-                            value: 'executeQueries',
-                            description: 'Executar consultas DAX',
-                            action: 'Execute DAX queries',
-                        },
-                        {
-                            name: 'Get',
-                            value: 'get',
-                            description: 'Obter um dataset específico',
-                            action: 'Get a dataset',
-                        },
-                        {
-                            name: 'Get Refresh History',
-                            value: 'getRefreshHistory',
-                            description: 'Obter histórico de atualizações',
-                            action: 'Get the refresh history',
-                        },
-                        {
-                            name: 'Get Tables',
-                            value: 'getTables',
-                            description: 'Obter tabelas de um dataset',
-                            action: 'Get tables from a dataset',
-                        },
-                        {
-                            name: 'List',
-                            value: 'list',
-                            description: 'Listar todos os datasets',
-                            action: 'List all datasets',
-                        },
-                        {
-                            name: 'Refresh',
-                            value: 'refresh',
-                            description: 'Atualizar um dataset',
-                            action: 'Refresh a dataset',
-                        },
-                    ],
-                    default: 'list',
-                },
-                {
-                    displayName: 'Operação',
-                    name: 'operation',
-                    type: 'options',
-                    noDataExpression: true,
-                    displayOptions: {
-                        show: {
-                            resource: [
-                                'group',
-                            ],
-                        },
-                    },
-                    options: [
-                        {
-                            name: 'Get',
-                            value: 'get',
-                            description: 'Obter um grupo específico',
-                            action: 'Get a group',
-                        },
-                        {
-                            name: 'Get Dashboards',
-                            value: 'getDashboards',
-                            description: 'Obter dashboards de um grupo',
-                            action: 'Get dashboards from a group',
-                        },
-                        {
-                            name: 'Get Datasets',
-                            value: 'getDatasets',
-                            description: 'Obter datasets de um grupo',
-                            action: 'Get datasets from a group',
-                        },
-                        {
-                            name: 'Get Reports',
-                            value: 'getReports',
-                            description: 'Obter relatórios de um grupo',
-                            action: 'Get reports from a group',
-                        },
-                        {
-                            name: 'List',
-                            value: 'list',
-                            description: 'Listar todos os grupos',
-                            action: 'List all groups',
-                        },
-                    ],
-                    default: 'list',
-                },
-                {
-                    displayName: 'Operação',
-                    name: 'operation',
-                    type: 'options',
-                    noDataExpression: true,
-                    displayOptions: {
-                        show: {
-                            resource: [
-                                'report',
-                            ],
-                        },
-                    },
-                    options: [
-                        {
-                            name: 'Export To File',
-                            value: 'exportToFile',
-                            description: 'Exportar relatório para arquivo',
-                            action: 'Export a report to file',
-                        },
-                        {
-                            name: 'Get',
-                            value: 'get',
-                            description: 'Obter um relatório específico',
-                            action: 'Get a report',
-                        },
-                        {
-                            name: 'Get Pages',
-                            value: 'getPages',
-                            description: 'Obter páginas de um relatório',
-                            action: 'Get pages from a report',
-                        },
-                        {
-                            name: 'List',
-                            value: 'list',
-                            description: 'Listar todos os relatórios',
-                            action: 'List all reports',
-                        },
-                    ],
-                    default: 'list',
-                },
-                {
-                    displayName: 'Group ID',
-                    name: 'groupId',
-                    type: 'options',
-                    typeOptions: {
-                        loadOptionsMethod: 'getGroups',
-                    },
                     default: '',
-                    description: 'ID do grupo do Power BI',
-                    displayOptions: {
-                        show: {
-                            resource: [
-                                'report',
-                            ],
-                            operation: [
-                                'get',
-                                'getPages',
-                                'list',
-                            ],
-                        },
-                    },
+                    description: 'ID do resultado do scan gerado pela operação getInfo',
                 },
                 {
-                    displayName: 'Report ID',
-                    name: 'reportId',
-                    type: 'options',
-                    typeOptions: {
-                        loadOptionsMethod: 'getReports',
-                        loadOptionsDependsOn: ['groupId'],
-                    },
-                    default: '',
-                    required: true,
-                    description: 'ID do relatório',
-                    displayOptions: {
-                        show: {
-                            resource: [
-                                'report',
-                            ],
-                            operation: [
-                                'get',
-                                'getPages',
-                            ],
-                        },
-                    },
-                },
-                {
-                    displayName: 'Group (Workspace)',
-                    name: 'groupId',
-                    type: 'options',
-                    typeOptions: {
-                        loadOptionsMethod: 'getGroups',
-                    },
-                    default: '',
+                    displayName: 'Authorization URL',
+                    name: 'url',
+                    type: 'string',
                     required: true,
                     displayOptions: {
                         show: {
                             resource: [
-                                'report',
+                                'admin',
                             ],
                             operation: [
-                                'exportToFile',
+                                'generateAuthUrl',
                             ],
                         },
                     },
-                    description: 'ID do grupo do Power BI',
+                    default: 'https://login.microsoftonline.com/organizations/oauth2/v2.0/authorize',
+                    description: 'Base URL for Microsoft Entra ID authorization endpoint',
                 },
                 {
-                    displayName: 'Report ID',
-                    name: 'reportId',
-                    type: 'options',
-                    typeOptions: {
-                        loadOptionsMethod: 'getReports',
-                        loadOptionsDependsOn: ['groupId'],
-                    },
-                    default: '',
+                    displayName: 'Client ID',
+                    name: 'clientId',
+                    type: 'string',
                     required: true,
                     displayOptions: {
                         show: {
                             resource: [
-                                'report',
+                                'admin',
                             ],
                             operation: [
-                                'exportToFile',
+                                'generateAuthUrl',
                             ],
                         },
-                    },
-                    description: 'ID do relatório a ser exportado',
-                },
-                {
-                    displayName: 'Report Type',
-                    name: 'reportType',
-                    type: 'options',
-                    options: [
-                        {
-                            name: 'Power BI Report',
-                            value: 'powerBI',
-                        },
-                        {
-                            name: 'Paginated Report',
-                            value: 'paginated',
-                        },
-                    ],
-                    default: 'powerBI',
-                    displayOptions: {
-                        show: {
-                            resource: [
-                                'report',
-                            ],
-                            operation: [
-                                'exportToFile',
-                            ],
-                        },
-                    },
-                    description: 'Tipo de relatório a ser exportado',
-                },
-                {
-                    displayName: 'Export Format',
-                    name: 'exportFormat',
-                    type: 'options',
-                    displayOptions: {
-                        show: {
-                            resource: [
-                                'report',
-                            ],
-                            operation: [
-                                'exportToFile',
-                            ],
-                            reportType: [
-                                'powerBI',
-                            ],
-                        },
-                    },
-                    options: [
-                        {
-                            name: 'PDF',
-                            value: 'PDF',
-                        },
-                        {
-                            name: 'PNG',
-                            value: 'PNG',
-                        },
-                        {
-                            name: 'PowerPoint (PPTX)',
-                            value: 'PPTX',
-                        },
-                    ],
-                    default: 'PDF',
-                    description: 'Formato para exportação',
-                },
-                {
-                    displayName: 'Export Format',
-                    name: 'exportFormat',
-                    type: 'options',
-                    displayOptions: {
-                        show: {
-                            resource: [
-                                'report',
-                            ],
-                            operation: [
-                                'exportToFile',
-                            ],
-                            reportType: [
-                                'paginated',
-                            ],
-                        },
-                    },
-                    options: [
-                        {
-                            name: 'PDF',
-                            value: 'PDF',
-                        },
-                        {
-                            name: 'Accessible PDF',
-                            value: 'ACCESSIBLEPDF',
-                        },
-                        {
-                            name: 'CSV',
-                            value: 'CSV',
-                        },
-                        {
-                            name: 'Image (BMP, EMF, GIF, JPEG, PNG, TIFF)',
-                            value: 'IMAGE',
-                        },
-                        {
-                            name: 'Microsoft Excel (XLSX)',
-                            value: 'XLSX',
-                        },
-                        {
-                            name: 'Microsoft Word (DOCX)',
-                            value: 'DOCX',
-                        },
-                        {
-                            name: 'MHTML (Web Archive)',
-                            value: 'MHTML',
-                        },
-                        {
-                            name: 'XML',
-                            value: 'XML',
-                        },
-                    ],
-                    default: 'PDF',
-                    description: 'Formato para exportação',
-                },
-                {
-                    displayName: 'Wait For Completion',
-                    name: 'waitForCompletion',
-                    type: 'boolean',
-                    default: true,
-                    displayOptions: {
-                        show: {
-                            resource: [
-                                'report',
-                            ],
-                            operation: [
-                                'exportToFile',
-                            ],
-                        },
-                    },
-                    description: 'Se deve esperar a exportação ser concluída',
-                },
-                {
-                    displayName: 'Download File',
-                    name: 'downloadFile',
-                    type: 'boolean',
-                    default: false,
-                    displayOptions: {
-                        show: {
-                            resource: [
-                                'report',
-                            ],
-                            operation: [
-                                'exportToFile',
-                            ],
-                            waitForCompletion: [
-                                true,
-                            ],
-                        },
-                    },
-                    description: 'Se ativado, o arquivo será disponibilizado como arquivo binário para download e também como base64 no campo fileBase64 para uso em integrações como WhatsApp',
-                },
-                {
-                    displayName: 'Additional Fields',
-                    name: 'additionalFields',
-                    type: 'collection',
-                    placeholder: 'Add Field',
-                    default: {},
-                    displayOptions: {
-                        show: {
-                            resource: [
-                                'report',
-                            ],
-                            operation: [
-                                'exportToFile',
-                            ],
-                        },
-                    },
-                    options: [
-                        {
-                            displayName: 'Maximum Wait Time',
-                            name: 'maxWaitTime',
-                            type: 'number',
-                            default: 300,
-                            description: 'Tempo máximo de espera em segundos',
-                        },
-                        {
-                            displayName: 'Polling Interval',
-                            name: 'pollingInterval',
-                            type: 'number',
-                            default: 5,
-                            description: 'Intervalo entre verificações em segundos',
-                        },
-                    ],
-                },
-                {
-                    displayName: 'Power BI Report Configuration',
-                    name: 'powerBIReportConfig',
-                    type: 'collection',
-                    placeholder: 'Add Configuration',
-                    default: {},
-                    displayOptions: {
-                        show: {
-                            resource: [
-                                'report',
-                            ],
-                            operation: [
-                                'exportToFile',
-                            ],
-                            reportType: [
-                                'powerBI',
-                            ],
-                        },
-                    },
-                    options: [
-                        {
-                            displayName: 'Include Hidden Pages',
-                            name: 'includeHiddenPages',
-                            type: 'boolean',
-                            default: false,
-                            description: 'Se deve incluir páginas ocultas',
-                        },
-                        {
-                            displayName: 'Locale',
-                            name: 'locale',
-                            type: 'string',
-                            default: '',
-                            placeholder: 'e.g. pt-BR',
-                            description: 'Localização para uso na exportação',
-                        },
-                        {
-                            displayName: 'Export Specific Pages',
-                            name: 'exportSpecificPages',
-                            type: 'boolean',
-                            default: false,
-                            description: 'Se deve exportar apenas páginas específicas',
-                        },
-                        {
-                            displayName: 'Pages',
-                            name: 'pages',
-                            type: 'string',
-                            default: '[]',
-                            displayOptions: {
-                                show: {
-                                    exportSpecificPages: [
-                                        true,
-                                    ],
-                                },
-                            },
-                            description: 'Array JSON de configurações de página. Exemplo: [{"pageName": "ReportSection1", "visualName": "VisualName1"}, {"pageName": "ReportSection2"}]',
-                            typeOptions: {
-                                alwaysOpenEditWindow: true,
-                            },
-                        },
-                        {
-                            displayName: 'Use Report Level Filters',
-                            name: 'useReportLevelFilters',
-                            type: 'boolean',
-                            default: false,
-                            description: 'Se deve aplicar filtros no nível do relatório',
-                        },
-                        {
-                            displayName: 'Report Level Filters',
-                            name: 'reportLevelFilters',
-                            type: 'string',
-                            default: '[]',
-                            displayOptions: {
-                                show: {
-                                    useReportLevelFilters: [
-                                        true,
-                                    ],
-                                },
-                            },
-                            description: 'Array JSON de configurações de filtro. Exemplo: [{"filter": "Table1/Column1 eq \'value\'"}]',
-                            typeOptions: {
-                                alwaysOpenEditWindow: true,
-                            },
-                        },
-                        {
-                            displayName: 'Use Default Bookmark',
-                            name: 'useDefaultBookmark',
-                            type: 'boolean',
-                            default: false,
-                            description: 'Se deve aplicar um bookmark padrão em todas as páginas',
-                        },
-                        {
-                            displayName: 'Default Bookmark Name',
-                            name: 'defaultBookmarkName',
-                            type: 'string',
-                            default: '',
-                            displayOptions: {
-                                show: {
-                                    useDefaultBookmark: [
-                                        true,
-                                    ],
-                                },
-                            },
-                            description: 'Nome do bookmark a ser aplicado',
-                        },
-                        {
-                            displayName: 'Default Bookmark State',
-                            name: 'defaultBookmarkState',
-                            type: 'string',
-                            default: '',
-                            displayOptions: {
-                                show: {
-                                    useDefaultBookmark: [
-                                        true,
-                                    ],
-                                },
-                            },
-                            description: 'Estado do bookmark a ser aplicado',
-                        },
-                        {
-                            displayName: 'Use Alternative Dataset',
-                            name: 'useAlternativeDataset',
-                            type: 'boolean',
-                            default: false,
-                            description: 'Se deve vincular o relatório a um dataset diferente',
-                        },
-                        {
-                            displayName: 'Dataset ID',
-                            name: 'datasetToBind',
-                            type: 'string',
-                            default: '',
-                            displayOptions: {
-                                show: {
-                                    useAlternativeDataset: [
-                                        true,
-                                    ],
-                                },
-                            },
-                            description: 'ID do dataset para vincular',
-                        },
-                        {
-                            displayName: 'Use Identities (RLS)',
-                            name: 'useIdentities',
-                            type: 'boolean',
-                            default: false,
-                            description: 'Se deve aplicar identidades de Row-Level Security',
-                        },
-                        {
-                            displayName: 'Identities',
-                            name: 'identities',
-                            type: 'string',
-                            default: '[]',
-                            displayOptions: {
-                                show: {
-                                    useIdentities: [
-                                        true,
-                                    ],
-                                },
-                            },
-                            description: 'Array JSON de configurações de identidade para RLS. Exemplo: [{"username": "user1@contoso.com", "roles": ["Role1", "Role2"]}]',
-                            typeOptions: {
-                                alwaysOpenEditWindow: true,
-                            },
-                        },
-                    ],
-                },
-                {
-                    displayName: 'Paginated Report Configuration',
-                    name: 'paginatedReportConfig',
-                    type: 'collection',
-                    placeholder: 'Add Configuration',
-                    default: {},
-                    displayOptions: {
-                        show: {
-                            resource: [
-                                'report',
-                            ],
-                            operation: [
-                                'exportToFile',
-                            ],
-                            reportType: [
-                                'paginated',
-                            ],
-                        },
-                    },
-                    options: [
-                        {
-                            displayName: 'Locale',
-                            name: 'locale',
-                            type: 'string',
-                            default: '',
-                            placeholder: 'e.g. pt-BR',
-                            description: 'Localização para uso na exportação',
-                        },
-                        {
-                            displayName: 'Use Parameters',
-                            name: 'useParameters',
-                            type: 'boolean',
-                            default: false,
-                            description: 'Se deve fornecer parâmetros para o relatório',
-                        },
-                        {
-                            displayName: 'Parameter Values',
-                            name: 'parameterValues',
-                            type: 'string',
-                            default: '[]',
-                            displayOptions: {
-                                show: {
-                                    useParameters: [
-                                        true,
-                                    ],
-                                },
-                            },
-                            description: 'Array JSON de configurações de parâmetros. Exemplo: [{"name": "Parameter1", "value": "Value1"}, {"name": "Parameter2", "value": "Value2"}]',
-                            typeOptions: {
-                                alwaysOpenEditWindow: true,
-                            },
-                        },
-                        {
-                            displayName: 'Use Format Settings',
-                            name: 'useFormatSettings',
-                            type: 'boolean',
-                            default: false,
-                            description: 'Se deve fornecer configurações específicas de formato',
-                        },
-                        {
-                            displayName: 'Format Settings',
-                            name: 'formatSettings',
-                            type: 'string',
-                            default: '{}',
-                            displayOptions: {
-                                show: {
-                                    useFormatSettings: [
-                                        true,
-                                    ],
-                                },
-                            },
-                            description: 'Objeto JSON com configurações específicas de formato. Exemplo: {"PageWidth": "8.5in", "PageHeight": "11in"}',
-                            typeOptions: {
-                                alwaysOpenEditWindow: true,
-                            },
-                        },
-                        {
-                            displayName: 'Use Identities (RLS)',
-                            name: 'useIdentities',
-                            type: 'boolean',
-                            default: false,
-                            description: 'Se deve aplicar identidades de Row-Level Security',
-                        },
-                        {
-                            displayName: 'Identities',
-                            name: 'identities',
-                            type: 'string',
-                            default: '[]',
-                            displayOptions: {
-                                show: {
-                                    useIdentities: [
-                                        true,
-                                    ],
-                                },
-                            },
-                            description: 'Array JSON de configurações de identidade para RLS. Exemplo: [{"username": "user1@contoso.com", "roles": ["Role1", "Role2"]}]',
-                            typeOptions: {
-                                alwaysOpenEditWindow: true,
-                            },
-                        },
-                    ],
-                },
-                {
-                    displayName: 'Group ID',
-                    name: 'groupId',
-                    type: 'options',
-                    typeOptions: {
-                        loadOptionsMethod: 'getGroups',
                     },
                     default: '',
-                    description: 'ID do grupo do Power BI',
+                    description: 'Application client ID registered in Microsoft Entra ID',
+                },
+                {
+                    displayName: 'Response Type',
+                    name: 'responseType',
+                    type: 'string',
+                    required: true,
                     displayOptions: {
                         show: {
                             resource: [
-                                'dashboard',
+                                'admin',
                             ],
                             operation: [
-                                'get',
-                                'getTiles',
-                                'list',
+                                'generateAuthUrl',
                             ],
                         },
                     },
+                    default: 'code',
+                    description: 'The type of response expected from the authorization endpoint',
                 },
                 {
-                    displayName: 'Dashboard ID',
-                    name: 'dashboardId',
-                    type: 'options',
-                    typeOptions: {
-                        loadOptionsMethod: 'getDashboards',
-                        loadOptionsDependsOn: ['groupId'],
+                    displayName: 'Redirect URI',
+                    name: 'redirectUri',
+                    type: 'string',
+                    required: true,
+                    displayOptions: {
+                        show: {
+                            resource: [
+                                'admin',
+                            ],
+                            operation: [
+                                'generateAuthUrl',
+                            ],
+                        },
                     },
                     default: '',
+                    description: 'The URI where the authorization response will be sent',
+                },
+                {
+                    displayName: 'Response Mode',
+                    name: 'responseMode',
+                    type: 'string',
                     required: true,
-                    description: 'ID do dashboard',
                     displayOptions: {
                         show: {
                             resource: [
-                                'dashboard',
+                                'admin',
                             ],
                             operation: [
-                                'get',
-                                'getTiles',
+                                'generateAuthUrl',
                             ],
                         },
                     },
+                    default: 'query',
+                    description: 'Specifies how the authorization response should be returned',
                 },
                 {
-                    displayName: 'Group ID',
-                    name: 'groupId',
-                    type: 'options',
-                    typeOptions: {
-                        loadOptionsMethod: 'getGroups',
+                    displayName: 'Scope',
+                    name: 'scope',
+                    type: 'string',
+                    required: true,
+                    displayOptions: {
+                        show: {
+                            resource: [
+                                'admin',
+                            ],
+                            operation: [
+                                'generateAuthUrl',
+                            ],
+                        },
+                    },
+                    default: 'openid',
+                    description: 'Space-separated list of scopes that you want the user to consent to',
+                },
+                {
+                    displayName: 'State',
+                    name: 'state',
+                    type: 'string',
+                    required: false,
+                    displayOptions: {
+                        show: {
+                            resource: [
+                                'admin',
+                            ],
+                            operation: [
+                                'generateAuthUrl',
+                            ],
+                        },
                     },
                     default: '',
-                    description: 'ID do grupo do Power BI',
+                    description: 'A value included in the request that is also returned in the token response to prevent cross-site request forgery attacks',
+                },
+                {
+                    displayName: 'Token URL',
+                    name: 'tokenUrl',
+                    type: 'string',
+                    required: true,
                     displayOptions: {
                         show: {
                             resource: [
-                                'dataset',
+                                'admin',
                             ],
                             operation: [
-                                'get',
-                                'getTables',
-                                'getRefreshHistory',
-                                'list',
-                                'refresh',
-                                'addRows',
-                                'executeQueries',
+                                'getToken',
                             ],
                         },
                     },
+                    default: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
+                    description: 'URL for Microsoft Entra ID token endpoint',
                 },
                 {
-                    displayName: 'Dataset ID',
-                    name: 'datasetId',
-                    type: 'options',
-                    typeOptions: {
-                        loadOptionsMethod: 'getDatasets',
-                        loadOptionsDependsOn: ['groupId'],
+                    displayName: 'Client ID',
+                    name: 'clientId',
+                    type: 'string',
+                    required: true,
+                    displayOptions: {
+                        show: {
+                            resource: [
+                                'admin',
+                            ],
+                            operation: [
+                                'getToken',
+                            ],
+                        },
                     },
                     default: '',
+                    description: 'Application client ID registered in Microsoft Entra ID',
+                },
+                {
+                    displayName: 'Client Secret',
+                    name: 'clientSecret',
+                    type: 'string',
+                    typeOptions: {
+                        password: true,
+                    },
                     required: true,
-                    description: 'ID do dataset',
                     displayOptions: {
                         show: {
                             resource: [
-                                'dataset',
+                                'admin',
                             ],
                             operation: [
-                                'get',
-                                'getTables',
-                                'getRefreshHistory',
-                                'refresh',
-                                'addRows',
-                                'executeQueries',
+                                'getToken',
                             ],
                         },
-                    },
-                },
-                {
-                    displayName: 'Table Name',
-                    name: 'tableName',
-                    type: 'options',
-                    typeOptions: {
-                        loadOptionsMethod: 'getTables',
-                        loadOptionsDependsOn: [
-                            'groupId',
-                            'datasetId',
-                        ],
                     },
                     default: '',
+                    description: 'Secret key of application registered in Microsoft Entra ID',
+                },
+                {
+                    displayName: 'Authorization Code',
+                    name: 'code',
+                    type: 'string',
                     required: true,
-                    description: 'Nome da tabela para adicionar linhas',
                     displayOptions: {
                         show: {
                             resource: [
-                                'dataset',
+                                'admin',
                             ],
                             operation: [
-                                'addRows',
+                                'getToken',
                             ],
                         },
-                    },
-                },
-                {
-                    displayName: 'Rows',
-                    name: 'rows',
-                    type: 'json',
-                    default: '[]',
-                    required: true,
-                    description: 'Dados a serem adicionados na tabela',
-                    displayOptions: {
-                        show: {
-                            resource: [
-                                'dataset',
-                            ],
-                            operation: [
-                                'addRows',
-                            ],
-                        },
-                    },
-                },
-                {
-                    displayName: 'DAX Query',
-                    name: 'query',
-                    type: 'json',
-                    default: '{ "queries": [{ "query": "EVALUATE ROW(\\"Result\\", 1)" }], "impersonatedUserName": null, "serializeResults": true }',
-                    required: true,
-                    description: 'Consulta DAX a ser executada',
-                    hint: 'Formato: { "queries": [{ "query": "EVALUATE..." }], "serializeResults": true }',
-                    displayOptions: {
-                        show: {
-                            resource: [
-                                'dataset',
-                            ],
-                            operation: [
-                                'executeQueries',
-                            ],
-                        },
-                    },
-                },
-                {
-                    displayName: 'Group ID',
-                    name: 'groupId',
-                    type: 'options',
-                    typeOptions: {
-                        loadOptionsMethod: 'getGroups',
                     },
                     default: '',
+                    description: 'Authorization code received from the authorization endpoint',
+                },
+                {
+                    displayName: 'Redirect URI',
+                    name: 'redirectUri',
+                    type: 'string',
                     required: true,
-                    description: 'ID do grupo do Power BI',
                     displayOptions: {
                         show: {
                             resource: [
-                                'group',
+                                'admin',
                             ],
                             operation: [
-                                'get',
-                                'getDashboards',
-                                'getDatasets',
-                                'getReports',
+                                'getToken',
                             ],
                         },
                     },
+                    default: '',
+                    description: 'The same redirect URI used in the authorization request',
                 },
+                {
+                    displayName: 'Grant Type',
+                    name: 'grantType',
+                    type: 'string',
+                    required: true,
+                    displayOptions: {
+                        show: {
+                            resource: [
+                                'admin',
+                            ],
+                            operation: [
+                                'getToken',
+                            ],
+                        },
+                    },
+                    default: 'authorization_code',
+                    description: 'The type of grant used in OAuth2 flow',
+                },
+                {
+                    displayName: 'Scope',
+                    name: 'scope',
+                    type: 'string',
+                    required: true,
+                    displayOptions: {
+                        show: {
+                            resource: [
+                                'admin',
+                            ],
+                            operation: [
+                                'getToken',
+                            ],
+                        },
+                    },
+                    default: 'https://analysis.windows.net/powerbi/api/.default offline_access',
+                    description: 'Space-separated list of scopes that you want access to',
+                },
+                {
+                    displayName: 'Token URL',
+                    name: 'tokenUrl',
+                    type: 'string',
+                    required: true,
+                    displayOptions: {
+                        show: {
+                            resource: [
+                                'admin',
+                            ],
+                            operation: [
+                                'refreshToken',
+                            ],
+                        },
+                    },
+                    default: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
+                    description: 'URL for Microsoft Entra ID token endpoint',
+                },
+                {
+                    displayName: 'Client ID',
+                    name: 'clientId',
+                    type: 'string',
+                    required: true,
+                    displayOptions: {
+                        show: {
+                            resource: [
+                                'admin',
+                            ],
+                            operation: [
+                                'refreshToken',
+                            ],
+                        },
+                    },
+                    default: '',
+                    description: 'Application client ID registered in Microsoft Entra ID',
+                },
+                {
+                    displayName: 'Client Secret',
+                    name: 'clientSecret',
+                    type: 'string',
+                    typeOptions: {
+                        password: true,
+                    },
+                    required: true,
+                    displayOptions: {
+                        show: {
+                            resource: [
+                                'admin',
+                            ],
+                            operation: [
+                                'refreshToken',
+                            ],
+                        },
+                    },
+                    default: '',
+                    description: 'Secret key of application registered in Microsoft Entra ID',
+                },
+                {
+                    displayName: 'Refresh Token',
+                    name: 'refreshToken',
+                    type: 'string',
+                    required: true,
+                    displayOptions: {
+                        show: {
+                            resource: [
+                                'admin',
+                            ],
+                            operation: [
+                                'refreshToken',
+                            ],
+                        },
+                    },
+                    default: '',
+                    description: 'Refresh token received from a previous token response',
+                },
+                {
+                    displayName: 'Redirect URI',
+                    name: 'redirectUri',
+                    type: 'string',
+                    required: true,
+                    displayOptions: {
+                        show: {
+                            resource: [
+                                'admin',
+                            ],
+                            operation: [
+                                'refreshToken',
+                            ],
+                        },
+                    },
+                    default: '',
+                    description: 'The same redirect URI used in the authorization request',
+                },
+                {
+                    displayName: 'Grant Type',
+                    name: 'grantType',
+                    type: 'string',
+                    required: true,
+                    displayOptions: {
+                        show: {
+                            resource: [
+                                'admin',
+                            ],
+                            operation: [
+                                'refreshToken',
+                            ],
+                        },
+                    },
+                    default: 'refresh_token',
+                    description: 'The type of grant used in OAuth2 flow',
+                },
+                {
+                    displayName: 'Scope',
+                    name: 'scope',
+                    type: 'string',
+                    required: true,
+                    displayOptions: {
+                        show: {
+                            resource: [
+                                'admin',
+                            ],
+                            operation: [
+                                'refreshToken',
+                            ],
+                        },
+                    },
+                    default: 'https://analysis.windows.net/powerbi/api/.default offline_access',
+                    description: 'Space-separated list of scopes that you want access to',
+                },
+                ...DashboardDescription_1.dashboardOperations,
+                ...DashboardDescription_1.dashboardFields,
+                ...DatasetDescription_1.datasetOperations,
+                ...DatasetDescription_1.datasetFields,
+                ...GroupDescription_1.groupOperations,
+                ...GroupDescription_1.groupFields,
+                ...ReportDescription_1.reportOperations,
+                ...ReportDescription_1.reportFields,
             ],
         };
         this.methods = {
-            loadOptions: {
-                async getGroups() {
+            loadOptions: { async getGroups() {
                     try {
-                        let authToken = this.getNodeParameter('authToken', '');
+                        let authToken = '';
+                        authToken = this.getNodeParameter('authToken', '');
                         if (!authToken) {
                             return [{ name: '-- Token de autenticação obrigatório --', value: '' }];
                         }
@@ -1347,8 +644,7 @@ class PowerBIHeaderAuth {
                     catch (error) {
                         return [{ name: 'Erro ao carregar grupos. Verifique o token.', value: '' }];
                     }
-                },
-                async getGroupsMultiSelect() {
+                }, async getGroupsMultiSelect() {
                     try {
                         let authToken = this.getNodeParameter('authToken', '');
                         if (!authToken) {
@@ -1365,8 +661,7 @@ class PowerBIHeaderAuth {
                     catch (error) {
                         return [{ name: 'Erro ao carregar grupos. Verifique o token.', value: '' }];
                     }
-                },
-                async getDashboards() {
+                }, async getDashboards() {
                     try {
                         let authToken = this.getNodeParameter('authToken', '');
                         if (!authToken) {
@@ -1387,8 +682,7 @@ class PowerBIHeaderAuth {
                     catch (error) {
                         return [{ name: 'Erro ao carregar dashboards. Verifique o token.', value: '' }];
                     }
-                },
-                async getDatasets() {
+                }, async getDatasets() {
                     try {
                         const authToken = this.getNodeParameter('authToken', '');
                         if (!authToken) {
@@ -1406,8 +700,7 @@ class PowerBIHeaderAuth {
                     catch (error) {
                         return [{ name: 'Erro ao carregar datasets. Verifique o token.', value: '' }];
                     }
-                },
-                async getTables() {
+                }, async getTables() {
                     try {
                         const authToken = this.getNodeParameter('authToken', '');
                         if (!authToken) {
@@ -1426,8 +719,7 @@ class PowerBIHeaderAuth {
                     catch (error) {
                         return [{ name: 'Erro ao carregar tabelas. Verifique o token.', value: '' }];
                     }
-                },
-                async getReports() {
+                }, async getReports() {
                     try {
                         let authToken = this.getNodeParameter('authToken', '');
                         if (!authToken) {
@@ -1456,8 +748,9 @@ class PowerBIHeaderAuth {
         this.description.codex = {
             categories: ['Power BI'],
             subcategories: {
-                'Power BI': ['Authentication', 'API'],
+                'Power BI': ['Dashboards', 'Reports', 'Datasets']
             },
+            alias: ['powerbi_header_auth', 'powerbi_token']
         };
     }
     async execute() {
