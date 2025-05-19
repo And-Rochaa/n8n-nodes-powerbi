@@ -206,8 +206,7 @@ class PowerBIHeaderAuth {
                                 'token',
                             ],
                         },
-                    },
-                    options: [
+                    }, options: [
                         {
                             name: 'Generate Auth URL',
                             value: 'generateAuthUrl',
@@ -218,6 +217,12 @@ class PowerBIHeaderAuth {
                             value: 'getToken',
                             description: 'Get an access token using an authorization code',
                             action: 'Get access token',
+                        },
+                        {
+                            name: 'Get Service Principal Token',
+                            value: 'getServicePrincipalToken',
+                            description: 'Get an access token using Service Principal credentials',
+                            action: 'Get service principal token',
                         },
                         {
                             name: 'Refresh Token',
@@ -610,8 +615,7 @@ class PowerBIHeaderAuth {
                     },
                     default: 'refresh_token',
                     description: 'The type of grant used in OAuth2 flow',
-                },
-                {
+                }, {
                     displayName: 'Scope',
                     name: 'scope',
                     type: 'string',
@@ -628,6 +632,98 @@ class PowerBIHeaderAuth {
                     },
                     default: 'https://analysis.windows.net/powerbi/api/.default offline_access',
                     description: 'Space-separated list of scopes that you want access to',
+                },
+                {
+                    displayName: 'Tenant ID',
+                    name: 'tenantId',
+                    type: 'string',
+                    required: true,
+                    displayOptions: {
+                        show: {
+                            resource: [
+                                'token',
+                            ],
+                            operation: [
+                                'getServicePrincipalToken',
+                            ],
+                        },
+                    },
+                    default: '',
+                    description: 'ID do tenant do Microsoft Entra ID (antigo Azure AD)',
+                },
+                {
+                    displayName: 'Client ID',
+                    name: 'clientId',
+                    type: 'string',
+                    required: true,
+                    displayOptions: {
+                        show: {
+                            resource: [
+                                'token',
+                            ],
+                            operation: [
+                                'getServicePrincipalToken',
+                            ],
+                        },
+                    },
+                    default: '',
+                    description: 'ID da aplicação registrada no Microsoft Entra ID',
+                },
+                {
+                    displayName: 'Client Secret',
+                    name: 'clientSecret',
+                    type: 'string',
+                    typeOptions: {
+                        password: true,
+                    },
+                    required: true,
+                    displayOptions: {
+                        show: {
+                            resource: [
+                                'token',
+                            ],
+                            operation: [
+                                'getServicePrincipalToken',
+                            ],
+                        },
+                    },
+                    default: '',
+                    description: 'Secret key da aplicação registrada no Microsoft Entra ID',
+                }, {
+                    displayName: 'API Resource',
+                    name: 'apiResource',
+                    type: 'string',
+                    required: true,
+                    displayOptions: {
+                        show: {
+                            resource: [
+                                'token',
+                            ],
+                            operation: [
+                                'getServicePrincipalToken',
+                            ],
+                        },
+                    },
+                    default: 'https://analysis.windows.net/powerbi/api',
+                    description: 'O recurso para o qual você deseja obter acesso',
+                },
+                {
+                    displayName: 'Grant Type',
+                    name: 'grantType',
+                    type: 'string',
+                    required: true,
+                    displayOptions: {
+                        show: {
+                            resource: [
+                                'token',
+                            ],
+                            operation: [
+                                'getServicePrincipalToken',
+                            ],
+                        },
+                    },
+                    default: 'client_credentials',
+                    description: 'O tipo de concessão usado no fluxo OAuth2',
                 },
                 ...DashboardDescription_1.dashboardOperations,
                 ...DashboardDescription_1.dashboardFields,

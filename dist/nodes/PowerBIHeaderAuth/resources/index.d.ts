@@ -34,5 +34,6 @@ export declare const resources: {
         generateAuthUrl: typeof import("./token/generateAuthUrl").generateAuthUrl;
         getToken: typeof import("./token/getToken").getToken;
         refreshToken: typeof import("./token/refreshToken").refreshToken;
+        getServicePrincipalToken: typeof import("./token/getServicePrincipalToken").getServicePrincipalToken;
     };
 };
