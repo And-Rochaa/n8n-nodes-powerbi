@@ -5,6 +5,7 @@ const n8n_workflow_1 = require("n8n-workflow");
 const GenericFunctions_1 = require("./GenericFunctions");
 const resources_1 = require("./resources");
 const DashboardDescription_1 = require("./descriptions/DashboardDescription");
+const DataflowDescription_1 = require("./descriptions/DataflowDescription");
 const DatasetDescription_1 = require("./descriptions/DatasetDescription");
 const GatewayDescription_1 = require("./descriptions/GatewayDescription");
 const GroupDescription_1 = require("./descriptions/GroupDescription");
@@ -50,6 +51,10 @@ class PowerBI {
                         {
                             name: 'Dashboard',
                             value: 'dashboard',
+                        },
+                        {
+                            name: 'Dataflow',
+                            value: 'dataflow',
                         },
                         {
                             name: 'Dataset',
@@ -207,6 +212,8 @@ class PowerBI {
                 },
                 ...DashboardDescription_1.dashboardOperations,
                 ...DashboardDescription_1.dashboardFields,
+                ...DataflowDescription_1.dataflowOperations,
+                ...DataflowDescription_1.dataflowFields,
                 ...DatasetDescription_1.datasetOperations,
                 ...DatasetDescription_1.datasetFields,
                 ...GatewayDescription_1.gatewayOperations,
@@ -230,6 +237,9 @@ class PowerBI {
                 },
                 async getDatasets() {
                     return await GenericFunctions_1.getDatasets.call(this);
+                },
+                async getDataflows() {
+                    return await GenericFunctions_1.getDataflows.call(this);
                 },
                 async getDatasources() {
                     return await GenericFunctions_1.getDatasources.call(this);
@@ -306,6 +316,12 @@ class PowerBI {
                         case 'report':
                             if (operation in resources_1.resources.report) {
                                 const results = await resources_1.resources.report[operation].call(this, i);
+                                returnData.push(...results);
+                            }
+                            break;
+                        case 'dataflow':
+                            if (operation in resources_1.resources.dataflow) {
+                                const results = await resources_1.resources.dataflow[operation].call(this, i);
                                 returnData.push(...results);
                             }
                             break;

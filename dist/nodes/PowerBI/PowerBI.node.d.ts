@@ -7,6 +7,7 @@ export declare class PowerBI implements INodeType {
             getGroupsMultiSelect(this: ILoadOptionsFunctions): Promise<any>;
             getDashboards(this: ILoadOptionsFunctions): Promise<any>;
             getDatasets(this: ILoadOptionsFunctions): Promise<any>;
+            getDataflows(this: ILoadOptionsFunctions): Promise<any>;
             getDatasources(this: ILoadOptionsFunctions): Promise<any>;
             getGateways(this: ILoadOptionsFunctions): Promise<any>;
             getTables(this: ILoadOptionsFunctions): Promise<any>;

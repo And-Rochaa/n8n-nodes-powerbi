@@ -6,6 +6,7 @@ const GenericFunctions_1 = require("./GenericFunctions");
 const resources_1 = require("./resources");
 const DashboardDescription_1 = require("../PowerBI/descriptions/DashboardDescription");
 const DatasetDescription_1 = require("../PowerBI/descriptions/DatasetDescription");
+const DataflowDescription_1 = require("./descriptions/DataflowDescription");
 const GatewayDescription_1 = require("./descriptions/GatewayDescription");
 const GroupDescription_1 = require("../PowerBI/descriptions/GroupDescription");
 const ReportDescription_1 = require("../PowerBI/descriptions/ReportDescription");
@@ -66,6 +67,10 @@ class PowerBIHeaderAuth {
                         {
                             name: 'Dataset',
                             value: 'dataset',
+                        },
+                        {
+                            name: 'Dataflow',
+                            value: 'dataflow',
                         },
                         {
                             name: 'Gateway',
@@ -734,6 +739,8 @@ class PowerBIHeaderAuth {
                 ...DashboardDescription_1.dashboardFields,
                 ...DatasetDescription_1.datasetOperations,
                 ...DatasetDescription_1.datasetFields,
+                ...DataflowDescription_1.dataflowOperations,
+                ...DataflowDescription_1.dataflowFields,
                 ...GatewayDescription_1.gatewayOperations,
                 ...GatewayDescription_1.gatewayFields,
                 ...GroupDescription_1.groupOperations,
@@ -858,6 +865,25 @@ class PowerBIHeaderAuth {
                         return [{ name: 'Erro ao carregar relatórios. Verifique o token.', value: '' }];
                     }
                 },
+                async getDataflows() {
+                    try {
+                        const authToken = this.getNodeParameter('authToken', '');
+                        if (!authToken) {
+                            return [{ name: '-- Token de autenticação obrigatório --', value: '' }];
+                        }
+                        const groupId = this.getNodeParameter('groupId', '');
+                        if (!groupId) {
+                            return [{ name: '-- Selecione um workspace primeiro --', value: '' }];
+                        }
+                        const authHeader = {
+                            Authorization: `Bearer ${authToken}`
+                        };
+                        return await GenericFunctions_1.getDataflows.call(this, groupId, authHeader);
+                    }
+                    catch (error) {
+                        return [{ name: 'Erro ao carregar dataflows. Verifique o token.', value: '' }];
+                    }
+                },
                 async getGateways() {
                     return await GenericFunctions_1.getGateways.call(this);
                 },
@@ -925,6 +951,13 @@ class PowerBIHeaderAuth {
                 else if (resource === 'dataset') {
                     if (operation in resources_1.resources.dataset) {
                         const results = await resources_1.resources.dataset[operation].call(this, i);
+                        returnData.push(...results);
+                        responseData = null;
+                    }
+                }
+                else if (resource === 'dataflow') {
+                    if (operation in resources_1.resources.dataflow) {
+                        const results = await resources_1.resources.dataflow[operation].call(this, i);
                         returnData.push(...results);
                         responseData = null;
                     }

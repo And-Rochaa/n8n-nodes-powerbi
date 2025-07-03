@@ -16,6 +16,7 @@ import {
 	getDashboards,
 	getGroupsMultiSelect,
 	getDatasets,
+	getDataflows,
 	getDatasources,
 	getGateways,
 	getTables,
@@ -30,6 +31,11 @@ import {
 	dashboardOperations,
 	dashboardFields,
 } from './descriptions/DashboardDescription';
+
+import {
+	dataflowOperations,
+	dataflowFields,
+} from './descriptions/DataflowDescription';
 
 import {
 	datasetOperations,
@@ -93,6 +99,10 @@ export class PowerBI implements INodeType {	description: INodeTypeDescription = 
 					{
 						name: 'Dashboard',
 						value: 'dashboard',
+					},
+					{
+						name: 'Dataflow',
+						value: 'dataflow',
 					},
 					{
 						name: 'Dataset',
@@ -252,6 +262,10 @@ export class PowerBI implements INodeType {	description: INodeTypeDescription = 
 			...dashboardOperations,
 			...dashboardFields,
 
+			// DATAFLOW OPERATIONS
+			...dataflowOperations,
+			...dataflowFields,
+
 			// DATASET OPERATIONS
 			...datasetOperations,
 			...datasetFields,
@@ -283,6 +297,9 @@ export class PowerBI implements INodeType {	description: INodeTypeDescription = 
 			},
 			async getDatasets(this: ILoadOptionsFunctions) {
 				return await getDatasets.call(this);
+			},
+			async getDataflows(this: ILoadOptionsFunctions) {
+				return await getDataflows.call(this);
 			},
 			async getDatasources(this: ILoadOptionsFunctions) {
 				return await getDatasources.call(this);
@@ -391,6 +408,15 @@ export class PowerBI implements INodeType {	description: INodeTypeDescription = 
 							if (operation in resources.report) {
 								// Execute a operação correspondente
 								const results = await resources.report[operation].call(this, i);
+								returnData.push(...results);
+							}
+							break;
+							
+						case 'dataflow':
+							// Usando os recursos modularizados
+							if (operation in resources.dataflow) {
+								// Execute a operação correspondente
+								const results = await resources.dataflow[operation].call(this, i);
 								returnData.push(...results);
 							}
 							break;

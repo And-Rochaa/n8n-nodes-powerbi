@@ -10,6 +10,7 @@ export declare class PowerBIHeaderAuth implements INodeType {
             getDatasets(this: ILoadOptionsFunctions): Promise<any>;
             getTables(this: ILoadOptionsFunctions): Promise<any>;
             getReports(this: ILoadOptionsFunctions): Promise<any>;
+            getDataflows(this: ILoadOptionsFunctions): Promise<any>;
             getGateways(this: ILoadOptionsFunctions): Promise<any>;
             getDatasources(this: ILoadOptionsFunctions): Promise<any>;
         };

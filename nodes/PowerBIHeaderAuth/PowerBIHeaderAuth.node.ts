@@ -16,6 +16,7 @@ import {
 	getGroups,
 	getDashboards,
 	getDatasets,
+	getDataflows,
 	getDatasources,
 	getGateways,
 	getTables,
@@ -37,6 +38,11 @@ import {
 	datasetOperations,
 	datasetFields,
 } from '../PowerBI/descriptions/DatasetDescription';
+
+import {
+	dataflowOperations,
+	dataflowFields,
+} from './descriptions/DataflowDescription';
 
 import {
 	gatewayOperations,
@@ -110,6 +116,10 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 					{
 						name: 'Dataset',
 						value: 'dataset',
+					},
+					{
+						name: 'Dataflow',
+						value: 'dataflow',
 					},
 					{
 						name: 'Gateway',
@@ -790,6 +800,10 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 			...datasetOperations,
 			...datasetFields,
 
+			// DATAFLOW OPERATIONS AND FIELDS
+			...dataflowOperations,
+			...dataflowFields,
+
 			// GATEWAY OPERATIONS AND FIELDS
 			...gatewayOperations,
 			...gatewayFields,
@@ -970,6 +984,28 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 					return [{ name: 'Erro ao carregar relatórios. Verifique o token.', value: '' }];
 				}
 			},
+			async getDataflows(this: ILoadOptionsFunctions) {
+				try {
+					const authToken = this.getNodeParameter('authToken', '') as string;
+					if (!authToken) {
+						// Retornar mensagem indicando que o token é necessário
+						return [{ name: '-- Token de autenticação obrigatório --', value: '' }];
+					}
+					
+					const groupId = this.getNodeParameter('groupId', '') as string;
+					if (!groupId) {
+						return [{ name: '-- Selecione um workspace primeiro --', value: '' }];
+					}
+					
+					const authHeader = { 
+						Authorization: `Bearer ${authToken}`
+					};
+					
+					return await getDataflows.call(this, groupId, authHeader);
+				} catch (error) {
+					return [{ name: 'Erro ao carregar dataflows. Verifique o token.', value: '' }];
+				}
+			},
 			async getGateways(this: ILoadOptionsFunctions) {
 				return await getGateways.call(this);
 			},
@@ -1038,6 +1074,16 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
                     if (operation in resources.dataset) {
                         // Execute a operação correspondente
                         const results = await resources.dataset[operation].call(this, i);
+                        returnData.push(...results);
+                        
+                        // Importante: marcar responseData como null para evitar processamento adicional
+                        responseData = null;
+                    }
+                } else if (resource === 'dataflow') {
+                    // Dataflow operations - usando os recursos modularizados
+                    if (operation in resources.dataflow) {
+                        // Execute a operação correspondente
+                        const results = await resources.dataflow[operation].call(this, i);
                         returnData.push(...results);
                         
                         // Importante: marcar responseData como null para evitar processamento adicional

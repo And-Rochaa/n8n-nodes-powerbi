@@ -8,6 +8,7 @@ import {
 	IHttpRequestOptions,
 	JsonObject,
 	IHttpRequestMethods,
+	INodePropertyOptions,
 } from 'n8n-workflow';
 
 /**
@@ -416,7 +417,6 @@ export async function getGateways(this: ILoadOptionsFunctions) {
 	} catch (error) {
 		// Se não conseguir listar gateways, retorna array vazio
 		// Isso pode acontecer se o usuário não tiver permissão de administrador de gateway
-		console.warn('Unable to list gateways:', error);
 	}
 	
 	return returnData;
@@ -450,8 +450,50 @@ export async function getDatasources(this: ILoadOptionsFunctions) {
 	} catch (error) {
 		// Se não conseguir listar datasources, retorna array vazio
 		// Isso pode acontecer se o usuário não tiver permissão de administrador de gateway
-		console.warn('Unable to list datasources:', error);
 		return [{ name: 'Erro ao carregar fontes de dados. Verifique as permissões.', value: '' }];
+	}
+	
+	return returnData;
+}
+
+/**
+ * Get all dataflows for a specific group
+ */
+export async function getDataflows(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+	const groupId = this.getCurrentNodeParameter('groupId') as string;
+	const returnData: INodePropertyOptions[] = [];
+
+	if (!groupId) {
+		return [{ name: 'Selecione um workspace primeiro', value: '' }];
+	}
+
+	try {
+		const responseData = await powerBiApiRequest.call(this, 'GET', `/groups/${groupId}/dataflows`);
+		
+		if (responseData && responseData.value) {
+			if (responseData.value.length === 0) {
+				return [{ name: 'Nenhum dataflow encontrado neste workspace', value: '' }];
+			}
+			
+			for (const dataflow of responseData.value) {
+				// A API do Power BI usa 'objectId' em vez de 'id' para dataflows
+				if (dataflow.name && dataflow.objectId) {
+					returnData.push({
+						name: dataflow.name,
+						value: dataflow.objectId,
+					});
+				}
+			}
+		} else {
+			return [{ name: 'Resposta da API não contém dataflows', value: '' }];
+		}
+		
+		if (returnData.length === 0) {
+			return [{ name: 'Nenhum dataflow válido encontrado', value: '' }];
+		}
+	} catch (error) {
+		// Se não conseguir listar dataflows, retorna array vazio
+		return [{ name: `Erro ao carregar fluxos de dados: ${error.message}`, value: '' }];
 	}
 	
 	return returnData;

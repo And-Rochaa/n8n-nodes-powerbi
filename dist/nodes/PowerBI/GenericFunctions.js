@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getDatasources = exports.getGateways = exports.getDashboards = exports.getReports = exports.getTables = exports.getDatasets = exports.getGroupsMultiSelect = exports.getGroups = exports.powerBiApiRequestAllItems = exports.powerBiApiRequest = exports.getRopcAccessToken = void 0;
+exports.getDataflows = exports.getDatasources = exports.getGateways = exports.getDashboards = exports.getReports = exports.getTables = exports.getDatasets = exports.getGroupsMultiSelect = exports.getGroups = exports.powerBiApiRequestAllItems = exports.powerBiApiRequest = exports.getRopcAccessToken = void 0;
 const n8n_workflow_1 = require("n8n-workflow");
 async function getRopcAccessToken() {
     const credentials = await this.getCredentials('powerBI');
@@ -263,7 +263,6 @@ async function getGateways() {
         }
     }
     catch (error) {
-        console.warn('Unable to list gateways:', error);
     }
     return returnData;
 }
@@ -288,10 +287,43 @@ async function getDatasources() {
         }
     }
     catch (error) {
-        console.warn('Unable to list datasources:', error);
         return [{ name: 'Erro ao carregar fontes de dados. Verifique as permissões.', value: '' }];
     }
     return returnData;
 }
 exports.getDatasources = getDatasources;
+async function getDataflows() {
+    const groupId = this.getCurrentNodeParameter('groupId');
+    const returnData = [];
+    if (!groupId) {
+        return [{ name: 'Selecione um workspace primeiro', value: '' }];
+    }
+    try {
+        const responseData = await powerBiApiRequest.call(this, 'GET', `/groups/${groupId}/dataflows`);
+        if (responseData && responseData.value) {
+            if (responseData.value.length === 0) {
+                return [{ name: 'Nenhum dataflow encontrado neste workspace', value: '' }];
+            }
+            for (const dataflow of responseData.value) {
+                if (dataflow.name && dataflow.objectId) {
+                    returnData.push({
+                        name: dataflow.name,
+                        value: dataflow.objectId,
+                    });
+                }
+            }
+        }
+        else {
+            return [{ name: 'Resposta da API não contém dataflows', value: '' }];
+        }
+        if (returnData.length === 0) {
+            return [{ name: 'Nenhum dataflow válido encontrado', value: '' }];
+        }
+    }
+    catch (error) {
+        return [{ name: `Erro ao carregar fluxos de dados: ${error.message}`, value: '' }];
+    }
+    return returnData;
+}
+exports.getDataflows = getDataflows;
 //# sourceMappingURL=GenericFunctions.js.map

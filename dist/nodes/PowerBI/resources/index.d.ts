@@ -8,6 +8,10 @@ export declare const resources: {
         get: typeof import("./dashboard/get").get;
         getTiles: typeof import("./dashboard/getTiles").getTiles;
     };
+    dataflow: {
+        list: typeof import("./dataflow/list").listDataflows;
+        get: typeof import("./dataflow/get").get;
+    };
     dataset: {
         list: typeof import("./dataset/list").list;
         get: typeof import("./dataset/get").get;
