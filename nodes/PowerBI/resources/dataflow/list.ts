@@ -11,7 +11,7 @@ export async function listDataflows(
 	const groupId = this.getNodeParameter('groupId', index) as string;
 
 	if (!groupId) {
-		throw new Error('Workspace ID é obrigatório');
+		throw new Error('Workspace ID is required');
 	}
 
 	const endpoint = `/groups/${groupId}/dataflows`;
@@ -23,7 +23,7 @@ export async function listDataflows(
 			endpoint,
 		);
 
-		// Se a resposta contém uma propriedade 'value', retornar os itens individuais
+		// If the response contains a 'value' property, return individual items
 		if (responseData.value && Array.isArray(responseData.value)) {
 			return responseData.value.map((dataflow: any) => ({
 				json: dataflow,
@@ -31,15 +31,15 @@ export async function listDataflows(
 			}));
 		}
 
-		// Se não há propriedade 'value', retornar a resposta completa
+		// If there's no 'value' property, return the complete response
 		return [{
 			json: responseData,
 			pairedItem: { item: index },
 		}];
 
 	} catch (error) {
-		// Melhor tratamento de erro com mais detalhes
+		// Better error handling with more details
 		const errorMessage = error.message || error.toString();
-		throw new Error(`Erro ao obter fluxos de dados (Workspace: ${groupId}): ${errorMessage}. Verifique se você tem permissões adequadas no workspace.`);
+		throw new Error(`Error getting dataflows (Workspace: ${groupId}): ${errorMessage}. Please verify that you have adequate permissions in the workspace.`);
 	}
 }

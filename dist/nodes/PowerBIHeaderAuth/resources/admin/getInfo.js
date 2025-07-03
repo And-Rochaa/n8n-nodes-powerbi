@@ -12,7 +12,7 @@ async function getInfo(i) {
     };
     const workspaces = this.getNodeParameter('workspaces', i);
     if (!workspaces || workspaces.length === 0) {
-        throw new Error('É necessário selecionar pelo menos um workspace');
+        throw new Error('It is necessary to select at least one workspace');
     }
     const datasetSchema = this.getNodeParameter('datasetSchema', i, false);
     const datasetExpressions = this.getNodeParameter('datasetExpressions', i, false);

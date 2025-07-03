@@ -8,7 +8,7 @@ import {
 import { powerBiApiRequest } from '../../GenericFunctions';
 
 /**
- * Obtém os tiles de um dashboard específico
+ * Gets the tiles of a specific dashboard
  */
 export async function getTiles(
 	this: IExecuteFunctions,

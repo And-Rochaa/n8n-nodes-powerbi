@@ -6,7 +6,7 @@ import {
 } from 'n8n-workflow';
 
 /**
- * Obtém um token de acesso usando o código de autorização
+ * Get an access token using the authorization code
  */
 export async function getToken(
 	this: IExecuteFunctions,
@@ -14,7 +14,7 @@ export async function getToken(
 ): Promise<INodeExecutionData[]> {
 	const returnData: INodeExecutionData[] = [];
 	
-	// Recuperar os parâmetros fornecidos pelo usuário
+	// Retrieve parameters provided by the user
 	const tokenUrl = this.getNodeParameter('tokenUrl', i) as string;
 	const clientId = this.getNodeParameter('clientId', i) as string;
 	const clientSecret = this.getNodeParameter('clientSecret', i) as string;
@@ -23,7 +23,7 @@ export async function getToken(
 	const grantType = this.getNodeParameter('grantType', i) as string;
 	const scope = this.getNodeParameter('scope', i) as string;
 		try {
-		// Configuração da requisição
+		// Request configuration
 		const options = {
 			method: 'POST',
 			url: tokenUrl,
@@ -41,15 +41,15 @@ export async function getToken(
 			json: true,
 		};
 		
-		// Realizar a requisição HTTP
+		// Make HTTP request
 		const response = await this.helpers.request(options) as JsonObject;
 		
-		// Verificar se a resposta contém um token de acesso
+		// Check if response contains an access token
 		if (!response.access_token) {
-			throw new Error('A resposta não contém um token de acesso válido');
+			throw new Error('Response does not contain a valid access token');
 		}
 		
-		// Construir objeto de retorno com os dados do token
+		// Build return object with token data
 		const responseData: IDataObject = {
 			access_token: response.access_token,
 			token_type: response.token_type || 'Bearer',
@@ -58,20 +58,20 @@ export async function getToken(
 			scope: response.scope,
 		};
 		
-		// Retornar os dados do token
+		// Return token data
 		returnData.push({
 			json: responseData,
 		});
 		
 		return returnData;
 	} catch (error) {
-		// Tratar erros de forma mais informativa
+		// Handle errors more informatively
 		if (error.response) {
 			const errorMessage = error.response.data?.error_description || 
 								 error.response.data?.error || 
-								 'Erro na obtenção do token';
-			throw new Error(`Erro na requisição do token: ${errorMessage}`);
+								 'Token acquisition error';
+			throw new Error(`Token request error: ${errorMessage}`);
 		}
-		throw new Error(`Falha ao obter token: ${error.message}`);
+		throw new Error(`Failed to get token: ${error.message}`);
 	}
 }

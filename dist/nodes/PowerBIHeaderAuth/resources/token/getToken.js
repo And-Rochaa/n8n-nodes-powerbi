@@ -30,7 +30,7 @@ async function getToken(i) {
         };
         const response = await this.helpers.request(options);
         if (!response.access_token) {
-            throw new Error('A resposta não contém um token de acesso válido');
+            throw new Error('Response does not contain a valid access token');
         }
         const responseData = {
             access_token: response.access_token,
@@ -48,10 +48,10 @@ async function getToken(i) {
         if (error.response) {
             const errorMessage = ((_a = error.response.data) === null || _a === void 0 ? void 0 : _a.error_description) ||
                 ((_b = error.response.data) === null || _b === void 0 ? void 0 : _b.error) ||
-                'Erro na obtenção do token';
-            throw new Error(`Erro na requisição do token: ${errorMessage}`);
+                'Token acquisition error';
+            throw new Error(`Token request error: ${errorMessage}`);
         }
-        throw new Error(`Falha ao obter token: ${error.message}`);
+        throw new Error(`Failed to get token: ${error.message}`);
     }
 }
 exports.getToken = getToken;

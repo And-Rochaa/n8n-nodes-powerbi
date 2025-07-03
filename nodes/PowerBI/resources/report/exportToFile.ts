@@ -8,7 +8,7 @@ import {
 
 import { powerBiApiRequest } from '../../GenericFunctions';
 
-// Interfaces para os tipos do Power BI
+// Interfaces for Power BI types
 interface IPageBookmark {
 	name?: string;
 	state?: string;
@@ -61,7 +61,7 @@ interface IEffectiveIdentity {
 }
 
 /**
- * Exporta um relatório do Power BI para vários formatos de arquivo
+ * Exports a Power BI report to various file formats
  */
 export async function exportToFile(
 	this: IExecuteFunctions,
@@ -69,32 +69,32 @@ export async function exportToFile(
 ): Promise<INodeExecutionData[]> {
 	const returnData: INodeExecutionData[] = [];
 	
-	// Obter parâmetros básicos
+	// Get basic parameters
 	const reportId = this.getNodeParameter('reportId', i) as string;
 	const groupId = this.getNodeParameter('groupId', i, '') as string;
 	const exportFormat = this.getNodeParameter('exportFormat', i) as string;
 	const waitForCompletion = this.getNodeParameter('waitForCompletion', i, true) as boolean;
 	const additionalFields = this.getNodeParameter('additionalFields', i, {}) as IDataObject;
-	const maxWaitTime = (additionalFields.maxWaitTime as number) || 300; // tempo máximo em segundos
-	const pollingInterval = (additionalFields.pollingInterval as number) || 5; // intervalo de polling em segundos
+	const maxWaitTime = (additionalFields.maxWaitTime as number) || 300; // maximum wait time in seconds
+	const pollingInterval = (additionalFields.pollingInterval as number) || 5; // polling interval in seconds
 	
-	// Construir endpoint baseado no grupo selecionado
+	// Build endpoint based on selected group
 	const exportEndpoint = groupId && groupId !== 'me' ? 
 		`/groups/${groupId}/reports/${reportId}/ExportTo` : `/reports/${reportId}/ExportTo`;
 	
-	// Preparar corpo da solicitação
+	// Prepare request body
 	const body: IDataObject = {
 		format: exportFormat,
 	};
 	
-	// Verificar se é um relatório do Power BI ou paginado
+	// Check if it is a Power BI or paginated report
 	const reportType = this.getNodeParameter('reportType', i, 'powerBI') as string;
 	
 	if (reportType === 'powerBI') {
-		// Configurações para relatórios do Power BI
+		// Settings for Power BI reports
 		const powerBIConfig: IPowerBIReportExportConfiguration = {};
 		
-		// Configurações básicas
+		// Basic settings
 		const includeHiddenPages = this.getNodeParameter('includeHiddenPages', i, false) as boolean;
 		const locale = this.getNodeParameter('locale', i, '') as string;
 		
@@ -110,7 +110,7 @@ export async function exportToFile(
 			}
 		}
 		
-		// Verificar se há páginas específicas para exportar
+		// Check if there are specific pages to export
 		const exportSpecificPages = this.getNodeParameter('exportSpecificPages', i, false) as boolean;
 		
 		if (exportSpecificPages) {
@@ -121,13 +121,13 @@ export async function exportToFile(
 					powerBIConfig.pages = pages;
 				}
 			} catch (error) {
-				throw new NodeOperationError(this.getNode(), 'Formato JSON inválido para páginas', {
-					description: 'Certifique-se de que o formato JSON está correto.',
+				throw new NodeOperationError(this.getNode(), 'Invalid JSON format for pages', {
+					description: 'Please ensure the JSON format is correct.',
 				});
 			}
 		}
 		
-		// Verificar se há filtros de nível de relatório
+		// Check if there are report-level filters
 		const useReportLevelFilters = this.getNodeParameter('useReportLevelFilters', i, false) as boolean;
 		
 		if (useReportLevelFilters) {
@@ -138,13 +138,13 @@ export async function exportToFile(
 					powerBIConfig.reportLevelFilters = filters;
 				}
 			} catch (error) {
-				throw new NodeOperationError(this.getNode(), 'Formato JSON inválido para filtros', {
-					description: 'Certifique-se de que o formato JSON está correto.',
+				throw new NodeOperationError(this.getNode(), 'Invalid JSON format for filters', {
+					description: 'Please ensure the JSON format is correct.',
 				});
 			}
 		}
 		
-		// Verificar se há um bookmark padrão
+		// Check if there is a default bookmark
 		const useDefaultBookmark = this.getNodeParameter('useDefaultBookmark', i, false) as boolean;
 		
 		if (useDefaultBookmark) {
@@ -164,7 +164,7 @@ export async function exportToFile(
 			}
 		}
 		
-		// Verificar se há um dataset alternativo para vincular
+		// Check if there is an alternative dataset to bind
 		const useAlternativeDataset = this.getNodeParameter('useAlternativeDataset', i, false) as boolean;
 		
 		if (useAlternativeDataset) {
@@ -174,7 +174,7 @@ export async function exportToFile(
 			}
 		}
 		
-		// Verificar se deve usar identidades para RLS (Row-Level Security)
+		// Check if identities should be used for RLS (Row-Level Security)
 		const useIdentities = this.getNodeParameter('useIdentities', i, false) as boolean;
 		
 		if (useIdentities) {
@@ -185,27 +185,27 @@ export async function exportToFile(
 					powerBIConfig.identities = identities;
 				}
 			} catch (error) {
-				throw new NodeOperationError(this.getNode(), 'Formato JSON inválido para identidades', {
-					description: 'Certifique-se de que o formato JSON está correto.',
+				throw new NodeOperationError(this.getNode(), 'Invalid JSON format for identities', {
+					description: 'Please ensure the JSON format is correct.',
 				});
 			}
 		}
 		
-		// Adicionar configurações do Power BI se existirem
+		// Add Power BI configuration if it exists
 		if (Object.keys(powerBIConfig).length > 0) {
 			body.powerBIReportConfiguration = powerBIConfig;
 		}
 	} else {
-		// Configurações para relatórios paginados
+		// Settings for paginated reports
 		const paginatedConfig: IPaginatedReportExportConfiguration = {};
 		
-		// Configuração de locale
+		// Locale configuration
 		const locale = this.getNodeParameter('locale', i, '') as string;
 		if (locale) {
 			paginatedConfig.locale = locale;
 		}
 		
-		// Parâmetros do relatório
+		// Report parameters
 		const useParameters = this.getNodeParameter('useParameters', i, false) as boolean;
 		
 		if (useParameters) {
@@ -216,13 +216,13 @@ export async function exportToFile(
 					paginatedConfig.parameterValues = parameters;
 				}
 			} catch (error) {
-				throw new NodeOperationError(this.getNode(), 'Formato JSON inválido para parâmetros', {
-					description: 'Certifique-se de que o formato JSON está correto.',
+				throw new NodeOperationError(this.getNode(), 'Invalid JSON format for parameters', {
+					description: 'Please ensure the JSON format is correct.',
 				});
 			}
 		}
 		
-		// Configurações de formato
+		// Format settings
 		const useFormatSettings = this.getNodeParameter('useFormatSettings', i, false) as boolean;
 		
 		if (useFormatSettings) {
@@ -233,13 +233,13 @@ export async function exportToFile(
 					paginatedConfig.formatSettings = formatSettings;
 				}
 			} catch (error) {
-				throw new NodeOperationError(this.getNode(), 'Formato JSON inválido para configurações de formato', {
-					description: 'Certifique-se de que o formato JSON está correto.',
+				throw new NodeOperationError(this.getNode(), 'Invalid JSON format for format settings', {
+					description: 'Please ensure the JSON format is correct.',
 				});
 			}
 		}
 		
-		// Identidades RLS para relatórios paginados
+		// RLS identities for paginated reports
 		const useIdentities = this.getNodeParameter('useIdentities', i, false) as boolean;
 		
 		if (useIdentities) {
@@ -250,20 +250,20 @@ export async function exportToFile(
 					paginatedConfig.identities = identities;
 				}
 			} catch (error) {
-				throw new NodeOperationError(this.getNode(), 'Formato JSON inválido para identidades', {
-					description: 'Certifique-se de que o formato JSON está correto.',
+				throw new NodeOperationError(this.getNode(), 'Invalid JSON format for identities', {
+					description: 'Please ensure the JSON format is correct.',
 				});
 			}
 		}
 		
-		// Adicionar configurações do relatório paginado se existirem
+		// Add paginated report configuration if it exists
 		if (Object.keys(paginatedConfig).length > 0) {
 			body.paginatedReportConfiguration = paginatedConfig;
 		}
 	}
 	
 	try {
-		// Iniciar o trabalho de exportação
+		// Start the export job
 		const exportResponse = await powerBiApiRequest.call(
 			this,
 			'POST',
@@ -274,28 +274,28 @@ export async function exportToFile(
 		const exportId = exportResponse.id;
 		
 		if (!waitForCompletion) {
-			// Retornar os detalhes do trabalho de exportação imediatamente
+			// Return export job details immediately
 			returnData.push({
 				json: exportResponse,
 			});
 			return returnData;
 		}
 		
-		// Construir endpoint para verificar o status da exportação
+		// Build endpoint to check export status
 		const statusEndpoint = groupId && groupId !== 'me' ? 
 			`/groups/${groupId}/reports/${reportId}/exports/${exportId}` : `/reports/${reportId}/exports/${exportId}`;
 		
-		// Polling para verificar o status do trabalho de exportação
+		// Polling to check the export job status
 		let exportStatus = exportResponse.status;
 		let statusResponse = exportResponse;
 		let elapsedTime = 0;
 		
 		while (exportStatus !== 'Succeeded' && exportStatus !== 'Failed' && elapsedTime < maxWaitTime) {
-			// Aguardar o intervalo de polling antes da próxima verificação
+			// Wait for the polling interval before the next check
 			await new Promise(resolve => setTimeout(resolve, pollingInterval * 1000));
 			elapsedTime += pollingInterval;
 			
-			// Verificar o status atual do trabalho de exportação
+			// Check the current export job status
 			statusResponse = await powerBiApiRequest.call(
 				this,
 				'GET',
@@ -305,13 +305,13 @@ export async function exportToFile(
 			
 			exportStatus = statusResponse.status;
 		}
-		// Verificar o resultado final
+		// Check the final result
 		if (exportStatus === 'Succeeded') {
-			// Verificar se é necessário baixar o arquivo
+			// Check if it is necessary to download the file
 			const downloadFile = this.getNodeParameter('downloadFile', i, false) as boolean;
 			
 			if (downloadFile && statusResponse.resourceLocation) {
-				try {					// Fazer uma solicitação GET para baixar o arquivo
+				try {					// Make a GET request to download the file
 					const fileResponse = await powerBiApiRequest.call(
 						this,
 						'GET',
@@ -322,7 +322,7 @@ export async function exportToFile(
 					);
 		
 					
-					// Extrair o corpo da resposta que contém o buffer do arquivo com verificação extra
+					// Extract the response body containing the file buffer with extra validation
 					let fileBuffer;
 							if (fileResponse && typeof fileResponse === 'object') {
 						if (Buffer.isBuffer(fileResponse)) {
@@ -336,21 +336,21 @@ export async function exportToFile(
 						fileBuffer = fileResponse;
 					}
 					
-					// Verificação final e conversão segura para Buffer
+					// Final check and safe conversion to Buffer
 					if (!fileBuffer) {
-						throw new Error('Não foi possível extrair o conteúdo do arquivo da resposta');
+						throw new Error('Could not extract file content from the response');
 					}
 					
-					// Converter para Buffer com tratamento de erro
+					// Convert to Buffer with error handling
 					let base64Data;					try {
 						const buffer = Buffer.isBuffer(fileBuffer) ? fileBuffer : Buffer.from(fileBuffer);
 						base64Data = buffer.toString('base64');
 					} catch (bufferError: any) {
-						throw new Error(`Falha ao processar o arquivo: ${bufferError.message}`);
+						throw new Error(`Failed to process the file: ${bufferError.message}`);
 					}
 					
-					// Determinar o tipo MIME com base na extensão do arquivo
-					let mimeType = 'application/octet-stream'; // Padrão
+					// Determine the MIME type based on the file extension
+					let mimeType = 'application/octet-stream'; // Default
 					const fileExtension = statusResponse.resourceFileExtension?.toLowerCase();
 					
 					if (fileExtension === '.pdf') {
@@ -362,7 +362,7 @@ export async function exportToFile(
 					} else if (fileExtension === '.xlsx') {
 						mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 					}
-							// Retornar os dados do status e o arquivo em base64
+							// Return the status data and the file in base64
 					returnData.push({
 						json: {
 							...statusResponse,
@@ -377,20 +377,20 @@ export async function exportToFile(
 						}
 					});				} catch (downloadError) {
 					throw new NodeApiError(this.getNode(), downloadError, {
-						message: 'Falha ao baixar o arquivo exportado',
-						description: 'O relatório foi exportado com sucesso, mas não foi possível baixar o arquivo.'
+						message: 'Failed to download the exported file',
+						description: 'The report was exported successfully, but the file could not be downloaded.'
 					});
 				}
 			} else {
-				// Retornar apenas os dados do status sem baixar o arquivo
+				// Return only the status data without downloading the file
 				returnData.push({
 					json: statusResponse,
 				});
 			}
 		} else if (exportStatus === 'Failed') {
-			let errorDescription = 'Tempo limite excedido ou erro desconhecido';
+			let errorDescription = 'Timeout exceeded or unknown error';
 			
-			// Verificar se statusResponse tem a propriedade error e se esta tem a propriedade message
+			// Check if statusResponse has the error property and if it has the message property
 			if (statusResponse && 
 				typeof statusResponse === 'object' && 
 				statusResponse.error && 
@@ -400,32 +400,32 @@ export async function exportToFile(
 			}
 			
 			throw new NodeApiError(this.getNode(), statusResponse, {
-				message: 'Falha na exportação do relatório',
+				message: 'Report export failed',
 				description: errorDescription,
 			});
 		} else {
 			throw new NodeApiError(this.getNode(), statusResponse, {
-				message: 'Tempo limite excedido',
-				description: `A exportação não foi concluída dentro do tempo máximo de espera (${maxWaitTime} segundos)`,
+				message: 'Timeout exceeded',
+				description: `The export did not complete within the maximum wait time (${maxWaitTime} seconds)`,
 			});
 		}
 				return returnData;	} catch (error) {
 		
-		// Verificar se é um erro específico de feature não disponível
+		// Check if it is a specific error for feature not available
 		if (error.response && 
 			error.response.data && 
 			error.response.data.error && 
 			error.response.data.error.code === 'FeatureNotAvailableError') {
 			
 			throw new NodeApiError(this.getNode(), error.response.data, {
-				message: 'Recurso de exportação não disponível',
-				description: 'A API de exportação para este formato não está disponível para este relatório ou sua licença do Power BI não permite esta operação. Verifique se você tem as permissões necessárias e se o relatório suporta o formato solicitado.',
+				message: 'Export feature not available',
+				description: 'The export API for this format is not available for this report, or your Power BI license does not allow this operation. Please check if you have the necessary permissions and if the report supports the requested format.',
 				httpCode: '404',
 			});
 		} else if (error.response && error.response.data) {
 			throw new NodeApiError(this.getNode(), error.response.data, { 
-				message: `Status: ${error.response.status || 'Erro'}`,
-				description: `Falha na comunicação com a API do Power BI: ${JSON.stringify(error.response.data)}`,
+				message: `Status: ${error.response.status || 'Error'}`,
+				description: `Failed to communicate with the Power BI API: ${JSON.stringify(error.response.data)}`,
 				httpCode: error.response.status ? error.response.status.toString() : '500',
 			});
 		}

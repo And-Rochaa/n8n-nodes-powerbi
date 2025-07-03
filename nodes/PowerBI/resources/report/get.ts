@@ -6,7 +6,7 @@ import {
 import { powerBiApiRequest } from '../../GenericFunctions';
 
 /**
- * Obtém um relatório específico pelo ID
+ * Gets a specific report by ID
  */
 export async function get(
 	this: IExecuteFunctions,
@@ -14,15 +14,15 @@ export async function get(
 ): Promise<INodeExecutionData[]> {
 	const returnData: INodeExecutionData[] = [];
 	
-	// Obter parâmetros
+	// Get parameters
 	const groupId = this.getNodeParameter('groupId', i, '') as string;
 	const reportId = this.getNodeParameter('reportId', i) as string;
 	
-	// Construir endpoint baseado no grupo selecionado
+	// Build endpoint based on selected group
 	const endpoint = groupId && groupId !== 'me' ? 
 		`/groups/${groupId}/reports/${reportId}` : `/reports/${reportId}`;
 	
-	// Fazer chamada à API
+	// Make API call
 	const responseData = await powerBiApiRequest.call(
 		this,
 		'GET',

@@ -7,7 +7,7 @@ import {
 import { powerBiApiRequest } from '../../GenericFunctions';
 
 /**
- * Obtém o histórico de atualizações de um dataset
+ * Gets the refresh history of a dataset
  */
 export async function getRefreshHistory(
 	this: IExecuteFunctions,

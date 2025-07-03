@@ -8,7 +8,7 @@ import {
 import { powerBiApiRequest } from '../../GenericFunctions';
 
 /**
- * Obtém as páginas de um relatório específico
+ * Gets the pages of a specific report
  */
 export async function getPages(
 	this: IExecuteFunctions,
@@ -16,22 +16,22 @@ export async function getPages(
 ): Promise<INodeExecutionData[]> {
 	const returnData: INodeExecutionData[] = [];
 	
-	// Obter parâmetros
+	// Get parameters
 	const groupId = this.getNodeParameter('groupId', i, '') as string;
 	const reportId = this.getNodeParameter('reportId', i) as string;
 	
-	// Construir endpoint baseado no grupo selecionado
+	// Build endpoint based on the selected group
 	const endpoint = groupId && groupId !== 'me' ? 
 		`/groups/${groupId}/reports/${reportId}/pages` : `/reports/${reportId}/pages`;
 	
-	// Fazer chamada à API
+	// Make API call
 	const responseData = await powerBiApiRequest.call(
 		this,
 		'GET',
 		endpoint,
 	) as JsonObject;
 	
-	// Processar os dados de resposta
+	// Process the response data
 	const pageItems = (responseData.value as IDataObject[] || []);
 	for (const item of pageItems) {
 		returnData.push({

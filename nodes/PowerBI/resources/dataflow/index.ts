@@ -1,7 +1,7 @@
 import { listDataflows } from './list';
 import { get } from './get';
 
-// Exportamos todas as operações disponíveis para dataflow
+// We export all available operations for dataflow
 export const dataflowOperations = {
     list: listDataflows,
     get,

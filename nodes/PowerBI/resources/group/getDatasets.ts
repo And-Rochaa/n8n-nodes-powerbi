@@ -8,7 +8,7 @@ import {
 import { powerBiApiRequest } from '../../GenericFunctions';
 
 /**
- * Obtém datasets de um grupo específico
+ * Gets datasets from a specific group
  */
 export async function getDatasets(
 	this: IExecuteFunctions,
@@ -16,17 +16,17 @@ export async function getDatasets(
 ): Promise<INodeExecutionData[]> {
 	const returnData: INodeExecutionData[] = [];
 	
-	// Obter parâmetro de ID do grupo
+	// Get group ID parameter
 	const groupId = this.getNodeParameter('groupId', i) as string;
 	
-	// Fazer requisição à API
+	// Make request to the API
 	const responseData = await powerBiApiRequest.call(
 		this,
 		'GET',
 		`/groups/${groupId}/datasets`,
 	) as JsonObject;
 	
-	// Processar os dados da resposta
+	// Process the response data
 	const datasetItems = (responseData.value as IDataObject[] || []);
 	for (const item of datasetItems) {
 		returnData.push({

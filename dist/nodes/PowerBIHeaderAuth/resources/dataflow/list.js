@@ -6,7 +6,7 @@ const GenericFunctions_1 = require("../../GenericFunctions");
 async function list(index) {
     const groupId = this.getNodeParameter('groupId', index);
     if (!groupId) {
-        throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'Group ID é obrigatório!');
+        throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'Group ID is required!');
     }
     let authToken = this.getNodeParameter('authToken', index);
     if (authToken.trim().toLowerCase().startsWith('bearer ')) {
@@ -27,9 +27,9 @@ async function list(index) {
     }
     catch (error) {
         if (error.statusCode === 403) {
-            throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'Acesso negado. Verifique se você tem permissões para acessar este workspace e se o workspace suporta dataflows.');
+            throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'Access denied. Please verify that you have permissions to access this workspace and that the workspace supports dataflows.');
         }
-        throw new n8n_workflow_1.NodeOperationError(this.getNode(), `Erro ao obter dataflows: ${error.message}`);
+        throw new n8n_workflow_1.NodeOperationError(this.getNode(), `Error getting dataflows: ${error.message}`);
     }
 }
 exports.list = list;

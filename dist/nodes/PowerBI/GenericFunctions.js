@@ -5,7 +5,7 @@ const n8n_workflow_1 = require("n8n-workflow");
 async function getRopcAccessToken() {
     const credentials = await this.getCredentials('powerBI');
     if (credentials.authType !== 'ropc') {
-        throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'O método de autenticação não está configurado como ROPC');
+        throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'Authentication method is not configured as ROPC');
     }
     const options = {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -29,7 +29,7 @@ async function getRopcAccessToken() {
             return response.access_token;
         }
         else {
-            throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'Não foi possível obter o token de acesso', {
+            throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'Could not obtain access token', {
                 description: JSON.stringify(response),
             });
         }
@@ -37,8 +37,8 @@ async function getRopcAccessToken() {
     catch (error) {
         if (error.message && error.message.includes('AADSTS')) {
             throw new n8n_workflow_1.NodeApiError(this.getNode(), error, {
-                message: 'Erro na autenticação do Azure AD: ' + error.error_description || error.message,
-                description: 'Verifique suas credenciais e permissões.',
+                message: 'Azure AD authentication error: ' + error.error_description || error.message,
+                description: 'Check your credentials and permissions.',
             });
         }
         throw new n8n_workflow_1.NodeApiError(this.getNode(), error);
@@ -106,7 +106,7 @@ async function getGroups() {
     const returnData = [];
     const groups = await powerBiApiRequestAllItems.call(this, 'value', 'GET', '/groups', {});
     returnData.push({
-        name: 'Meu Workspace',
+        name: 'My Workspace',
         value: 'me',
     });
     for (const group of groups) {
@@ -141,10 +141,10 @@ async function getDatasets() {
         groupId = this.getNodeParameter('groupId', 0);
     }
     catch (error) {
-        return [{ name: 'Selecione um grupo primeiro', value: '' }];
+        return [{ name: 'Select a group first', value: '' }];
     }
     if (!groupId) {
-        return [{ name: 'Selecione um grupo primeiro', value: '' }];
+        return [{ name: 'Select a group first', value: '' }];
     }
     let endpoint = '/datasets';
     if (groupId && groupId !== 'me') {
@@ -170,10 +170,10 @@ async function getTables() {
         datasetId = this.getNodeParameter('datasetId', 0);
     }
     catch (error) {
-        return [{ name: 'Selecione um grupo e dataset primeiro', value: '' }];
+        return [{ name: 'Select a group and dataset first', value: '' }];
     }
     if (!groupId || !datasetId) {
-        return [{ name: 'Selecione um grupo e dataset primeiro', value: '' }];
+        return [{ name: 'Select a group and dataset first', value: '' }];
     }
     let endpoint = `/datasets/${datasetId}/tables`;
     if (groupId && groupId !== 'me') {
@@ -198,10 +198,10 @@ async function getReports() {
         groupId = this.getNodeParameter('groupId', 0);
     }
     catch (error) {
-        return [{ name: 'Selecione um grupo primeiro', value: '' }];
+        return [{ name: 'Select a group first', value: '' }];
     }
     if (!groupId) {
-        return [{ name: 'Selecione um grupo primeiro', value: '' }];
+        return [{ name: 'Select a group first', value: '' }];
     }
     let endpoint = '/reports';
     if (groupId && groupId !== 'me') {
@@ -226,10 +226,10 @@ async function getDashboards() {
         groupId = this.getNodeParameter('groupId', 0);
     }
     catch (error) {
-        return [{ name: 'Selecione um grupo primeiro', value: '' }];
+        return [{ name: 'Select a group first', value: '' }];
     }
     if (!groupId) {
-        return [{ name: 'Selecione um grupo primeiro', value: '' }];
+        return [{ name: 'Select a group first', value: '' }];
     }
     let endpoint = '/dashboards';
     if (groupId && groupId !== 'me') {
@@ -272,7 +272,7 @@ async function getDatasources() {
     try {
         const gatewayId = this.getNodeParameter('gatewayId', '');
         if (!gatewayId) {
-            return [{ name: '-- Selecione um gateway primeiro --', value: '' }];
+            return [{ name: '-- Select a gateway first --', value: '' }];
         }
         const responseData = await powerBiApiRequest.call(this, 'GET', `/gateways/${gatewayId}/datasources`, {}, {});
         if (responseData && responseData.value) {
@@ -287,7 +287,7 @@ async function getDatasources() {
         }
     }
     catch (error) {
-        return [{ name: 'Erro ao carregar fontes de dados. Verifique as permissões.', value: '' }];
+        return [{ name: 'Error loading data sources. Check permissions.', value: '' }];
     }
     return returnData;
 }
@@ -296,13 +296,13 @@ async function getDataflows() {
     const groupId = this.getCurrentNodeParameter('groupId');
     const returnData = [];
     if (!groupId) {
-        return [{ name: 'Selecione um workspace primeiro', value: '' }];
+        return [{ name: 'Select a workspace first', value: '' }];
     }
     try {
         const responseData = await powerBiApiRequest.call(this, 'GET', `/groups/${groupId}/dataflows`);
         if (responseData && responseData.value) {
             if (responseData.value.length === 0) {
-                return [{ name: 'Nenhum dataflow encontrado neste workspace', value: '' }];
+                return [{ name: 'No dataflow found in this workspace', value: '' }];
             }
             for (const dataflow of responseData.value) {
                 if (dataflow.name && dataflow.objectId) {
@@ -314,14 +314,14 @@ async function getDataflows() {
             }
         }
         else {
-            return [{ name: 'Resposta da API não contém dataflows', value: '' }];
+            return [{ name: 'API response does not contain dataflows', value: '' }];
         }
         if (returnData.length === 0) {
-            return [{ name: 'Nenhum dataflow válido encontrado', value: '' }];
+            return [{ name: 'No valid dataflow found', value: '' }];
         }
     }
     catch (error) {
-        return [{ name: `Erro ao carregar fluxos de dados: ${error.message}`, value: '' }];
+        return [{ name: `Error loading dataflows: ${error.message}`, value: '' }];
     }
     return returnData;
 }

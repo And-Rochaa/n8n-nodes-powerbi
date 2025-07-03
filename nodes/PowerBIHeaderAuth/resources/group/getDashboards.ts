@@ -8,7 +8,7 @@ import {
 import { powerBiApiRequestWithHeaders } from '../../GenericFunctions';
 
 /**
- * Obtém todos os dashboards de um grupo/workspace
+ * Gets all dashboards from a group/workspace
  */
 export async function getDashboards(
 	this: IExecuteFunctions,
@@ -16,26 +16,26 @@ export async function getDashboards(
 ): Promise<INodeExecutionData[]> {
 	const returnData: INodeExecutionData[] = [];
 	
-	// Obter token de autenticação
+	// Get authentication token
 	let authToken = this.getNodeParameter('authToken', i) as string;
 	
-	// Remover o prefixo "Bearer" se já estiver presente no token
+	// Remove the "Bearer" prefix if already present in the token
 	if (authToken.trim().toLowerCase().startsWith('bearer ')) {
 		authToken = authToken.trim().substring(7);
 	}
 	
-	// Preparar o header de autorização
+	// Prepare the authorization header
 	const headers: IDataObject = {
 		Authorization: `Bearer ${authToken}`,
 	};
 	
-	// Obter parâmetros
+	// Get parameters
 	const groupId = this.getNodeParameter('groupId', i) as string;
 	
-	// Construir endpoint
+	// Build endpoint
 	const endpoint = `/groups/${groupId}/dashboards`;
 	
-	// Fazer requisição para a API
+	// Make request to the API
 	const responseData = await powerBiApiRequestWithHeaders.call(
 		this,
 		'GET',
@@ -45,7 +45,7 @@ export async function getDashboards(
 		headers,
 	) as JsonObject;
 	
-	// Processar os dados de resposta
+	// Process response data
 	const dashboardItems = (responseData.value as IDataObject[] || []);
 	for (const item of dashboardItems) {
 		returnData.push({

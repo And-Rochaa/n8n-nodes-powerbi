@@ -13,33 +13,33 @@ export async function getDatasourceUsers(
 	const datasourceId = this.getNodeParameter('datasourceId', index) as string;
 
 	if (!gatewayId) {
-		throw new Error('Gateway ID é obrigatório');
+		throw new Error('Gateway ID is required');
 	}
 
 	if (!datasourceId) {
-		throw new Error('Datasource ID é obrigatório');
+		throw new Error('Datasource ID is required');
 	}
 
-	// Obter o token de autenticação
+	// Get authentication token
 	let authToken = '';
 	try {
-		// Primeiro tenta pegar do parâmetro de entrada
+		// First try to get from input parameter
 		const inputData = this.getInputData();
 		if (inputData[index]?.json?.access_token) {
 			authToken = inputData[index].json.access_token as string;
 		} else {
-			// Se não encontrar na entrada, pega do parâmetro do nó
+			// If not found in input, get from node parameter
 			authToken = this.getNodeParameter('authToken', index) as string;
 		}
 	} catch (error) {
-		throw new Error('Falha ao obter token de autenticação');
+		throw new Error('Failed to get authentication token');
 	}
 
 	if (!authToken) {
-		throw new Error('Token de autenticação é obrigatório');
+		throw new Error('Authentication token is required');
 	}
 
-	// Remover o prefixo "Bearer" se já estiver presente no token
+	// Remove the "Bearer" prefix if already present in the token
 	if (authToken.trim().toLowerCase().startsWith('bearer ')) {
 		authToken = authToken.trim().substring(7);
 	}
@@ -60,7 +60,7 @@ export async function getDatasourceUsers(
 			headers,
 		);
 
-		// Se a resposta contém uma propriedade 'value', retornar os itens individuais
+		// If the response contains a 'value' property, return individual items
 		if (responseData.value && Array.isArray(responseData.value)) {
 			return responseData.value.map((user: any) => ({
 				json: user,
@@ -68,15 +68,15 @@ export async function getDatasourceUsers(
 			}));
 		}
 
-		// Se não há propriedade 'value', retornar a resposta completa
+		// If there's no 'value' property, return the complete response
 		return [{
 			json: responseData,
 			pairedItem: { item: index },
 		}];
 
 	} catch (error) {
-		// Melhor tratamento de erro com mais detalhes
+		// Better error handling with more details
 		const errorMessage = error.message || error.toString();
-		throw new Error(`Erro ao obter usuários da fonte de dados (Gateway: ${gatewayId}, Datasource: ${datasourceId}): ${errorMessage}. Verifique se você tem permissões de administrador no gateway e se os IDs estão corretos.`);
+		throw new Error(`Error getting data source users (Gateway: ${gatewayId}, Datasource: ${datasourceId}): ${errorMessage}. Please verify that you have administrator permissions on the gateway and that the IDs are correct.`);
 	}
 }

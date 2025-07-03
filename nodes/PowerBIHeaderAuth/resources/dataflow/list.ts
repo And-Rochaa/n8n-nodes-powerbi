@@ -6,18 +6,18 @@ export async function list(this: IExecuteFunctions, index: number): Promise<INod
 	const groupId = this.getNodeParameter('groupId', index) as string;
 
 	if (!groupId) {
-		throw new NodeOperationError(this.getNode(), 'Group ID é obrigatório!');
+		throw new NodeOperationError(this.getNode(), 'Group ID is required!');
 	}
 
-	// Obter token de autenticação
+	// Get authentication token
 	let authToken = this.getNodeParameter('authToken', index) as string;
 	
-	// Remover o prefixo "Bearer" se já estiver presente no token
+	// Remove the "Bearer" prefix if already present in the token
 	if (authToken.trim().toLowerCase().startsWith('bearer ')) {
 		authToken = authToken.trim().substring(7);
 	}
 	
-	// Preparar o header de autorização
+	// Prepare the authorization header
 	const headers: IDataObject = {
 		Authorization: `Bearer ${authToken}`,
 	};
@@ -43,8 +43,8 @@ export async function list(this: IExecuteFunctions, index: number): Promise<INod
 		return [{ json: responseData }];
 	} catch (error) {
 		if (error.statusCode === 403) {
-			throw new NodeOperationError(this.getNode(), 'Acesso negado. Verifique se você tem permissões para acessar este workspace e se o workspace suporta dataflows.');
+			throw new NodeOperationError(this.getNode(), 'Access denied. Please verify that you have permissions to access this workspace and that the workspace supports dataflows.');
 		}
-		throw new NodeOperationError(this.getNode(), `Erro ao obter dataflows: ${error.message}`);
+		throw new NodeOperationError(this.getNode(), `Error getting dataflows: ${error.message}`);
 	}
 }

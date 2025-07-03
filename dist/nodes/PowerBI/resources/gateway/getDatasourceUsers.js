@@ -6,10 +6,10 @@ async function getDatasourceUsers(index) {
     const gatewayId = this.getNodeParameter('gatewayId', index);
     const datasourceId = this.getNodeParameter('datasourceId', index);
     if (!gatewayId) {
-        throw new Error('Gateway ID é obrigatório');
+        throw new Error('Gateway ID is required');
     }
     if (!datasourceId) {
-        throw new Error('Datasource ID é obrigatório');
+        throw new Error('Datasource ID is required');
     }
     const endpoint = `/gateways/${gatewayId}/datasources/${datasourceId}/users`;
     try {
@@ -27,7 +27,7 @@ async function getDatasourceUsers(index) {
     }
     catch (error) {
         const errorMessage = error.message || error.toString();
-        throw new Error(`Erro ao obter usuários da fonte de dados (Gateway: ${gatewayId}, Datasource: ${datasourceId}): ${errorMessage}. Verifique se você tem permissões de administrador no gateway e se os IDs estão corretos.`);
+        throw new Error(`Error getting data source users (Gateway: ${gatewayId}, Datasource: ${datasourceId}): ${errorMessage}. Please verify that you have administrator permissions on the gateway and that the IDs are correct.`);
     }
 }
 exports.getDatasourceUsers = getDatasourceUsers;

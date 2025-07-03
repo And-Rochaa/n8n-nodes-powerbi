@@ -6,7 +6,7 @@ import {
 import { powerBiApiRequest } from '../../GenericFunctions';
 
 /**
- * Execute consultas DAX em um dataset
+ * Execute DAX queries on a dataset
  */
 export async function executeQueries(
 	this: IExecuteFunctions,

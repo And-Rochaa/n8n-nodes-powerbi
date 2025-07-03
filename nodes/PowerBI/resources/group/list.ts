@@ -8,7 +8,7 @@ import {
 import { powerBiApiRequest } from '../../GenericFunctions';
 
 /**
- * Lista todos os grupos (workspaces)
+ * Lists all groups (workspaces)
  */
 export async function list(
 	this: IExecuteFunctions,
@@ -16,14 +16,14 @@ export async function list(
 ): Promise<INodeExecutionData[]> {
 	const returnData: INodeExecutionData[] = [];
 	
-	// Fazer requisição à API
+	// Make request to the API
 	const responseData = await powerBiApiRequest.call(
 		this,
 		'GET',
 		'/groups',
 	) as JsonObject;
 	
-	// Processar os dados da resposta
+	// Process the response data
 	const groupItems = (responseData.value as IDataObject[] || []);
 	for (const item of groupItems) {
 		returnData.push({

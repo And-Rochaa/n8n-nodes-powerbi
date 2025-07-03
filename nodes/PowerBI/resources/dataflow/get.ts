@@ -7,11 +7,11 @@ export async function get(this: IExecuteFunctions, index: number): Promise<INode
 	const dataflowId = this.getNodeParameter('dataflowId', index) as string;
 
 	if (!groupId) {
-		throw new NodeOperationError(this.getNode(), 'Workspace ID é obrigatório!');
+		throw new NodeOperationError(this.getNode(), 'Workspace ID is required!');
 	}
 
 	if (!dataflowId) {
-		throw new NodeOperationError(this.getNode(), 'Dataflow ID é obrigatório!');
+		throw new NodeOperationError(this.getNode(), 'Dataflow ID is required!');
 	}
 
 	try {
@@ -23,15 +23,15 @@ export async function get(this: IExecuteFunctions, index: number): Promise<INode
 			endpoint,
 		);
 
-		// A API retorna a definição do dataflow como JSON
+		// The API returns the dataflow definition as JSON
 		return [{ json: responseData }];
 	} catch (error) {
 		if (error.statusCode === 403) {
-			throw new NodeOperationError(this.getNode(), 'Acesso negado. Verifique se você tem permissões para acessar este dataflow.');
+			throw new NodeOperationError(this.getNode(), 'Access denied. Please verify that you have permissions to access this dataflow.');
 		}
 		if (error.statusCode === 404) {
-			throw new NodeOperationError(this.getNode(), 'Dataflow não encontrado. Verifique se o ID está correto.');
+			throw new NodeOperationError(this.getNode(), 'Dataflow not found. Please verify that the ID is correct.');
 		}
-		throw new NodeOperationError(this.getNode(), `Erro ao obter dataflow: ${error.message}`);
+		throw new NodeOperationError(this.getNode(), `Error getting dataflow: ${error.message}`);
 	}
 }

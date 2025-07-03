@@ -6,7 +6,7 @@ import {
 } from 'n8n-workflow';
 
 /**
- * Obtém informações detalhadas dos workspaces
+ * Gets detailed workspace information
  */
 export async function getInfo(
 	this: IExecuteFunctions,
@@ -14,34 +14,34 @@ export async function getInfo(
 ): Promise<INodeExecutionData[]> {
 	const returnData: INodeExecutionData[] = [];
 	
-	// Obter token de autenticação
+	// Get authentication token
 	let authToken = this.getNodeParameter('authToken', i) as string;
 	
-	// Remover o prefixo "Bearer" se já estiver presente no token
+	// Remove the "Bearer" prefix if already present in the token
 	if (authToken.trim().toLowerCase().startsWith('bearer ')) {
 		authToken = authToken.trim().substring(7);
 	}
 	
-	// Preparar o header de autorização
+	// Prepare the authorization header
 	const headers: IDataObject = {
 		Authorization: `Bearer ${authToken}`,
 	};
 	
-	// Obter workspaces selecionados
+	// Get selected workspaces
 	const workspaces = this.getNodeParameter('workspaces', i) as string[];
 	
-	// Verificar se os workspaces foram selecionados
+	// Check if workspaces were selected
 	if (!workspaces || workspaces.length === 0) {
-		throw new Error('É necessário selecionar pelo menos um workspace');
+		throw new Error('It is necessary to select at least one workspace');
 	}
 	
-	// Obter opções
+	// Get options
 	const datasetSchema = this.getNodeParameter('datasetSchema', i, false) as boolean;
 	const datasetExpressions = this.getNodeParameter('datasetExpressions', i, false) as boolean;
 	const lineage = this.getNodeParameter('lineage', i, false) as boolean;
 	const datasourceDetails = this.getNodeParameter('datasourceDetails', i, false) as boolean;
 			
-	// Construir query parameters
+	// Build query parameters
 	const queryParameters: IDataObject = {
 		datasetSchema: datasetSchema ? 'True' : 'False',
 		datasetExpressions: datasetExpressions ? 'True' : 'False',
@@ -49,7 +49,7 @@ export async function getInfo(
 		datasourceDetails: datasourceDetails ? 'True' : 'False',
 	};
 	
-	// Fazer a requisição para o endpoint de administração com método POST
+	// Make the request to the administration endpoint with POST method
 	const options: IHttpRequestOptions = {
 		method: 'POST',
 		body: { workspaces },
@@ -62,7 +62,7 @@ export async function getInfo(
 		},
 	};
 	
-	// Usar a requisição HTTP direta
+	// Use direct HTTP request
 	const responseData = await this.helpers.request(options);
 	
 	returnData.push({

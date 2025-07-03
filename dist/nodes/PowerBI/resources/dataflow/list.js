@@ -5,7 +5,7 @@ const GenericFunctions_1 = require("../../GenericFunctions");
 async function listDataflows(index) {
     const groupId = this.getNodeParameter('groupId', index);
     if (!groupId) {
-        throw new Error('Workspace ID é obrigatório');
+        throw new Error('Workspace ID is required');
     }
     const endpoint = `/groups/${groupId}/dataflows`;
     try {
@@ -23,7 +23,7 @@ async function listDataflows(index) {
     }
     catch (error) {
         const errorMessage = error.message || error.toString();
-        throw new Error(`Erro ao obter fluxos de dados (Workspace: ${groupId}): ${errorMessage}. Verifique se você tem permissões adequadas no workspace.`);
+        throw new Error(`Error getting dataflows (Workspace: ${groupId}): ${errorMessage}. Please verify that you have adequate permissions in the workspace.`);
     }
 }
 exports.listDataflows = listDataflows;

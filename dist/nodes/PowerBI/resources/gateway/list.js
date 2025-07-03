@@ -17,7 +17,7 @@ async function list(i) {
         else {
             returnData.push({
                 json: {
-                    message: 'Nenhum gateway encontrado',
+                    message: 'No gateways found',
                     value: [],
                 },
             });
@@ -27,8 +27,8 @@ async function list(i) {
     catch (error) {
         if (error.response && error.response.data) {
             throw new n8n_workflow_1.NodeApiError(this.getNode(), error.response.data, {
-                message: `Status: ${error.response.status || 'Erro'}`,
-                description: `Falha ao listar gateways: ${JSON.stringify(error.response.data)}`,
+                message: `Status: ${error.response.status || 'Error'}`,
+                description: `Failed to list gateways: ${JSON.stringify(error.response.data)}`,
                 httpCode: error.response.status ? error.response.status.toString() : '500',
             });
         }

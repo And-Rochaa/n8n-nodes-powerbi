@@ -7,7 +7,7 @@ import {
 import { powerBiApiRequestWithHeaders } from '../../GenericFunctions';
 
 /**
- * Obtém o resultado do escaneamento de um workspace
+ * Gets the scan result of a workspace
  */
 export async function getScanResult(
 	this: IExecuteFunctions,
@@ -15,23 +15,23 @@ export async function getScanResult(
 ): Promise<INodeExecutionData[]> {
 	const returnData: INodeExecutionData[] = [];
 	
-	// Obter token de autenticação
+	// Get authentication token
 	let authToken = this.getNodeParameter('authToken', i) as string;
 	
-	// Remover o prefixo "Bearer" se já estiver presente no token
+	// Remove the "Bearer" prefix if already present in the token
 	if (authToken.trim().toLowerCase().startsWith('bearer ')) {
 		authToken = authToken.trim().substring(7);
 	}
 	
-	// Preparar o header de autorização
+	// Prepare the authorization header
 	const headers: IDataObject = {
 		Authorization: `Bearer ${authToken}`,
 	};
 	
-	// Obter ID do scan
+	// Get scan ID
 	const scanId = this.getNodeParameter('scanId', i) as string;
 	
-	// Fazer requisição para obter o resultado do scan
+	// Make request to get scan result
 	const responseData = await powerBiApiRequestWithHeaders.call(
 		this,
 		'GET',

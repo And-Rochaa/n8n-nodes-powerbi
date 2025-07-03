@@ -7,15 +7,15 @@ export async function getDatasources(
 ): Promise<INodeExecutionData[]> {
 	const gatewayId = this.getNodeParameter('gatewayId', index) as string;
 	
-	// Obter token de autenticação
+	// Get authentication token
 	let authToken = this.getNodeParameter('authToken', index) as string;
 	
-	// Remover o prefixo "Bearer" se já estiver presente no token
+	// Remove the "Bearer" prefix if already present in the token
 	if (authToken.trim().toLowerCase().startsWith('bearer ')) {
 		authToken = authToken.trim().substring(7);
 	}
 	
-	// Preparar o header de autorização
+	// Prepare the authorization header
 	const headers: IDataObject = {
 		Authorization: `Bearer ${authToken}`,
 	};

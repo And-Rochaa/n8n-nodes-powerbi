@@ -7,7 +7,7 @@ import { groupOperations } from './group';
 import { reportOperations } from './report';
 import { token } from './token';
 
-// Exportamos um objeto com todos os recursos
+// We export an object with all resources
 export const resources = {
     admin: adminOperations,
     dashboard: dashboardOperations,

@@ -13,7 +13,7 @@ async function addRows(i) {
         rows = JSON.parse(data);
     }
     catch (error) {
-        throw new Error(`Não foi possível analisar o JSON das linhas: ${error}`);
+        throw new Error(`Could not parse rows JSON: ${error}`);
     }
     const endpoint = groupId && groupId !== 'me' ?
         `/groups/${groupId}/datasets/${datasetId}/tables/${tableName}/rows` : `/datasets/${datasetId}/tables/${tableName}/rows`;
@@ -21,7 +21,7 @@ async function addRows(i) {
         rows,
     });
     returnData.push({
-        json: { success: true, message: 'Linhas adicionadas com sucesso' },
+        json: { success: true, message: 'Rows added successfully' },
     });
     return returnData;
 }

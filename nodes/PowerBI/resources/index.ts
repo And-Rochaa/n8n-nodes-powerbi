@@ -6,7 +6,7 @@ import { gatewayOperations } from './gateway';
 import { groupOperations } from './group';
 import { reportOperations } from './report';
 
-// Exportamos um objeto com todos os recursos
+// We export an object with all resources
 export const resources = {
     admin: adminOperations,
     dashboard: dashboardOperations,

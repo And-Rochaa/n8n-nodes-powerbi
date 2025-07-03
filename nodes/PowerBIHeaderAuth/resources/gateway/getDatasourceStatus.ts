@@ -13,22 +13,22 @@ export async function getDatasourceStatus(
 	const datasourceId = this.getNodeParameter('datasourceId', index) as string;
 
 	if (!gatewayId) {
-		throw new Error('Gateway ID é obrigatório');
+		throw new Error('Gateway ID is required');
 	}
 
 	if (!datasourceId) {
-		throw new Error('Datasource ID é obrigatório');
+		throw new Error('Datasource ID is required');
 	}
 
-	// Obter token de autenticação
+	// Get authentication token
 	let authToken = this.getNodeParameter('authToken', index) as string;
 	
-	// Remover o prefixo "Bearer" se já estiver presente no token
+	// Remove the "Bearer" prefix if already present in the token
 	if (authToken.trim().toLowerCase().startsWith('bearer ')) {
 		authToken = authToken.trim().substring(7);
 	}
 	
-	// Preparar o header de autorização
+	// Prepare the authorization header
 	const headers: IDataObject = {
 		Authorization: `Bearer ${authToken}`,
 	};
@@ -54,18 +54,18 @@ export async function getDatasourceStatus(
 	} catch (error) {
 		if (error.httpCode === '403') {
 			throw new Error(
-				`Erro 403: Você não tem permissão para verificar o status desta fonte de dados (Gateway: ${gatewayId}, Datasource: ${datasourceId}). Verifique se você tem acesso de administrador ao gateway e à fonte de dados.`
+				`Error 403: You don't have permission to check the status of this data source (Gateway: ${gatewayId}, Datasource: ${datasourceId}). Please verify that you have administrator access to the gateway and data source.`
 			);
 		}
 		
 		if (error.httpCode === '404') {
 			throw new Error(
-				`Erro 404: Gateway (${gatewayId}) ou fonte de dados (${datasourceId}) não encontrado. Verifique se os IDs estão corretos e se você tem acesso a eles.`
+				`Error 404: Gateway (${gatewayId}) or data source (${datasourceId}) not found. Please verify that the IDs are correct and that you have access to them.`
 			);
 		}
 
 		throw new Error(
-			`Erro ao verificar status da fonte de dados: ${error.message || error}`
+			`Error checking data source status: ${error.message || error}`
 		);
 	}
 }

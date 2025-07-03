@@ -6,7 +6,7 @@ import {
 } from 'n8n-workflow';
 
 /**
- * Executa a operação getInfo para obter informações detalhadas dos workspaces
+ * Executes the getInfo operation to retrieve detailed information about workspaces
  */
 export async function getInfo(
 	this: IExecuteFunctions,
@@ -14,22 +14,22 @@ export async function getInfo(
 ): Promise<INodeExecutionData[]> {
 	const returnData: INodeExecutionData[] = [];
 	
-	// Obter workspaces selecionados
+	// Get selected workspaces
 	const workspaces = this.getNodeParameter('workspaces', i) as string[];
 	
-	// Verificar se os workspaces foram selecionados
+	// Check if workspaces were selected
 	if (!workspaces || workspaces.length === 0) {
-		throw new Error('É necessário selecionar pelo menos um workspace');
+		throw new Error('You must select at least one workspace');
 	}
 	
-	// Obter opções
+	// Get options
 	const datasetSchema = this.getNodeParameter('datasetSchema', i) as boolean;
 	const datasetExpressions = this.getNodeParameter('datasetExpressions', i) as boolean;
 	const lineage = this.getNodeParameter('lineage', i) as boolean;
 	const datasourceDetails = this.getNodeParameter('datasourceDetails', i) as boolean;
-	const getArtifactUsers = false; // Opcional, não implementado na interface ainda
+	const getArtifactUsers = false; // Optional, not implemented in the interface yet
 	
-	// Construir URL com query parameters conforme especificado na documentação
+	// Build URL with query parameters as specified in the documentation
 	const url = 'https://api.powerbi.com/v1.0/myorg/admin/workspaces/getInfo';
 	const queryString = [
 		`datasetSchema=${datasetSchema ? 'True' : 'False'}`,
@@ -40,10 +40,10 @@ export async function getInfo(
 	
 	const fullUrl = `${url}?${queryString}`;
 	
-	// Configurar corpo da requisição com a lista de workspaces IDs
+	// Set up request body with the list of workspace IDs
 	const requestBody = { workspaces };
 	
-	// Fazer a requisição para o endpoint de administração com método POST
+	// Make the request to the admin endpoint using the POST method
 	const options = {
 		method: 'POST',
 		body: requestBody,
@@ -53,7 +53,7 @@ export async function getInfo(
 			'Content-Type': 'application/json',
 		},
 	};
-		// Usar autenticação direta para garantir que o método POST seja usado corretamente
+		// Use direct authentication to ensure the POST method is used correctly
 	const responseData = await this.helpers.requestWithAuthentication.call(
 		this,
 		'powerBI',

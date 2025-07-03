@@ -8,7 +8,7 @@ import {
 import { powerBiApiRequest } from '../../GenericFunctions';
 
 /**
- * Obtém dashboards de um grupo específico
+ * Gets dashboards from a specific group
  */
 export async function getDashboards(
 	this: IExecuteFunctions,
@@ -16,17 +16,17 @@ export async function getDashboards(
 ): Promise<INodeExecutionData[]> {
 	const returnData: INodeExecutionData[] = [];
 	
-	// Obter parâmetro de ID do grupo
+	// Get group ID parameter
 	const groupId = this.getNodeParameter('groupId', i) as string;
 	
-	// Fazer requisição à API
+	// Make API request
 	const responseData = await powerBiApiRequest.call(
 		this,
 		'GET',
 		`/groups/${groupId}/dashboards`,
 	) as JsonObject;
 	
-	// Processar os dados da resposta
+	// Process the response data
 	const dashboardItems = (responseData.value as IDataObject[] || []);
 	for (const item of dashboardItems) {
 		returnData.push({

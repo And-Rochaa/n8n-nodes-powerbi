@@ -23,7 +23,7 @@ export async function powerBiApiRequestWithHeaders(
 	headers: IDataObject = {},
 	requestOptions: IDataObject = {},
 ): Promise<JsonObject | Buffer | string> {
-	// Construa os headers básicos
+	// Build basic headers
 	const httpRequestOptions: IHttpRequestOptions = {
 		headers: {
 			'Content-Type': 'application/json',
@@ -34,12 +34,12 @@ export async function powerBiApiRequestWithHeaders(
 		url: `https://api.powerbi.com/v1.0/myorg${endpoint}`,
 		json: true,
 	};
-		// Adiciona os headers adicionais, garantindo que a autorização esteja presente
+		// Add additional headers, ensuring authorization is present
 	if (headers && Object.keys(headers).length > 0) {
 		Object.assign(httpRequestOptions.headers!, headers);
 	}
 	
-	// Adiciona opções adicionais, como encoding para arquivos binários
+	// Add additional options, such as encoding for binary files
 	if (requestOptions && Object.keys(requestOptions).length > 0) {
 		Object.assign(httpRequestOptions, requestOptions);
 	}
@@ -49,24 +49,24 @@ export async function powerBiApiRequestWithHeaders(
 			delete httpRequestOptions.body;
 		}
 		
-		// Verifica se o header de autorização foi fornecido
+		// Check if authorization header was provided
 		if (!headers.Authorization && !httpRequestOptions.headers?.Authorization) {
 			throw new NodeOperationError(
 				this.getNode(), 
-				'Token de autenticação obrigatório',
-				{ description: 'Forneça um token de autenticação válido para acessar a API do Power BI' }
+				'Authentication token required',
+				{ description: 'Provide a valid authentication token to access the Power BI API' }
 			);
 		}
-				// Se o token não começar com "Bearer ", adicione-o
+				// If token doesn't start with "Bearer ", add it
 		if (httpRequestOptions.headers?.Authorization && typeof httpRequestOptions.headers.Authorization === 'string') {
 			const authHeader = httpRequestOptions.headers.Authorization as string;
 			if (!authHeader.trim().toLowerCase().startsWith('bearer ')) {
 				httpRequestOptions.headers.Authorization = `Bearer ${authHeader}`;
 			}
 		}
-				// Faz a requisição HTTP direta sem usar OAuth
+				// Make direct HTTP request without using OAuth
 		
-		// Se for uma solicitação que espera um arquivo binário (json: false)
+		// If it's a request expecting a binary file (json: false)
 		if (httpRequestOptions.json === false) {
 			const response = await this.helpers.request!({
 				...httpRequestOptions,
@@ -74,35 +74,35 @@ export async function powerBiApiRequestWithHeaders(
 				encoding: null
 			});
 
-			// Para downloads de arquivos, returnFullResponse permite acesso aos headers e ao corpo
+			// For file downloads, returnFullResponse allows access to headers and body
 			if (httpRequestOptions.returnFullResponse) {
 				return response;
 			}
-			// Caso contrário, retornar apenas o conteúdo do arquivo
+			// Otherwise, return only the file content
 			return response.body;
 		} else {
-			// Para solicitações JSON regulares
+			// For regular JSON requests
 			const response = await this.helpers.request(httpRequestOptions);
 
 			return response;
 		}
 		} catch (requestError: any) {		if (requestError.response) {
-					// Não é mais necessário converter erros 403 para 401
-			// O n8n agora captura os erros de autenticação antes que esta conversão seja efetiva
+					// No need to convert 403 errors to 401 anymore
+			// n8n now captures authentication errors before this conversion takes effect
 			
 			if (requestError.response.statusCode === 401) {
 				throw new NodeOperationError(
 					this.getNode(), 
-					'Falha na autenticação. Verifique se o token é válido.',
-					{ description: 'O token fornecido não foi aceito pela API do Power BI. Verifique se está no formato correto e não expirou.' }
+					'Authentication failed. Check if the token is valid.',
+					{ description: 'The provided token was not accepted by the Power BI API. Check if it is in the correct format and has not expired.' }
 				);
 			}
 			
 			if (requestError.response.statusCode === 403) {
 				throw new NodeOperationError(
 					this.getNode(), 
-					'Acesso negado. Verifique as permissões do token.',
-					{ description: 'O token não tem permissão para acessar este recurso da API do Power BI.' }
+					'Access denied. Check token permissions.',
+					{ description: 'The token does not have permission to access this Power BI API resource.' }
 				);
 			}
 		}
@@ -111,7 +111,7 @@ export async function powerBiApiRequestWithHeaders(
 }
 
 /**
- * Obter todos os grupos (workspaces)
+ * Get all groups (workspaces)
  */
 export async function getGroups(
 	this: IExecuteFunctions | ILoadOptionsFunctions,
@@ -119,10 +119,10 @@ export async function getGroups(
 ): Promise<IDataObject[]> {
 	const returnData: IDataObject[] = [];
 	try {
-		// Verifica e formata o token de autorização
+		// Verify and format authorization token
 		if (headers.Authorization && typeof headers.Authorization === 'string') {
 			const authHeader = headers.Authorization as string;
-			// Se o token não começar com "Bearer ", adicione-o
+			// If token doesn't start with "Bearer ", add it
 			if (!authHeader.trim().toLowerCase().startsWith('bearer ')) {
 				headers.Authorization = `Bearer ${authHeader}`;
 			}
@@ -147,7 +147,7 @@ export async function getGroups(
 				});
 			}
 		}	} catch (error) {
-		return [{ name: '-- Erro ao carregar workspaces --', value: '' }];
+		return [{ name: '-- Error loading workspaces --', value: '' }];
 	}
 
 	returnData.sort((a, b) => {
@@ -164,7 +164,7 @@ export async function getGroups(
 }
 
 /**
- * Obter grupos formatados para multiselect
+ * Get groups formatted for multiselect
  */
 export async function getGroupsMultiSelect(
 	this: IExecuteFunctions | ILoadOptionsFunctions,
@@ -172,7 +172,7 @@ export async function getGroupsMultiSelect(
 ): Promise<IDataObject[]> {
 	const returnData: IDataObject[] = [
 		{
-			name: 'Meu Workspace',
+			name: 'My Workspace',
 			value: 'me',
 		},
 	];
@@ -209,7 +209,7 @@ export async function getGroupsMultiSelect(
 }
 
 /**
- * Obter dashboards de um grupo
+ * Get dashboards from a group
  */
 export async function getDashboards(
 	this: IExecuteFunctions | ILoadOptionsFunctions,
@@ -247,7 +247,7 @@ export async function getDashboards(
 }
 
 /**
- * Obter datasets de um grupo
+ * Get datasets from a group
  */
 export async function getDatasets(
 	this: IExecuteFunctions | ILoadOptionsFunctions,
@@ -285,7 +285,7 @@ export async function getDatasets(
 }
 
 /**
- * Obter tabelas de um dataset
+ * Get tables from a dataset
  */
 export async function getTables(
 	this: IExecuteFunctions | ILoadOptionsFunctions,
@@ -324,7 +324,7 @@ export async function getTables(
 }
 
 /**
- * Obter relatórios de um grupo
+ * Get reports from a group
  */
 export async function getReports(
 	this: IExecuteFunctions | ILoadOptionsFunctions,
@@ -368,15 +368,15 @@ export async function getGateways(this: ILoadOptionsFunctions) {
 	const returnData: IDataObject[] = [];
 	
 	try {
-		// Obter token de autenticação
+		// Get authentication token
 		let authToken = this.getNodeParameter('authToken', 0) as string;
 		
-		// Remover o prefixo "Bearer" se já estiver presente no token
+		// Remove "Bearer" prefix if already present in token
 		if (authToken.trim().toLowerCase().startsWith('bearer ')) {
 			authToken = authToken.trim().substring(7);
 		}
 		
-		// Preparar o header de autorização
+		// Prepare authorization header
 		const headers: IDataObject = {
 			Authorization: `Bearer ${authToken}`,
 		};
@@ -394,8 +394,8 @@ export async function getGateways(this: ILoadOptionsFunctions) {
 			}
 		}
 	} catch (error) {
-		// Se não conseguir listar gateways, retorna array vazio
-		// Isso pode acontecer se o usuário não tiver permissão de administrador de gateway
+		// If unable to list gateways, return empty array
+		// This can happen if the user doesn't have gateway administrator permission
 	}
 	
 	return returnData;
@@ -411,22 +411,22 @@ export async function getDatasources(this: ILoadOptionsFunctions) {
 		const gatewayId = this.getNodeParameter('gatewayId', '') as string;
 		
 		if (!gatewayId) {
-			return [{ name: '-- Selecione um gateway primeiro --', value: '' }];
+			return [{ name: '-- Select a gateway first --', value: '' }];
 		}
 		
-		// Obter token de autenticação
+		// Get authentication token
 		let authToken = this.getNodeParameter('authToken', '') as string;
 		
 		if (!authToken) {
-			return [{ name: '-- Token de autenticação obrigatório --', value: '' }];
+			return [{ name: '-- Authentication token required --', value: '' }];
 		}
 		
-		// Remover o prefixo "Bearer" se já estiver presente no token
+		// Remove "Bearer" prefix if already present in token
 		if (authToken.trim().toLowerCase().startsWith('bearer ')) {
 			authToken = authToken.trim().substring(7);
 		}
 		
-		// Preparar o header de autorização
+		// Prepare authorization header
 		const headers: IDataObject = {
 			Authorization: `Bearer ${authToken}`,
 		};
@@ -444,9 +444,9 @@ export async function getDatasources(this: ILoadOptionsFunctions) {
 			}
 		}
 	} catch (error) {
-		// Se não conseguir listar datasources, retorna array vazio
-		// Isso pode acontecer se o usuário não tiver permissão de administrador de gateway
-		return [{ name: 'Erro ao carregar fontes de dados. Verifique as permissões.', value: '' }];
+		// If unable to list datasources, return empty array
+		// This can happen if the user doesn't have gateway administrator permission
+		return [{ name: 'Error loading data sources. Check permissions.', value: '' }];
 	}
 	
 	return returnData;
@@ -459,7 +459,7 @@ export async function getDataflows(this: ILoadOptionsFunctions, groupId: string,
 	const returnData: INodePropertyOptions[] = [];
 
 	if (!groupId) {
-		return [{ name: 'Selecione um workspace primeiro', value: '' }];
+		return [{ name: 'Select a workspace first', value: '' }];
 	}
 
 	try {
@@ -467,11 +467,11 @@ export async function getDataflows(this: ILoadOptionsFunctions, groupId: string,
 		
 		if (responseData && responseData.value) {
 			if (responseData.value.length === 0) {
-				return [{ name: 'Nenhum dataflow encontrado neste workspace', value: '' }];
+				return [{ name: 'No dataflow found in this workspace', value: '' }];
 			}
 			
 			for (const dataflow of responseData.value) {
-				// A API do Power BI usa 'objectId' em vez de 'id' para dataflows
+				// Power BI API uses 'objectId' instead of 'id' for dataflows
 				if (dataflow.name && dataflow.objectId) {
 					returnData.push({
 						name: dataflow.name,
@@ -480,15 +480,15 @@ export async function getDataflows(this: ILoadOptionsFunctions, groupId: string,
 				}
 			}
 		} else {
-			return [{ name: 'Resposta da API não contém dataflows', value: '' }];
+			return [{ name: 'API response does not contain dataflows', value: '' }];
 		}
 		
 		if (returnData.length === 0) {
-			return [{ name: 'Nenhum dataflow válido encontrado', value: '' }];
+			return [{ name: 'No valid dataflow found', value: '' }];
 		}
 	} catch (error) {
-		// Se não conseguir listar dataflows, retorna array vazio
-		return [{ name: `Erro ao carregar fluxos de dados: ${error.message}`, value: '' }];
+		// If unable to list dataflows, return empty array
+		return [{ name: `Error loading dataflows: ${error.message}`, value: '' }];
 	}
 	
 	return returnData;

@@ -25,7 +25,7 @@ async function powerBiApiRequestWithHeaders(method, endpoint, body = {}, qs = {}
             delete httpRequestOptions.body;
         }
         if (!headers.Authorization && !((_a = httpRequestOptions.headers) === null || _a === void 0 ? void 0 : _a.Authorization)) {
-            throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'Token de autenticação obrigatório', { description: 'Forneça um token de autenticação válido para acessar a API do Power BI' });
+            throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'Authentication token required', { description: 'Provide a valid authentication token to access the Power BI API' });
         }
         if (((_b = httpRequestOptions.headers) === null || _b === void 0 ? void 0 : _b.Authorization) && typeof httpRequestOptions.headers.Authorization === 'string') {
             const authHeader = httpRequestOptions.headers.Authorization;
@@ -52,10 +52,10 @@ async function powerBiApiRequestWithHeaders(method, endpoint, body = {}, qs = {}
     catch (requestError) {
         if (requestError.response) {
             if (requestError.response.statusCode === 401) {
-                throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'Falha na autenticação. Verifique se o token é válido.', { description: 'O token fornecido não foi aceito pela API do Power BI. Verifique se está no formato correto e não expirou.' });
+                throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'Authentication failed. Check if the token is valid.', { description: 'The provided token was not accepted by the Power BI API. Check if it is in the correct format and has not expired.' });
             }
             if (requestError.response.statusCode === 403) {
-                throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'Acesso negado. Verifique as permissões do token.', { description: 'O token não tem permissão para acessar este recurso da API do Power BI.' });
+                throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'Access denied. Check token permissions.', { description: 'The token does not have permission to access this Power BI API resource.' });
             }
         }
         throw requestError;
@@ -82,7 +82,7 @@ async function getGroups(headers) {
         }
     }
     catch (error) {
-        return [{ name: '-- Erro ao carregar workspaces --', value: '' }];
+        return [{ name: '-- Error loading workspaces --', value: '' }];
     }
     returnData.sort((a, b) => {
         if (a.name < b.name) {
@@ -99,7 +99,7 @@ exports.getGroups = getGroups;
 async function getGroupsMultiSelect(headers) {
     const returnData = [
         {
-            name: 'Meu Workspace',
+            name: 'My Workspace',
             value: 'me',
         },
     ];
@@ -240,11 +240,11 @@ async function getDatasources() {
     try {
         const gatewayId = this.getNodeParameter('gatewayId', '');
         if (!gatewayId) {
-            return [{ name: '-- Selecione um gateway primeiro --', value: '' }];
+            return [{ name: '-- Select a gateway first --', value: '' }];
         }
         let authToken = this.getNodeParameter('authToken', '');
         if (!authToken) {
-            return [{ name: '-- Token de autenticação obrigatório --', value: '' }];
+            return [{ name: '-- Authentication token required --', value: '' }];
         }
         if (authToken.trim().toLowerCase().startsWith('bearer ')) {
             authToken = authToken.trim().substring(7);
@@ -265,7 +265,7 @@ async function getDatasources() {
         }
     }
     catch (error) {
-        return [{ name: 'Erro ao carregar fontes de dados. Verifique as permissões.', value: '' }];
+        return [{ name: 'Error loading data sources. Check permissions.', value: '' }];
     }
     return returnData;
 }
@@ -273,13 +273,13 @@ exports.getDatasources = getDatasources;
 async function getDataflows(groupId, authHeader) {
     const returnData = [];
     if (!groupId) {
-        return [{ name: 'Selecione um workspace primeiro', value: '' }];
+        return [{ name: 'Select a workspace first', value: '' }];
     }
     try {
         const responseData = await powerBiApiRequestWithHeaders.call(this, 'GET', `/groups/${groupId}/dataflows`, {}, {}, authHeader);
         if (responseData && responseData.value) {
             if (responseData.value.length === 0) {
-                return [{ name: 'Nenhum dataflow encontrado neste workspace', value: '' }];
+                return [{ name: 'No dataflow found in this workspace', value: '' }];
             }
             for (const dataflow of responseData.value) {
                 if (dataflow.name && dataflow.objectId) {
@@ -291,14 +291,14 @@ async function getDataflows(groupId, authHeader) {
             }
         }
         else {
-            return [{ name: 'Resposta da API não contém dataflows', value: '' }];
+            return [{ name: 'API response does not contain dataflows', value: '' }];
         }
         if (returnData.length === 0) {
-            return [{ name: 'Nenhum dataflow válido encontrado', value: '' }];
+            return [{ name: 'No valid dataflow found', value: '' }];
         }
     }
     catch (error) {
-        return [{ name: `Erro ao carregar fluxos de dados: ${error.message}`, value: '' }];
+        return [{ name: `Error loading dataflows: ${error.message}`, value: '' }];
     }
     return returnData;
 }

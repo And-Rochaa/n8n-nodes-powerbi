@@ -7,10 +7,10 @@ async function get(index) {
     const groupId = this.getNodeParameter('groupId', index);
     const dataflowId = this.getNodeParameter('dataflowId', index);
     if (!groupId) {
-        throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'Workspace ID é obrigatório!');
+        throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'Workspace ID is required!');
     }
     if (!dataflowId) {
-        throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'Dataflow ID é obrigatório!');
+        throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'Dataflow ID is required!');
     }
     try {
         const endpoint = `/groups/${groupId}/dataflows/${dataflowId}`;
@@ -19,12 +19,12 @@ async function get(index) {
     }
     catch (error) {
         if (error.statusCode === 403) {
-            throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'Acesso negado. Verifique se você tem permissões para acessar este dataflow.');
+            throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'Access denied. Please verify that you have permissions to access this dataflow.');
         }
         if (error.statusCode === 404) {
-            throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'Dataflow não encontrado. Verifique se o ID está correto.');
+            throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'Dataflow not found. Please verify that the ID is correct.');
         }
-        throw new n8n_workflow_1.NodeOperationError(this.getNode(), `Erro ao obter dataflow: ${error.message}`);
+        throw new n8n_workflow_1.NodeOperationError(this.getNode(), `Error getting dataflow: ${error.message}`);
     }
 }
 exports.get = get;

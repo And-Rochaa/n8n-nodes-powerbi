@@ -17,13 +17,13 @@ export const dataflowOperations: INodeProperties[] = [
 			{
 				name: 'Get Dataflows',
 				value: 'list',
-				description: 'Retorna uma lista de dataflows do workspace especificado',
+				description: 'Returns a list of dataflows from the specified workspace',
 				action: 'Get dataflows',
 			},
 			{
 				name: 'Get Dataflow',
 				value: 'get',
-				description: 'Exporta a definição do fluxo de dados especificado para um arquivo JSON',
+				description: 'Exports the specified dataflow definition to a JSON file',
 				action: 'Get dataflow',
 			},
 		],
@@ -48,7 +48,7 @@ export const dataflowFields: INodeProperties[] = [
 		},
 		default: '',
 		required: true,
-		description: 'O workspace (grupo) para obter os dataflows',
+		description: 'The workspace (group) to get dataflows from',
 	},
 	// Group ID field for get operation
 	{
@@ -66,7 +66,7 @@ export const dataflowFields: INodeProperties[] = [
 		},
 		default: '',
 		required: true,
-		description: 'O workspace que contém o fluxo de dados',
+		description: 'The workspace that contains the dataflow',
 	},
 	// Dataflow ID field for get operation
 	{
@@ -85,6 +85,6 @@ export const dataflowFields: INodeProperties[] = [
 		},
 		default: '',
 		required: true,
-		description: 'O fluxo de dados para obter a definição',
+		description: 'The dataflow to get the definition for',
 	},
 ];

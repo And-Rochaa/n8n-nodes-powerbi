@@ -7,7 +7,7 @@ import {
 import { powerBiApiRequest } from '../../GenericFunctions';
 
 /**
- * Obtém um dataset específico pelo ID
+ * Gets a specific dataset by ID
  */
 export async function get(
 	this: IExecuteFunctions,

@@ -8,7 +8,7 @@ import {
 import { powerBiApiRequest } from '../../GenericFunctions';
 
 /**
- * Lista todos os datasets
+ * Lists all datasets
  */
 export async function list(
 	this: IExecuteFunctions,

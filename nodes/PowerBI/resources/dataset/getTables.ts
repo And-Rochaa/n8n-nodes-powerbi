@@ -8,7 +8,7 @@ import {
 import { powerBiApiRequest } from '../../GenericFunctions';
 
 /**
- * Obtém as tabelas de um dataset específico
+ * Gets the tables of a specific dataset
  */
 export async function getTables(
 	this: IExecuteFunctions,

@@ -15,7 +15,7 @@ import {
  * Make an API request to Power BI API
  */
 /**
- * Obter token de acesso usando autenticação ROPC (Resource Owner Password Credentials)
+ * Get access token using ROPC authentication (Resource Owner Password Credentials)
  */
 export async function getRopcAccessToken(
 	this: IExecuteFunctions | IExecuteSingleFunctions | ILoadOptionsFunctions,
@@ -23,7 +23,7 @@ export async function getRopcAccessToken(
 	const credentials = await this.getCredentials('powerBI') as IDataObject;
 
 	if (credentials.authType !== 'ropc') {
-		throw new NodeOperationError(this.getNode(), 'O método de autenticação não está configurado como ROPC');
+		throw new NodeOperationError(this.getNode(), 'Authentication method is not configured as ROPC');
 	}
 
 	const options: IHttpRequestOptions = {
@@ -39,7 +39,7 @@ export async function getRopcAccessToken(
 		url: 'https://login.microsoftonline.com/common/oauth2/token',
 		json: true,
 	};
-	// Adicionar client_secret apenas se fornecido (opcional para aplicativos públicos)
+	// Add client_secret only if provided (optional for public clients)
 	if (credentials.ropcClientSecret) {
 		(options.body as IDataObject).client_secret = credentials.ropcClientSecret as string;
 	}
@@ -50,15 +50,15 @@ export async function getRopcAccessToken(
 		if (response.access_token) {
 			return response.access_token as string;
 		} else {
-			throw new NodeOperationError(this.getNode(), 'Não foi possível obter o token de acesso', {
+			throw new NodeOperationError(this.getNode(), 'Could not obtain access token', {
 				description: JSON.stringify(response),
 			});
 		}
 	} catch (error) {
 		if (error.message && error.message.includes('AADSTS')) {
 			throw new NodeApiError(this.getNode(), error as JsonObject, {
-				message: 'Erro na autenticação do Azure AD: ' + error.error_description || error.message,
-				description: 'Verifique suas credenciais e permissões.',
+				message: 'Azure AD authentication error: ' + error.error_description || error.message,
+				description: 'Check your credentials and permissions.',
 			});
 		}
 		throw new NodeApiError(this.getNode(), error as JsonObject);
@@ -84,7 +84,7 @@ export async function powerBiApiRequest(
 		json: true,
 	};
 	
-	// Adiciona opções adicionais, como encoding para arquivos binários
+	// Add additional options, such as encoding for binary files
 	if (requestOptions && Object.keys(requestOptions).length > 0) {
 		Object.assign(options, requestOptions);
 	}
@@ -95,14 +95,14 @@ export async function powerBiApiRequest(
 		}
 		
 		
-		// Se for uma solicitação que espera um arquivo binário (json: false)
+		// If it is a request expecting a binary file (json: false)
 		if (options.json === false) {
 			const oauth2Options = {
 				...options,
 				resolveWithFullResponse: true,
 				encoding: null,
 			};
-					// Utilizando o método requestOAuth2 com opções específicas para binário
+					// Using the requestOAuth2 method with specific options for binary data
 			const response = await this.helpers.requestOAuth2.call(
 				this,
 				'powerBI',
@@ -112,13 +112,13 @@ export async function powerBiApiRequest(
 			
 
 			
-			// Para downloads de arquivos, returnFullResponse permite acesso aos headers
+			// For file downloads, returnFullResponse allows access to headers
 			if (requestOptions.returnFullResponse) {
 				return response;
 			}
 			
-			// Caso contrário, retornar apenas o conteúdo do arquivo
-			return response.body || response;		} else {			// Para solicitações JSON regulares
+			// Otherwise, return only the file content
+			return response.body || response;		} else {			// For regular JSON requests
 			const response = await this.helpers.requestOAuth2.call(
 				this,
 				'powerBI',
@@ -128,8 +128,8 @@ export async function powerBiApiRequest(
 			return response as JsonObject;
 		}
 	} catch (error) {
-		// Não é mais necessário converter erros 403 para 401
-		// O n8n agora captura os erros de autenticação antes que esta conversão seja efetiva
+		// No need to convert 403 errors to 401 anymore
+		// n8n now captures authentication errors before this conversion takes effect
 		
 		throw new NodeApiError(this.getNode(), error as JsonObject);
 	}
@@ -182,7 +182,7 @@ export async function getGroups(this: ILoadOptionsFunctions) {
 	
 	// Add "My Workspace" as an option
 	returnData.push({
-		name: 'Meu Workspace',
+		name: 'My Workspace',
 		value: 'me',
 	});
 	
@@ -236,11 +236,11 @@ export async function getDatasets(this: ILoadOptionsFunctions) {
 	try {
 		groupId = this.getNodeParameter('groupId', 0) as string;
 	} catch (error) {
-		return [{ name: 'Selecione um grupo primeiro', value: '' }];
+		return [{ name: 'Select a group first', value: '' }];
 	}
 	
 	if (!groupId) {
-		return [{ name: 'Selecione um grupo primeiro', value: '' }];
+		return [{ name: 'Select a group first', value: '' }];
 	}
 	
 	let endpoint = '/datasets';
@@ -279,11 +279,11 @@ export async function getTables(this: ILoadOptionsFunctions) {
 		groupId = this.getNodeParameter('groupId', 0) as string;
 		datasetId = this.getNodeParameter('datasetId', 0) as string;
 	} catch (error) {
-		return [{ name: 'Selecione um grupo e dataset primeiro', value: '' }];
+		return [{ name: 'Select a group and dataset first', value: '' }];
 	}
 	
 	if (!groupId || !datasetId) {
-		return [{ name: 'Selecione um grupo e dataset primeiro', value: '' }];
+		return [{ name: 'Select a group and dataset first', value: '' }];
 	}
 	
 	let endpoint = `/datasets/${datasetId}/tables`;
@@ -321,11 +321,11 @@ export async function getReports(this: ILoadOptionsFunctions) {
 	try {
 		groupId = this.getNodeParameter('groupId', 0) as string;
 	} catch (error) {
-		return [{ name: 'Selecione um grupo primeiro', value: '' }];
+		return [{ name: 'Select a group first', value: '' }];
 	}
 	
 	if (!groupId) {
-		return [{ name: 'Selecione um grupo primeiro', value: '' }];
+		return [{ name: 'Select a group first', value: '' }];
 	}
 	
 	let endpoint = '/reports';
@@ -363,11 +363,11 @@ export async function getDashboards(this: ILoadOptionsFunctions) {
 	try {
 		groupId = this.getNodeParameter('groupId', 0) as string;
 	} catch (error) {
-		return [{ name: 'Selecione um grupo primeiro', value: '' }];
+		return [{ name: 'Select a group first', value: '' }];
 	}
 	
 	if (!groupId) {
-		return [{ name: 'Selecione um grupo primeiro', value: '' }];
+		return [{ name: 'Select a group first', value: '' }];
 	}
 	
 	let endpoint = '/dashboards';
@@ -415,8 +415,8 @@ export async function getGateways(this: ILoadOptionsFunctions) {
 			}
 		}
 	} catch (error) {
-		// Se não conseguir listar gateways, retorna array vazio
-		// Isso pode acontecer se o usuário não tiver permissão de administrador de gateway
+		// If unable to list gateways, return empty array
+		// This can happen if the user doesn't have gateway administrator permission
 	}
 	
 	return returnData;
@@ -432,7 +432,7 @@ export async function getDatasources(this: ILoadOptionsFunctions) {
 		const gatewayId = this.getNodeParameter('gatewayId', '') as string;
 		
 		if (!gatewayId) {
-			return [{ name: '-- Selecione um gateway primeiro --', value: '' }];
+			return [{ name: '-- Select a gateway first --', value: '' }];
 		}
 		
 		const responseData = await powerBiApiRequest.call(this, 'GET', `/gateways/${gatewayId}/datasources`, {}, {});
@@ -448,9 +448,9 @@ export async function getDatasources(this: ILoadOptionsFunctions) {
 			}
 		}
 	} catch (error) {
-		// Se não conseguir listar datasources, retorna array vazio
-		// Isso pode acontecer se o usuário não tiver permissão de administrador de gateway
-		return [{ name: 'Erro ao carregar fontes de dados. Verifique as permissões.', value: '' }];
+		// If unable to list datasources, return empty array
+		// This can happen if the user doesn't have gateway administrator permission
+		return [{ name: 'Error loading data sources. Check permissions.', value: '' }];
 	}
 	
 	return returnData;
@@ -464,7 +464,7 @@ export async function getDataflows(this: ILoadOptionsFunctions): Promise<INodePr
 	const returnData: INodePropertyOptions[] = [];
 
 	if (!groupId) {
-		return [{ name: 'Selecione um workspace primeiro', value: '' }];
+		return [{ name: 'Select a workspace first', value: '' }];
 	}
 
 	try {
@@ -472,11 +472,11 @@ export async function getDataflows(this: ILoadOptionsFunctions): Promise<INodePr
 		
 		if (responseData && responseData.value) {
 			if (responseData.value.length === 0) {
-				return [{ name: 'Nenhum dataflow encontrado neste workspace', value: '' }];
+				return [{ name: 'No dataflow found in this workspace', value: '' }];
 			}
 			
 			for (const dataflow of responseData.value) {
-				// A API do Power BI usa 'objectId' em vez de 'id' para dataflows
+				// The Power BI API uses 'objectId' instead of 'id' for dataflows
 				if (dataflow.name && dataflow.objectId) {
 					returnData.push({
 						name: dataflow.name,
@@ -485,15 +485,15 @@ export async function getDataflows(this: ILoadOptionsFunctions): Promise<INodePr
 				}
 			}
 		} else {
-			return [{ name: 'Resposta da API não contém dataflows', value: '' }];
+			return [{ name: 'API response does not contain dataflows', value: '' }];
 		}
 		
 		if (returnData.length === 0) {
-			return [{ name: 'Nenhum dataflow válido encontrado', value: '' }];
+			return [{ name: 'No valid dataflow found', value: '' }];
 		}
 	} catch (error) {
-		// Se não conseguir listar dataflows, retorna array vazio
-		return [{ name: `Erro ao carregar fluxos de dados: ${error.message}`, value: '' }];
+		// If unable to list dataflows, return empty array
+		return [{ name: `Error loading dataflows: ${error.message}`, value: '' }];
 	}
 	
 	return returnData;

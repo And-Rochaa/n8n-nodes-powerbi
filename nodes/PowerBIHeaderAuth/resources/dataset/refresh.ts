@@ -7,7 +7,7 @@ import {
 import { powerBiApiRequestWithHeaders } from '../../GenericFunctions';
 
 /**
- * Atualiza um dataset específico
+ * Refreshes a specific dataset
  */
 export async function refresh(
 	this: IExecuteFunctions,
@@ -15,28 +15,28 @@ export async function refresh(
 ): Promise<INodeExecutionData[]> {
 	const returnData: INodeExecutionData[] = [];
 	
-	// Obter token de autenticação
+	// Get authentication token
 	let authToken = this.getNodeParameter('authToken', i) as string;
 	
-	// Remover o prefixo "Bearer" se já estiver presente no token
+	// Remove the "Bearer" prefix if already present in the token
 	if (authToken.trim().toLowerCase().startsWith('bearer ')) {
 		authToken = authToken.trim().substring(7);
 	}
 	
-	// Preparar o header de autorização
+	// Prepare the authorization header
 	const headers: IDataObject = {
 		Authorization: `Bearer ${authToken}`,
 	};
 	
-	// Obter parâmetros
+	// Get parameters
 	const groupId = this.getNodeParameter('groupId', i, '') as string;
 	const datasetId = this.getNodeParameter('datasetId', i) as string;
 	
-	// Construir endpoint baseado no grupo selecionado
+	// Build endpoint based on selected group
 	const endpoint = groupId && groupId !== 'me' ? 
 		`/groups/${groupId}/datasets/${datasetId}/refreshes` : `/datasets/${datasetId}/refreshes`;
 	
-	// Fazer requisição para a API
+	// Make request to the API
 	await powerBiApiRequestWithHeaders.call(
 		this,
 		'POST',

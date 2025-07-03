@@ -8,7 +8,7 @@ import {
 import { powerBiApiRequestWithHeaders } from '../../GenericFunctions';
 
 /**
- * Lista todos os relatórios disponíveis
+ * Lists all available reports
  */
 export async function list(
 	this: IExecuteFunctions,
@@ -16,27 +16,27 @@ export async function list(
 ): Promise<INodeExecutionData[]> {
 	const returnData: INodeExecutionData[] = [];
 	
-	// Obter token de autenticação
+	// Get authentication token
 	let authToken = this.getNodeParameter('authToken', i) as string;
 	
-	// Remover o prefixo "Bearer" se já estiver presente no token
+	// Remove the "Bearer" prefix if it is already present in the token
 	if (authToken.trim().toLowerCase().startsWith('bearer ')) {
 		authToken = authToken.trim().substring(7);
 	}
 	
-	// Preparar o header de autorização
+	// Prepare the authorization header
 	const headers: IDataObject = {
 		Authorization: `Bearer ${authToken}`,
 	};
 	
-	// Obter parâmetros
+	// Get parameters
 	const groupId = this.getNodeParameter('groupId', i, '') as string;
 	
-	// Construir endpoint baseado no grupo selecionado
+	// Build endpoint based on the selected group
 	const endpoint = groupId && groupId !== 'me' ? 
 		`/groups/${groupId}/reports` : `/reports`;
 	
-	// Fazer requisição para a API
+	// Make request to the API
 	const responseData = await powerBiApiRequestWithHeaders.call(
 		this,
 		'GET',
@@ -46,7 +46,7 @@ export async function list(
 		headers,
 	) as JsonObject;
 	
-	// Processar os dados de resposta
+	// Process response data
 	const reportItems = (responseData.value as IDataObject[] || []);
 	for (const item of reportItems) {
 		returnData.push({

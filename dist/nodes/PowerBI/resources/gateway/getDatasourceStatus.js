@@ -6,10 +6,10 @@ async function getDatasourceStatus(index) {
     const gatewayId = this.getNodeParameter('gatewayId', index);
     const datasourceId = this.getNodeParameter('datasourceId', index);
     if (!gatewayId) {
-        throw new Error('Gateway ID é obrigatório');
+        throw new Error('Gateway ID is required');
     }
     if (!datasourceId) {
-        throw new Error('Datasource ID é obrigatório');
+        throw new Error('Datasource ID is required');
     }
     const endpoint = `/gateways/${gatewayId}/datasources/${datasourceId}/status`;
     try {
@@ -19,12 +19,12 @@ async function getDatasourceStatus(index) {
     }
     catch (error) {
         if (error.httpCode === '403') {
-            throw new Error(`Erro 403: Você não tem permissão para verificar o status desta fonte de dados (Gateway: ${gatewayId}, Datasource: ${datasourceId}). Verifique se você tem acesso de administrador ao gateway e à fonte de dados.`);
+            throw new Error(`Error 403: You don't have permission to check the status of this data source (Gateway: ${gatewayId}, Datasource: ${datasourceId}). Please verify that you have administrator access to the gateway and data source.`);
         }
         if (error.httpCode === '404') {
-            throw new Error(`Erro 404: Gateway (${gatewayId}) ou fonte de dados (${datasourceId}) não encontrado. Verifique se os IDs estão corretos e se você tem acesso a eles.`);
+            throw new Error(`Error 404: Gateway (${gatewayId}) or data source (${datasourceId}) not found. Please verify that the IDs are correct and that you have access to them.`);
         }
-        throw new Error(`Erro ao verificar status da fonte de dados: ${error.message || error}`);
+        throw new Error(`Error checking data source status: ${error.message || error}`);
     }
 }
 exports.getDatasourceStatus = getDatasourceStatus;

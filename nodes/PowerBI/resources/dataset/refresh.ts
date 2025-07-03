@@ -6,7 +6,7 @@ import {
 import { powerBiApiRequest } from '../../GenericFunctions';
 
 /**
- * Atualiza (refresh) um dataset específico
+ * Refreshes a specific dataset
  */
 export async function refresh(
 	this: IExecuteFunctions,

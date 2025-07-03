@@ -8,7 +8,7 @@ import {
 import { powerBiApiRequest } from '../../GenericFunctions';
 
 /**
- * Lista todos os relatórios
+ * Lists all reports
  */
 export async function list(
 	this: IExecuteFunctions,
@@ -16,21 +16,21 @@ export async function list(
 ): Promise<INodeExecutionData[]> {
 	const returnData: INodeExecutionData[] = [];
 	
-	// Obter ID do grupo (workspace) se fornecido
+	// Get group (workspace) ID if provided
 	const groupId = this.getNodeParameter('groupId', i, '') as string;
 	
-	// Construir o endpoint com base no ID do grupo fornecido
+	// Build the endpoint based on the provided group ID
 	const endpoint = groupId && groupId !== 'me' ? 
 		`/groups/${groupId}/reports` : '/reports';
 	
-	// Fazer chamada à API
+	// Make API call
 	const responseData = await powerBiApiRequest.call(
 		this,
 		'GET',
 		endpoint,
 	) as JsonObject;
 	
-	// Processar os dados de resposta
+	// Process the response data
 	const reportItems = (responseData.value as IDataObject[] || []);
 	for (const item of reportItems) {
 		returnData.push({

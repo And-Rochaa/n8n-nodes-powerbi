@@ -5,7 +5,7 @@ async function getInfo(i) {
     const returnData = [];
     const workspaces = this.getNodeParameter('workspaces', i);
     if (!workspaces || workspaces.length === 0) {
-        throw new Error('É necessário selecionar pelo menos um workspace');
+        throw new Error('You must select at least one workspace');
     }
     const datasetSchema = this.getNodeParameter('datasetSchema', i);
     const datasetExpressions = this.getNodeParameter('datasetExpressions', i);

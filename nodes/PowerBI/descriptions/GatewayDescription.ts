@@ -17,37 +17,37 @@ export const gatewayOperations: INodeProperties[] = [
 			{
 				name: 'Get Datasource',
 				value: 'getDatasource',
-				description: 'Retorna a fonte de dados especificada do gateway especificado',
+				description: 'Returns the specified datasource from the specified gateway',
 				action: 'Get datasource',
 			},
 			{
 				name: 'Get Datasource Status',
 				value: 'getDatasourceStatus',
-				description: 'Verifica o status de conectividade da fonte de dados especificada',
+				description: 'Checks the connectivity status of the specified datasource',
 				action: 'Get datasource status',
 			},
 			{
 				name: 'Get Datasources',
 				value: 'getDatasources',
-				description: 'Retorna uma lista de fontes de dados do gateway especificado',
+				description: 'Returns a list of datasources from the specified gateway',
 				action: 'Get datasources',
 			},
 			{
 				name: 'Get Datasource Users',
 				value: 'getDatasourceUsers',
-				description: 'Retorna uma lista de usuários que têm acesso à fonte de dados especificada',
+				description: 'Returns a list of users who have access to the specified datasource',
 				action: 'Get datasource users',
 			},
 			{
 				name: 'Get Gateway',
 				value: 'get',
-				description: 'Retorna o gateway especificado',
+				description: 'Returns the specified gateway',
 				action: 'Get gateway',
 			},
 			{
-				name: 'Listar Gateways',
+				name: 'List Gateways',
 				value: 'list',
-				description: 'Retorna uma lista de gateways para os quais o usuário é administrador',
+				description: 'Returns a list of gateways for which the user is an administrator',
 				action: 'List gateways',
 			},
 		],
@@ -72,7 +72,7 @@ export const gatewayFields: INodeProperties[] = [
 		},
 		default: '',
 		required: true,
-		description: 'O gateway que contém a fonte de dados',
+		description: 'The gateway that contains the datasource',
 	},
 	// Datasource ID field for getDatasource operation
 	{
@@ -91,7 +91,7 @@ export const gatewayFields: INodeProperties[] = [
 		},
 		default: '',
 		required: true,
-		description: 'A fonte de dados a ser obtida',
+		description: 'The datasource to be retrieved',
 	},
 	// Gateway ID field for getDatasourceStatus operation
 	{
@@ -109,7 +109,7 @@ export const gatewayFields: INodeProperties[] = [
 		},
 		default: '',
 		required: true,
-		description: 'O gateway que contém a fonte de dados',
+		description: 'The gateway that contains the datasource',
 	},
 	// Datasource ID field for getDatasourceStatus operation
 	{
@@ -128,7 +128,7 @@ export const gatewayFields: INodeProperties[] = [
 		},
 		default: '',
 		required: true,
-		description: 'A fonte de dados para verificar o status',
+		description: 'The datasource to check status for',
 	},
 	// Gateway ID field for getDatasources operation
 	{
@@ -146,7 +146,7 @@ export const gatewayFields: INodeProperties[] = [
 		},
 		default: '',
 		required: true,
-		description: 'O gateway para obter as fontes de dados',
+		description: 'The gateway to get datasources from',
 	},
 	// Gateway ID field for getDatasourceUsers operation
 	{
@@ -164,7 +164,7 @@ export const gatewayFields: INodeProperties[] = [
 		},
 		default: '',
 		required: true,
-		description: 'O gateway que contém a fonte de dados',
+		description: 'The gateway that contains the datasource',
 	},
 	// Datasource ID field for getDatasourceUsers operation
 	{
@@ -183,7 +183,7 @@ export const gatewayFields: INodeProperties[] = [
 		},
 		default: '',
 		required: true,
-		description: 'A fonte de dados para obter os usuários',
+		description: 'The datasource to get users for',
 	},
 	// Gateway ID field for get operation
 	{
@@ -201,6 +201,6 @@ export const gatewayFields: INodeProperties[] = [
 		},
 		default: '',
 		required: true,
-		description: 'O gateway a ser obtido',
+		description: 'The gateway to be retrieved',
 	},
 ];

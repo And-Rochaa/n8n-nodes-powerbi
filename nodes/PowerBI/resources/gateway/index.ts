@@ -5,7 +5,7 @@ import { getDatasourceStatus } from './getDatasourceStatus';
 import { getDatasourceUsers } from './getDatasourceUsers';
 import { list } from './list';
 
-// Exportamos todas as operações disponíveis para gateway
+// We export all available operations for gateway
 export const gatewayOperations = {
     get: getGateway,
     getDatasource,

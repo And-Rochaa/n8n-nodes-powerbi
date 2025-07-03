@@ -27,7 +27,7 @@ async function refreshToken(i) {
         });
         if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(`Falha ao renovar o token: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`);
+            throw new Error(`Failed to refresh token: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`);
         }
         const tokenData = await response.json();
         returnData.push({
@@ -37,7 +37,7 @@ async function refreshToken(i) {
     }
     catch (error) {
         if (error.response) {
-            const errorMessage = `Erro na solicitação: ${error.response.statusCode} - ${error.response.statusMessage}`;
+            const errorMessage = `Request error: ${error.response.statusCode} - ${error.response.statusMessage}`;
             throw new Error(errorMessage);
         }
         throw error;

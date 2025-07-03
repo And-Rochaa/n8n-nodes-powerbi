@@ -42,8 +42,8 @@ async function exportToFile(i) {
                 }
             }
             catch (error) {
-                throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'Formato JSON inválido para páginas', {
-                    description: 'Certifique-se de que o formato JSON está correto.',
+                throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'Invalid JSON format for pages', {
+                    description: 'Please ensure the JSON format is correct.',
                 });
             }
         }
@@ -57,8 +57,8 @@ async function exportToFile(i) {
                 }
             }
             catch (error) {
-                throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'Formato JSON inválido para filtros', {
-                    description: 'Certifique-se de que o formato JSON está correto.',
+                throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'Invalid JSON format for filters', {
+                    description: 'Please ensure the JSON format is correct.',
                 });
             }
         }
@@ -93,8 +93,8 @@ async function exportToFile(i) {
                 }
             }
             catch (error) {
-                throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'Formato JSON inválido para identidades', {
-                    description: 'Certifique-se de que o formato JSON está correto.',
+                throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'Invalid JSON format for identities', {
+                    description: 'Please ensure the JSON format is correct.',
                 });
             }
         }
@@ -118,8 +118,8 @@ async function exportToFile(i) {
                 }
             }
             catch (error) {
-                throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'Formato JSON inválido para parâmetros', {
-                    description: 'Certifique-se de que o formato JSON está correto.',
+                throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'Invalid JSON format for parameters', {
+                    description: 'Please ensure the JSON format is correct.',
                 });
             }
         }
@@ -133,8 +133,8 @@ async function exportToFile(i) {
                 }
             }
             catch (error) {
-                throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'Formato JSON inválido para configurações de formato', {
-                    description: 'Certifique-se de que o formato JSON está correto.',
+                throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'Invalid JSON format for format settings', {
+                    description: 'Please ensure the JSON format is correct.',
                 });
             }
         }
@@ -148,8 +148,8 @@ async function exportToFile(i) {
                 }
             }
             catch (error) {
-                throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'Formato JSON inválido para identidades', {
-                    description: 'Certifique-se de que o formato JSON está correto.',
+                throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'Invalid JSON format for identities', {
+                    description: 'Please ensure the JSON format is correct.',
                 });
             }
         }
@@ -198,7 +198,7 @@ async function exportToFile(i) {
                         fileBuffer = fileResponse;
                     }
                     if (!fileBuffer) {
-                        throw new Error('Não foi possível extrair o conteúdo do arquivo da resposta');
+                        throw new Error('Could not extract file content from the response');
                     }
                     let base64Data;
                     try {
@@ -206,7 +206,7 @@ async function exportToFile(i) {
                         base64Data = buffer.toString('base64');
                     }
                     catch (bufferError) {
-                        throw new Error(`Falha ao processar o arquivo: ${bufferError.message}`);
+                        throw new Error(`Failed to process the file: ${bufferError.message}`);
                     }
                     let mimeType = 'application/octet-stream';
                     const fileExtension = (_a = statusResponse.resourceFileExtension) === null || _a === void 0 ? void 0 : _a.toLowerCase();
@@ -238,8 +238,8 @@ async function exportToFile(i) {
                 }
                 catch (downloadError) {
                     throw new n8n_workflow_1.NodeApiError(this.getNode(), downloadError, {
-                        message: 'Falha ao baixar o arquivo exportado',
-                        description: 'O relatório foi exportado com sucesso, mas não foi possível baixar o arquivo.'
+                        message: 'Failed to download the exported file',
+                        description: 'The report was exported successfully, but the file could not be downloaded.'
                     });
                 }
             }
@@ -250,7 +250,7 @@ async function exportToFile(i) {
             }
         }
         else if (exportStatus === 'Failed') {
-            let errorDescription = 'Tempo limite excedido ou erro desconhecido';
+            let errorDescription = 'Timeout exceeded or unknown error';
             if (statusResponse &&
                 typeof statusResponse === 'object' &&
                 statusResponse.error &&
@@ -259,14 +259,14 @@ async function exportToFile(i) {
                 errorDescription = statusResponse.error.message;
             }
             throw new n8n_workflow_1.NodeApiError(this.getNode(), statusResponse, {
-                message: 'Falha na exportação do relatório',
+                message: 'Report export failed',
                 description: errorDescription,
             });
         }
         else {
             throw new n8n_workflow_1.NodeApiError(this.getNode(), statusResponse, {
-                message: 'Tempo limite excedido',
-                description: `A exportação não foi concluída dentro do tempo máximo de espera (${maxWaitTime} segundos)`,
+                message: 'Timeout exceeded',
+                description: `The export did not complete within the maximum wait time (${maxWaitTime} seconds)`,
             });
         }
         return returnData;
@@ -277,15 +277,15 @@ async function exportToFile(i) {
             error.response.data.error &&
             error.response.data.error.code === 'FeatureNotAvailableError') {
             throw new n8n_workflow_1.NodeApiError(this.getNode(), error.response.data, {
-                message: 'Recurso de exportação não disponível',
-                description: 'A API de exportação para este formato não está disponível para este relatório ou sua licença do Power BI não permite esta operação. Verifique se você tem as permissões necessárias e se o relatório suporta o formato solicitado.',
+                message: 'Export feature not available',
+                description: 'The export API for this format is not available for this report, or your Power BI license does not allow this operation. Please check if you have the necessary permissions and if the report supports the requested format.',
                 httpCode: '404',
             });
         }
         else if (error.response && error.response.data) {
             throw new n8n_workflow_1.NodeApiError(this.getNode(), error.response.data, {
-                message: `Status: ${error.response.status || 'Erro'}`,
-                description: `Falha na comunicação com a API do Power BI: ${JSON.stringify(error.response.data)}`,
+                message: `Status: ${error.response.status || 'Error'}`,
+                description: `Failed to communicate with the Power BI API: ${JSON.stringify(error.response.data)}`,
                 httpCode: error.response.status ? error.response.status.toString() : '500',
             });
         }

@@ -7,7 +7,7 @@ import {
 import { powerBiApiRequestWithHeaders } from '../../GenericFunctions';
 
 /**
- * Adiciona linhas a uma tabela em um dataset
+ * Adds rows to a table in a dataset
  */
 export async function addRows(
 	this: IExecuteFunctions,
@@ -15,20 +15,20 @@ export async function addRows(
 ): Promise<INodeExecutionData[]> {
 	const returnData: INodeExecutionData[] = [];
 	
-	// Obter token de autenticação
+	// Get authentication token
 	let authToken = this.getNodeParameter('authToken', i) as string;
 	
-	// Remover o prefixo "Bearer" se já estiver presente no token
+	// Remove the "Bearer" prefix if already present in the token
 	if (authToken.trim().toLowerCase().startsWith('bearer ')) {
 		authToken = authToken.trim().substring(7);
 	}
 	
-	// Preparar o header de autorização
+	// Prepare the authorization header
 	const headers: IDataObject = {
 		Authorization: `Bearer ${authToken}`,
 	};
 	
-	// Obter parâmetros
+	// Get parameters
 	const datasetId = this.getNodeParameter('datasetId', i) as string;
 	const tableName = this.getNodeParameter('tableName', i) as string;
 	const data = this.getNodeParameter('data', i) as string;
@@ -38,14 +38,14 @@ export async function addRows(
 	try {
 		rows = JSON.parse(data);
 	} catch (error) {
-		throw new Error(`Não foi possível analisar o JSON das linhas: ${error}`);
+		throw new Error(`Unable to parse JSON rows: ${error}`);
 	}
 	
-	// Construir endpoint baseado no grupo selecionado
+	// Build endpoint based on selected group
 	const endpoint = groupId && groupId !== 'me' ? 
 		`/groups/${groupId}/datasets/${datasetId}/tables/${tableName}/rows` : `/datasets/${datasetId}/tables/${tableName}/rows`;
 	
-	// Fazer requisição para a API
+	// Make request to the API
 	await powerBiApiRequestWithHeaders.call(
 		this,
 		'POST',
@@ -58,7 +58,7 @@ export async function addRows(
 	);
 	
 	returnData.push({
-		json: { success: true, message: 'Linhas adicionadas com sucesso' },
+		json: { success: true, message: 'Rows added successfully' },
 	});
 	
 	return returnData;

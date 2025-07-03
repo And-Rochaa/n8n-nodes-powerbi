@@ -5,7 +5,7 @@ import {
 } from 'n8n-workflow';
 
 /**
- * Gera uma URL de autenticação OAuth2 para o Microsoft Entra ID
+ * Generates an OAuth2 authentication URL for Microsoft Entra ID
  */
 export async function generateAuthUrl(
 	this: IExecuteFunctions,
@@ -13,7 +13,7 @@ export async function generateAuthUrl(
 ): Promise<INodeExecutionData[]> {
 	const returnData: INodeExecutionData[] = [];
 	
-	// Recuperar os parâmetros fornecidos pelo usuário
+	// Retrieve parameters provided by user
 	const baseUrl = this.getNodeParameter('url', i) as string;
 	const clientId = this.getNodeParameter('clientId', i) as string;
 	const responseType = this.getNodeParameter('responseType', i) as string;
@@ -22,15 +22,15 @@ export async function generateAuthUrl(
 	const scope = this.getNodeParameter('scope', i) as string;
 	const state = this.getNodeParameter('state', i, '') as string;
 	
-	// Construir a URL de autenticação
+	// Build authentication URL
 	let authUrl = `${baseUrl}?client_id=${encodeURIComponent(clientId)}&response_type=${encodeURIComponent(responseType)}&redirect_uri=${encodeURIComponent(redirectUri)}&response_mode=${encodeURIComponent(responseMode)}&scope=${encodeURIComponent(scope)}`;
 	
-	// Adicionar state se fornecido
+	// Add state if provided
 	if (state) {
 		authUrl += `&state=${encodeURIComponent(state)}`;
 	}
 	
-	// Retornar a URL gerada
+	// Return generated URL
 	returnData.push({
 		json: {
 			authUrl,

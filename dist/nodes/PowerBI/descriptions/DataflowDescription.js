@@ -18,13 +18,13 @@ exports.dataflowOperations = [
             {
                 name: 'Get Dataflows',
                 value: 'list',
-                description: 'Retorna uma lista de todos os fluxos de dados do workspace especificado',
+                description: 'Returns a list of all dataflows from the specified workspace',
                 action: 'Get dataflows',
             },
             {
                 name: 'Get Dataflow',
                 value: 'get',
-                description: 'Exporta a definição do fluxo de dados especificado para um arquivo JSON',
+                description: 'Exports the specified dataflow definition to a JSON file',
                 action: 'Get dataflow',
             },
         ],
@@ -47,7 +47,7 @@ exports.dataflowFields = [
         },
         default: '',
         required: true,
-        description: 'O workspace para obter os fluxos de dados',
+        description: 'The workspace to get dataflows from',
     },
     {
         displayName: 'Workspace',
@@ -64,7 +64,7 @@ exports.dataflowFields = [
         },
         default: '',
         required: true,
-        description: 'O workspace que contém o fluxo de dados',
+        description: 'The workspace that contains the dataflow',
     },
     {
         displayName: 'Dataflow',
@@ -82,7 +82,7 @@ exports.dataflowFields = [
         },
         default: '',
         required: true,
-        description: 'O fluxo de dados para obter a definição',
+        description: 'The dataflow to get the definition for',
     },
 ];
 //# sourceMappingURL=DataflowDescription.js.map

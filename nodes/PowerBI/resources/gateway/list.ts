@@ -7,7 +7,7 @@ import {
 import { powerBiApiRequest } from '../../GenericFunctions';
 
 /**
- * Lista todos os gateways para os quais o usuário é administrador
+ * Lists all gateways for which the user is an administrator
  */
 export async function list(
 	this: IExecuteFunctions,
@@ -16,26 +16,26 @@ export async function list(
 	const returnData: INodeExecutionData[] = [];
 
 	try {
-		// Fazer solicitação para listar gateways
+		// Make request to list gateways
 		const response = await powerBiApiRequest.call(
 			this,
 			'GET',
 			'/gateways',
 		);
 
-		// Verificar se há gateways na resposta
+		// Check if there are gateways in the response
 		if (response.value && Array.isArray(response.value)) {
-			// Retornar cada gateway como um item separado
+			// Return each gateway as a separate item
 			response.value.forEach((gateway: any) => {
 				returnData.push({
 					json: gateway,
 				});
 			});
 		} else {
-			// Se não há gateways, retornar objeto vazio
+			// If there are no gateways, return empty object
 			returnData.push({
 				json: {
-					message: 'Nenhum gateway encontrado',
+					message: 'No gateways found',
 					value: [],
 				},
 			});
@@ -45,8 +45,8 @@ export async function list(
 	} catch (error) {
 		if (error.response && error.response.data) {
 			throw new NodeApiError(this.getNode(), error.response.data, { 
-				message: `Status: ${error.response.status || 'Erro'}`,
-				description: `Falha ao listar gateways: ${JSON.stringify(error.response.data)}`,
+				message: `Status: ${error.response.status || 'Error'}`,
+				description: `Failed to list gateways: ${JSON.stringify(error.response.data)}`,
 				httpCode: error.response.status ? error.response.status.toString() : '500',
 			});
 		}

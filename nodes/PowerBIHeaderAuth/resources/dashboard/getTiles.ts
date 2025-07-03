@@ -8,7 +8,7 @@ import {
 import { powerBiApiRequestWithHeaders } from '../../GenericFunctions';
 
 /**
- * Obtém os tiles de um dashboard específico
+ * Gets tiles from a specific dashboard
  */
 export async function getTiles(
 	this: IExecuteFunctions,
@@ -16,28 +16,28 @@ export async function getTiles(
 ): Promise<INodeExecutionData[]> {
 	const returnData: INodeExecutionData[] = [];
 	
-	// Obter token de autenticação
+	// Get authentication token
 	let authToken = this.getNodeParameter('authToken', i) as string;
 	
-	// Remover o prefixo "Bearer" se já estiver presente no token
+	// Remove the "Bearer" prefix if already present in the token
 	if (authToken.trim().toLowerCase().startsWith('bearer ')) {
 		authToken = authToken.trim().substring(7);
 	}
 	
-	// Preparar o header de autorização
+	// Prepare the authorization header
 	const headers: IDataObject = {
 		Authorization: `Bearer ${authToken}`,
 	};
 	
-	// Obter parâmetros
+	// Get parameters
 	const dashboardId = this.getNodeParameter('dashboardId', i) as string;
 	const groupId = this.getNodeParameter('groupId', i, '') as string;
 	
-	// Construir o endpoint baseado no grupo selecionado
+	// Build the endpoint based on selected group
 	const endpoint = groupId && groupId !== 'me' ? 
 		`/groups/${groupId}/dashboards/${dashboardId}/tiles` : `/dashboards/${dashboardId}/tiles`;
 	
-	// Fazer requisição para a API
+	// Make request to the API
 	const responseData = await powerBiApiRequestWithHeaders.call(
 		this,
 		'GET',
@@ -47,7 +47,7 @@ export async function getTiles(
 		headers,
 	) as JsonObject;
 	
-	// Processar os dados de resposta
+	// Process response data
 	const tileItems = (responseData.value as IDataObject[] || []);
 	for (const item of tileItems) {
 		returnData.push({

@@ -8,7 +8,7 @@ import {
 import { powerBiApiRequest } from '../../GenericFunctions';
 
 /**
- * Obtém um dashboard específico pelo ID
+ * Gets a specific dashboard by ID
  */
 export async function get(
 	this: IExecuteFunctions,

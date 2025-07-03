@@ -8,7 +8,7 @@ import {
 import { powerBiApiRequest } from '../../GenericFunctions';
 
 /**
- * Executa a operação getScanResult para obter o resultado de um scan administrativo
+ * Executes the getScanResult operation to retrieve the result of an administrative scan
  */
 export async function getScanResult(
 	this: IExecuteFunctions,
@@ -18,7 +18,7 @@ export async function getScanResult(
 	
 	const scanId = this.getNodeParameter('scanId', i) as string;
 	
-	// Fazer requisição para obter o resultado do scan
+	// Make request to get the scan result
 	const responseData = await powerBiApiRequest.call(
 		this,
 		'GET',

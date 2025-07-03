@@ -8,7 +8,7 @@ import {
 import { powerBiApiRequest } from '../../GenericFunctions';
 
 /**
- * Lista todos os dashboards disponíveis
+ * Lists all available dashboards
  */
 export async function list(
 	this: IExecuteFunctions,

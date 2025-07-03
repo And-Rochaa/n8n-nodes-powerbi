@@ -6,7 +6,7 @@ import {
 import { powerBiApiRequest } from '../../GenericFunctions';
 
 /**
- * Adiciona linhas a uma tabela em um dataset
+ * Adds rows to a table in a dataset
  */
 export async function addRows(
 	this: IExecuteFunctions,
@@ -24,7 +24,7 @@ export async function addRows(
 	try {
 		rows = JSON.parse(data);
 	} catch (error) {
-		throw new Error(`Não foi possível analisar o JSON das linhas: ${error}`);
+		throw new Error(`Could not parse rows JSON: ${error}`);
 	}
 	
 	// Construct the endpoint based on whether a group ID is provided
@@ -42,7 +42,7 @@ export async function addRows(
 	);
 	
 	returnData.push({
-		json: { success: true, message: 'Linhas adicionadas com sucesso' },
+		json: { success: true, message: 'Rows added successfully' },
 	});
 	
 	return returnData;

@@ -260,7 +260,7 @@ exports.reportFields = [
                 ],
             },
         }, description: 'Whether to wait for the export to complete before returning the result',
-    }, { displayName: 'Baixar Arquivo',
+    }, { displayName: 'Download File',
         name: 'downloadFile',
         type: 'boolean',
         default: false,
@@ -277,7 +277,7 @@ exports.reportFields = [
                 ],
             },
         },
-        description: 'Se ativado, o arquivo será disponibilizado como arquivo binário para download e também como base64 no campo fileBase64 para uso em integrações como WhatsApp', },
+        description: 'If activated, the file will be available as a binary file for download and also as base64 in the fileBase64 field for use in integrations such as WhatsApp', },
     {
         displayName: 'Additional Fields',
         name: 'additionalFields',
