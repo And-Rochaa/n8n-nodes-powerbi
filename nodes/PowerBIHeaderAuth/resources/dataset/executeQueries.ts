@@ -32,23 +32,40 @@ export async function executeQueries(
 	const datasetId = this.getNodeParameter('datasetId', i) as string;
 	const daxQuery = this.getNodeParameter('daxQuery', i) as string;
 	const groupId = this.getNodeParameter('groupId', i, '') as string;
+	const includeNulls = this.getNodeParameter('includeNulls', i, false) as boolean;
+	const impersonatedUserName = this.getNodeParameter('impersonatedUserName', i, '') as string;
 	
 	// Build endpoint based on selected group
 	const endpoint = groupId && groupId !== 'me' ? 
 		`/groups/${groupId}/datasets/${datasetId}/executeQueries` : `/datasets/${datasetId}/executeQueries`;
+	
+	// Build the request body
+	const requestBody: any = {
+		queries: [
+			{
+				query: daxQuery,
+			},
+		],
+	};
+	
+	// Add optional serializer settings if includeNulls is specified
+	if (includeNulls !== false) {
+		requestBody.serializerSettings = {
+			includeNulls: includeNulls,
+		};
+	}
+	
+	// Add optional impersonated user name if specified
+	if (impersonatedUserName && impersonatedUserName.trim() !== '') {
+		requestBody.impersonatedUserName = impersonatedUserName.trim();
+	}
 	
 	// Make request to the API
 	const responseData = await powerBiApiRequestWithHeaders.call(
 		this,
 		'POST',
 		endpoint,
-		{
-			queries: [
-				{
-					query: daxQuery,
-				},
-			],
-		},
+		requestBody,
 		{},
 		headers,
 	);

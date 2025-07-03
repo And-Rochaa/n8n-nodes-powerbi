@@ -174,6 +174,41 @@ exports.datasetFields = [
         description: 'DAX query to be executed on the dataset',
     },
     {
+        displayName: 'Include Nulls',
+        name: 'includeNulls',
+        type: 'boolean',
+        displayOptions: {
+            show: {
+                resource: [
+                    'dataset',
+                ],
+                operation: [
+                    'executeQueries',
+                ],
+            },
+        },
+        default: false,
+        description: 'Whether null (blank) values should be included in the result set',
+    },
+    {
+        displayName: 'Impersonated User Name',
+        name: 'impersonatedUserName',
+        type: 'string',
+        displayOptions: {
+            show: {
+                resource: [
+                    'dataset',
+                ],
+                operation: [
+                    'executeQueries',
+                ],
+            },
+        },
+        default: '',
+        placeholder: 'someuser@mycompany.com',
+        description: 'The UPN of a user to be impersonated. If the model is not RLS enabled, this will be ignored.',
+    },
+    {
         displayName: 'Limit',
         name: 'top',
         type: 'number',
