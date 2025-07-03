@@ -1,121 +1,143 @@
-![Power BI Logo](https://uploaddeimagens.com.br/images/004/897/873/original/Integra%C3%A7%C3%A3o_n8n_e_Power_BI.png)
+![Power BI Logo](https://i.postimg.cc/3hntXFh3/Integra-o-n8n-e-Power-BI.png)
 
 # n8n-nodes-powerbi
 
-Este pacote contém nodes para o n8n que permitem integração completa com as APIs REST do Microsoft Power BI. Estes nodes possibilitam automação, integração e orquestração de fluxos de dados com o Power BI diretamente no n8n.
+This package contains nodes for n8n that enable complete integration with Microsoft Power BI REST APIs. These nodes enable automation, integration, and orchestration of data flows with Power BI directly in n8n.
 
-## Sobre o Autor
+## About the Author
 
-Este Community Nodes foi criado e disponibilizado gratuitamente por **Anderson Rocha do Universo Automático** para a comunidade e foi pensado para simplificar e abstrair toda a complexidade de utilizaçao das Apis do Power BI.
+This Community Node was created and made freely available by **Anderson Rocha from Universo Automático** for the community and was designed to simplify and abstract all the complexity of using Power BI APIs.
 
-## Índice
+### Social Media
+- YouTube: [https://www.youtube.com/@universoautomatico](https://www.youtube.com/@universoautomatico)
+- Instagram: [https://www.instagram.com/universoautomatico/](https://www.instagram.com/universoautomatico/)
+- N8N + Power BI Training: [https://n8npowerbi.com/](https://n8npowerbi.com/)
 
-- [Funcionalidades](#funcionalidades)
-- [Recursos Disponíveis](#recursos-disponíveis)
-- [Métodos de Autenticação](#métodos-de-autenticação)
-- [Configurando o Aplicativo no Microsoft Entra ID (Azure AD)](#configurando-o-aplicativo-no-microsoft-entra-id-azure-ad)
-- [Utilizando os Nodes](#utilizando-os-nodes)
-- [Limitações e Solução de Problemas](#limitações-e-solução-de-problemas)
-- [Recursos Adicionais](#recursos-adicionais)
+## Table of Contents
 
-## Funcionalidades
+- [Features](#features)
+- [Available Resources](#available-resources)
+- [Authentication Methods](#authentication-methods)
+- [Setting up the Application in Microsoft Entra ID (Azure AD)](#setting-up-the-application-in-microsoft-entra-id-azure-ad)
+- [Using the Nodes](#using-the-nodes)
+- [Limitations and Troubleshooting](#limitations-and-troubleshooting)
+- [Additional Resources](#additional-resources)
 
-Este pacote oferece dois nodes principais:
+## Features
+
+This package offers two main nodes:
 
 ### 1. Power BI
 
-Node principal que utiliza autenticação OAuth2 com o Microsoft Entra ID (anteriormente Azure AD) e oferece funcionalidades completas de:
+Main node that uses OAuth2 authentication with Microsoft Entra ID (formerly Azure AD) and offers complete functionality for:
 
-- Gerenciamento de relatórios, dashboards e datasets
-- Administração de workspaces (grupos)
-- Execução de consultas DAX
-- Atualização de dados
-- Exportação de relatórios
+- Managing reports, dashboards, and datasets
+- Workspace (groups) administration
+- DAX query execution
+- Data refresh
+- Report export
+- Gateway management
+- Dataflow operations
 
 ### 2. Power BI (Header Auth)
 
-Node alternativo que permite autenticação via token Bearer passado diretamente como parâmetro. Útil para:
+Alternative node that allows authentication via Bearer token passed directly as a parameter. Useful for:
 
-- Integração com outros flows que já possuem tokens de autenticação
-- Implementação de fluxos personalizados de autenticação
-- Testes e prototipagem rápida
+- Integration with other flows that already have authentication tokens
+- Implementation of custom authentication flows
+- Quick testing and prototyping
 
-Ambos os nodes podem ser usados como ferramentas de IA no n8n AI Assistant, permitindo automações baseadas em linguagem natural.
+Both nodes can be used as AI tools in the n8n AI Assistant, enabling natural language-based automations.
 
-## Recursos Disponíveis
+## Available Resources
 
-### Recursos de Administração
-- **Obter Informações de Workspace**: Recupera detalhes completos sobre workspaces, incluindo esquema de datasets, expressões DAX, linhagem e fontes de dados
-- **Obter Resultados de Scan**: Recupera resultados de escaneamento de workspace
+### Administration Resources
+- **Get Workspace Information**: Retrieves complete details about workspaces, including dataset schema, DAX expressions, lineage, and data sources
+- **Get Scan Results**: Retrieves workspace scan results
 
-### Recursos de Dashboard
-- **Listar Dashboards**: Recupera todos os dashboards em um workspace
-- **Obter Dashboard**: Recupera detalhes de um dashboard específico
-- **Obter Blocos**: Recupera blocos (tiles) de um dashboard
+### Dashboard Resources
+- **List Dashboards**: Retrieves all dashboards in a workspace
+- **Get Dashboard**: Retrieves details of a specific dashboard
+- **Get Tiles**: Retrieves tiles from a dashboard
 
-### Recursos de Dataset
-- **Listar Datasets**: Recupera todos os datasets em um workspace
-- **Obter Dataset**: Recupera detalhes de um dataset específico
-- **Atualizar Dataset**: Inicia uma operação de atualização de dataset
-- **Obter Tabelas**: Lista todas as tabelas em um dataset
-- **Adicionar Linhas**: Adiciona dados a uma tabela de um dataset
-- **Executar Consultas DAX**: Realiza consultas em linguagem DAX em um dataset
-- **Obter Histórico de Atualizações**: Recupera histórico de atualizações de um dataset
+### Dataset Resources
+- **List Datasets**: Retrieves all datasets in a workspace
+- **Get Dataset**: Retrieves details of a specific dataset
+- **Refresh Dataset**: Initiates a dataset refresh operation
+- **Get Tables**: Lists all tables in a dataset
+- **Add Rows**: Adds data to a dataset table
+- **Execute DAX Queries**: Performs DAX language queries on a dataset
+- **Get Refresh History**: Retrieves dataset refresh history
 
-### Recursos de Grupo (Workspace)
-- **Listar Grupos**: Recupera todos os workspaces acessíveis
-- **Obter Grupo**: Recupera detalhes de um workspace específico
-- **Obter Relatórios**: Lista relatórios em um workspace
-- **Obter Dashboards**: Lista dashboards em um workspace
-- **Obter Datasets**: Lista datasets em um workspace
+### Dataflow Resources
+- **List Dataflows**: Retrieves all dataflows in a workspace
+- **Get Dataflow**: Exports the specified dataflow definition to JSON
+- **Get Dataflow Data Sources**: Returns a list of data sources for the specified dataflow
+- **Get Dataflow Transactions**: Returns a list of transactions for the specified dataflow
+- **Refresh Dataflow**: Triggers a refresh for the specified dataflow
 
-### Recursos de Relatório
-- **Listar Relatórios**: Recupera todos os relatórios em um workspace
-- **Obter Relatório**: Recupera detalhes de um relatório específico
-- **Obter Páginas**: Lista páginas em um relatório
-- **Exportar Arquivo**: Exporta um relatório em diversos formatos
+### Gateway Resources
+- **List Gateways**: Returns a list of gateways for which the user is an administrator
+- **Get Gateway**: Returns the specified gateway details
+- **Get Datasource**: Returns the specified datasource from the specified gateway
+- **Get Datasources**: Returns a list of datasources from the specified gateway
+- **Get Datasource Status**: Checks the connectivity status of the specified datasource
+- **Get Datasource Users**: Returns a list of users who have access to the specified datasource
 
-## Métodos de Autenticação
+### Group (Workspace) Resources
+- **List Groups**: Retrieves all accessible workspaces
+- **Get Group**: Retrieves details of a specific workspace
+- **Get Reports**: Lists reports in a workspace
+- **Get Dashboards**: Lists dashboards in a workspace
+- **Get Datasets**: Lists datasets in a workspace
 
-Este node suporta três métodos de autenticação:
+### Report Resources
+- **List Reports**: Retrieves all reports in a workspace
+- **Get Report**: Retrieves details of a specific report
+- **Get Pages**: Lists pages in a report
+- **Export File**: Exports a report in various formats
 
-1. **OAuth2**: Para aplicativos que atuam em nome de um usuário por meio de fluxo interativo.
+## Authentication Methods
 
-### Renovação de Tokens
+This node supports OAuth2 authentication:
 
-É importante observar que as credenciais do Power BI geralmente expiram em torno de 1 hora a 1 hora e 30 minutos. O n8n atualiza os tokens dos serviços somente quando ocorre um erro 401 ao expirar o token, porém o Power BI por padrão retorna o erro 403. A credencial será mantida assim que o n8n incluir esse status de erro 403 em suas tratativas de autenticação.
+1. **OAuth2**: For applications acting on behalf of a user through interactive flow.
 
-### Integração com Ferramentas de IA
+### Token Renewal
 
-Os nodes Power BI e Power BI (Header Auth) foram configurados como ferramentas de IA dentro do n8n, permitindo que:
+It's important to note that Power BI credentials typically expire around 1 hour to 1 hour and 30 minutes. n8n refreshes service tokens only when a 401 error occurs when the token expires, but Power BI by default returns a 403 error. The credential will be maintained once n8n includes this 403 error status in its authentication handling.
 
-1. Sejam facilmente acessados pelo assistente de IA do n8n
-2. Possam ser usados em automações orientadas por linguagem natural
-3. Apareçam na paleta de ferramentas de IA no editor de fluxos
+### AI Tools Integration
 
-## Configurando o Aplicativo no Microsoft Entra ID (Azure AD)
+The Power BI and Power BI (Header Auth) nodes have been configured as AI tools within n8n, allowing them to:
 
-Para utilizar o node Power BI com autenticação OAuth2, você precisa registrar um aplicativo no Microsoft Entra ID (anteriormente Azure AD). Siga os passos abaixo:
+1. Be easily accessed by n8n's AI assistant
+2. Be used in natural language-driven automations
+3. Appear in the AI tools palette in the flow editor
 
-### 1. Registrar um Novo Aplicativo
+## Setting up the Application in Microsoft Entra ID (Azure AD)
 
-1. Acesse o [Portal do Azure](https://portal.azure.com).
-2. Navegue para **Microsoft Entra ID** > **Registros de aplicativos**.
-3. Clique em **Novo registro**.
-4. Forneça um nome para o aplicativo, por exemplo "n8n Power BI Integration".
-5. Em **Tipos de conta compatíveis**, selecione **Contas apenas neste diretório organizacional**.
-6. Na seção **URI de Redirecionamento**, selecione **Web** e insira: `https://your-n8n-domain/rest/oauth2-credential/callback`.
-   - Em ambiente local de desenvolvimento, use: `http://localhost:5678/rest/oauth2-credential/callback`
-7. Clique em **Registrar**.
+To use the Power BI node with OAuth2 authentication, you need to register an application in Microsoft Entra ID (formerly Azure AD). Follow the steps below:
 
-### 2. Configurar as Permissões da API
+### 1. Register a New Application
 
-1. No menu lateral do aplicativo registrado, clique em **Permissões de API**.
-2. Clique em **Adicionar uma permissão**.
-3. Selecione **Power BI Service**.
-4. Você pode escolher entre **Permissões delegadas** (para OAuth2 e ROPC) ou **Permissões de aplicativo** (para Service Principal):
+1. Access the [Azure Portal](https://portal.azure.com).
+2. Navigate to **Microsoft Entra ID** > **App registrations**.
+3. Click **New registration**.
+4. Provide a name for the application, for example "n8n Power BI Integration".
+5. In **Supported account types**, select **Accounts in this organizational directory only**.
+6. In the **Redirect URI** section, select **Web** and enter: `https://your-n8n-domain/rest/oauth2-credential/callback`.
+   - For local development environment, use: `http://localhost:5678/rest/oauth2-credential/callback`
+7. Click **Register**.
+
+### 2. Configure API Permissions
+
+1. In the registered application's side menu, click **API permissions**.
+2. Click **Add a permission**.
+3. Select **Power BI Service**.
+4. You can choose between **Delegated permissions** (for OAuth2 and ROPC) or **Application permissions** (for Service Principal):
    
-   **Para permissões delegadas (recomendado para a maioria dos casos):**
+   **For delegated permissions (recommended for most cases):**
    - Dataset.Read.All
    - Dataset.ReadWrite.All
    - Report.Read.All
@@ -125,32 +147,97 @@ Para utilizar o node Power BI com autenticação OAuth2, você precisa registrar
    - Workspace.Read.All
    - Workspace.ReadWrite.All
    - Content.Create
-   - Tenant.Read.All (para funções administrativas)
+   - Tenant.Read.All (for administrative functions)
    
-   **Para permissões de aplicativo (Service Principal):**
+   **For application permissions (Service Principal):**
    - Dashboard.Read.All
    - Report.Read.All
    - Dataset.Read.All
    - Workspace.Read.All
    - Tenant.Read.All
 
-5. Clique em **Adicionar permissões**.
-6. Se estiver usando Service Principal, você precisará solicitar que um administrador **Conceda consentimento do administrador para [seu diretório]**.
+5. Click **Add permissions**.
+6. If using Service Principal, you'll need to request an administrator to **Grant admin consent for [your directory]**.
 
-### 3. Criar o Segredo do Cliente (Client Secret)
+### 3. Create the Client Secret
 
-1. No menu lateral, clique em **Certificados e segredos**.
-2. Na seção **Segredos do cliente**, clique em **Novo segredo do cliente**.
-3. Adicione uma descrição e selecione um período de expiração.
-4. Clique em **Adicionar**.
-5. **IMPORTANTE**: Copie imediatamente o valor do segredo gerado, pois ele não poderá ser visualizado novamente.
+1. In the side menu, click **Certificates & secrets**.
+2. In the **Client secrets** section, click **New client secret**.
+3. Add a description and select an expiration period.
+4. Click **Add**.
+5. **IMPORTANT**: Immediately copy the generated secret value, as it cannot be viewed again.
 
-### 4. Obter os Valores de Configuração
+### 4. Get Configuration Values
 
-Anote os seguintes valores que serão necessários para configurar o node no n8n:
+Note the following values that will be needed to configure the node in n8n:
 
-- **Client ID**: Encontre em **Visão geral** > **ID do aplicativo (cliente)**
-- **Client Secret**: O valor que você copiou ao criar o segredo do cliente
+- **Client ID**: Found in **Overview** > **Application (client) ID**
+- **Client Secret**: The value you copied when creating the client secret
+- **Tenant ID**: Found in **Overview** > **Directory (tenant) ID**
+
+## Using the Nodes
+
+### Power BI (OAuth2)
+
+1. Add the Power BI node to your workflow.
+2. Configure the OAuth2 credential:
+   - **Client ID**: The registered application ID
+   - **Client Secret**: The generated client secret
+   - **Scope**: Leave blank or use `https://analysis.windows.net/powerbi/api/.default`
+   - **Auth URI**: `https://login.microsoftonline.com/common/oauth2/v2.0/authorize`
+   - **Token URI**: `https://login.microsoftonline.com/common/oauth2/v2.0/token`
+   - **Auth URL Query Parameters**: 
+     ```json
+     {
+       "resource": "https://analysis.windows.net/powerbi/api"
+     }
+     ```
+3. Select the desired resource (dashboard, report, dataset, group, gateway, dataflow) and operation.
+4. Configure the operation-specific parameters.
+
+### Power BI (Header Auth)
+
+1. Add the Power BI Header Auth node to your workflow.
+2. Provide a Bearer authentication token in the format:
+   - Without "Bearer" prefix: `eyJ0eXAiOiJKV...`
+   - Or with prefix: `Bearer eyJ0eXAiOiJKV...`
+3. Select the desired resource and operation.
+4. Configure the operation-specific parameters.
+
+## Limitations and Troubleshooting
+
+### Power BI API Limitations
+
+- **Rate limits**: The Power BI API imposes rate limits that may vary depending on your license and subscription plan. [Learn more](https://docs.microsoft.com/en-us/power-bi/developer/embedded/embedded-capacity)
+- **Permissions**: Many operations require administrative or owner permissions in the workspace
+- **Some operations require Premium license**: Certain operations like programmatic refresh or DAX queries in large volumes may require Premium capacity
+
+### Common Issues
+
+1. **403 Forbidden Error**: 
+   - Verify that the user or application has adequate permissions in Power BI
+   - Confirm that the necessary API permissions have been granted in Microsoft Entra ID
+   - Check if administrative consent has been provided for the permissions
+
+2. **401 Unauthorized Error**:
+   - The token may have expired - verify that your credentials are valid
+   - Check if the Client Secret is still valid (they expire as configured)
+
+3. **Dataset refresh errors**:
+   - Ensure that the dataset allows API refreshes
+   - Verify that data source credentials are updated in the dataset
+
+## Additional Resources
+
+- [Official Power BI REST API Documentation](https://docs.microsoft.com/en-us/rest/api/power-bi/)
+- [Power BI Developer Center](https://powerbi.microsoft.com/en-us/developers/)
+- [Power BI API FAQ](https://docs.microsoft.com/en-us/power-bi/developer/embedded/embedded-faq)
+- [Power BI Known Limitations](https://docs.microsoft.com/en-us/power-bi/admin/service-admin-portal-about)
+- [n8n Custom Nodes Documentation](https://docs.n8n.io/integrations/creating-nodes/)
+
+## License
+
+[MIT](https://github.com/n8n-io/n8n-nodes-starter/blob/master/LICENSE.md)
 - **Tenant ID**: Encontre em **Visão geral** > **ID do diretório (tenant)**
 
 ## Utilizando os Nodes
@@ -205,9 +292,6 @@ Anote os seguintes valores que serão necessários para configurar o node no n8n
    - Certifique-se de que o dataset permite atualizações via API
    - Verifique se as credenciais das fontes de dados estão atualizadas no dataset
 
-### Redes Sociais
-- YouTube: [https://www.youtube.com/@universoautomatico](https://www.youtube.com/@universoautomatico)
-- Instagram: [https://www.instagram.com/universoautomatico/](https://www.instagram.com/universoautomatico/)
 
 ## Recursos Adicionais
 

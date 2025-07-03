@@ -11,6 +11,9 @@ export declare const resources: {
     dataflow: {
         list: typeof import("./dataflow/list").listDataflows;
         get: typeof import("./dataflow/get").get;
+        getDatasources: typeof import("./dataflow/getDatasources").getDatasources;
+        getTransactions: typeof import("./dataflow/getTransactions").getTransactions;
+        refresh: typeof import("./dataflow/refresh").refresh;
     };
     dataset: {
         list: typeof import("./dataset/list").list;
