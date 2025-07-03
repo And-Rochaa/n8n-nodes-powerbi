@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getReports = exports.getTables = exports.getDatasets = exports.getDashboards = exports.getGroupsMultiSelect = exports.getGroups = exports.powerBiApiRequestWithHeaders = void 0;
+exports.getDatasources = exports.getGateways = exports.getReports = exports.getTables = exports.getDatasets = exports.getDashboards = exports.getGroupsMultiSelect = exports.getGroups = exports.powerBiApiRequestWithHeaders = void 0;
 const n8n_workflow_1 = require("n8n-workflow");
 async function powerBiApiRequestWithHeaders(method, endpoint, body = {}, qs = {}, headers = {}, requestOptions = {}) {
     var _a, _b;
@@ -208,4 +208,68 @@ async function getReports(groupId, headers) {
     return returnData;
 }
 exports.getReports = getReports;
+async function getGateways() {
+    const returnData = [];
+    try {
+        let authToken = this.getNodeParameter('authToken', 0);
+        if (authToken.trim().toLowerCase().startsWith('bearer ')) {
+            authToken = authToken.trim().substring(7);
+        }
+        const headers = {
+            Authorization: `Bearer ${authToken}`,
+        };
+        const responseData = await powerBiApiRequestWithHeaders.call(this, 'GET', '/gateways', {}, {}, headers);
+        if (responseData && responseData.value) {
+            for (const gateway of responseData.value) {
+                if (gateway.name && gateway.id) {
+                    returnData.push({
+                        name: gateway.name,
+                        value: gateway.id,
+                    });
+                }
+            }
+        }
+    }
+    catch (error) {
+        console.warn('Unable to list gateways:', error);
+    }
+    return returnData;
+}
+exports.getGateways = getGateways;
+async function getDatasources() {
+    const returnData = [];
+    try {
+        const gatewayId = this.getNodeParameter('gatewayId', '');
+        if (!gatewayId) {
+            return [{ name: '-- Selecione um gateway primeiro --', value: '' }];
+        }
+        let authToken = this.getNodeParameter('authToken', '');
+        if (!authToken) {
+            return [{ name: '-- Token de autenticação obrigatório --', value: '' }];
+        }
+        if (authToken.trim().toLowerCase().startsWith('bearer ')) {
+            authToken = authToken.trim().substring(7);
+        }
+        const headers = {
+            Authorization: `Bearer ${authToken}`,
+        };
+        const responseData = await powerBiApiRequestWithHeaders.call(this, 'GET', `/gateways/${gatewayId}/datasources`, {}, {}, headers);
+        if (responseData && responseData.value) {
+            for (const datasource of responseData.value) {
+                if (datasource.datasourceName && datasource.id) {
+                    returnData.push({
+                        name: `${datasource.datasourceName} (${datasource.datasourceType})`,
+                        value: datasource.id,
+                    });
+                }
+            }
+        }
+    }
+    catch (error) {
+        console.warn('Unable to list datasources:', error);
+        return [{ name: 'Erro ao carregar fontes de dados. Verifique as permissões.', value: '' }];
+    }
+    return returnData;
+}
+exports.getDatasources = getDatasources;
 //# sourceMappingURL=GenericFunctions.js.map

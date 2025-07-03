@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getDashboards = exports.getReports = exports.getTables = exports.getDatasets = exports.getGroupsMultiSelect = exports.getGroups = exports.powerBiApiRequestAllItems = exports.powerBiApiRequest = exports.getRopcAccessToken = void 0;
+exports.getDatasources = exports.getGateways = exports.getDashboards = exports.getReports = exports.getTables = exports.getDatasets = exports.getGroupsMultiSelect = exports.getGroups = exports.powerBiApiRequestAllItems = exports.powerBiApiRequest = exports.getRopcAccessToken = void 0;
 const n8n_workflow_1 = require("n8n-workflow");
 async function getRopcAccessToken() {
     const credentials = await this.getCredentials('powerBI');
@@ -247,4 +247,51 @@ async function getDashboards() {
     return returnData;
 }
 exports.getDashboards = getDashboards;
+async function getGateways() {
+    const returnData = [];
+    try {
+        const responseData = await powerBiApiRequest.call(this, 'GET', '/gateways', {}, {});
+        if (responseData && responseData.value) {
+            for (const gateway of responseData.value) {
+                if (gateway.name && gateway.id) {
+                    returnData.push({
+                        name: gateway.name,
+                        value: gateway.id,
+                    });
+                }
+            }
+        }
+    }
+    catch (error) {
+        console.warn('Unable to list gateways:', error);
+    }
+    return returnData;
+}
+exports.getGateways = getGateways;
+async function getDatasources() {
+    const returnData = [];
+    try {
+        const gatewayId = this.getNodeParameter('gatewayId', '');
+        if (!gatewayId) {
+            return [{ name: '-- Selecione um gateway primeiro --', value: '' }];
+        }
+        const responseData = await powerBiApiRequest.call(this, 'GET', `/gateways/${gatewayId}/datasources`, {}, {});
+        if (responseData && responseData.value) {
+            for (const datasource of responseData.value) {
+                if (datasource.datasourceName && datasource.id) {
+                    returnData.push({
+                        name: `${datasource.datasourceName} (${datasource.datasourceType})`,
+                        value: datasource.id,
+                    });
+                }
+            }
+        }
+    }
+    catch (error) {
+        console.warn('Unable to list datasources:', error);
+        return [{ name: 'Erro ao carregar fontes de dados. Verifique as permissões.', value: '' }];
+    }
+    return returnData;
+}
+exports.getDatasources = getDatasources;
 //# sourceMappingURL=GenericFunctions.js.map

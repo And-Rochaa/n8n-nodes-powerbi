@@ -17,6 +17,14 @@ export declare const resources: {
         executeQueries: typeof import("./dataset/executeQueries").executeQueries;
         getRefreshHistory: typeof import("./dataset/getRefreshHistory").getRefreshHistory;
     };
+    gateway: {
+        getDatasource: typeof import("./gateway/getDatasource").getDatasource;
+        getDatasourceStatus: typeof import("./gateway/getDatasourceStatus").getDatasourceStatus;
+        getDatasources: typeof import("./gateway/getDatasources").getDatasources;
+        getDatasourceUsers: typeof import("./gateway/getDatasourceUsers").getDatasourceUsers;
+        get: typeof import("./gateway/get").getGateway;
+        list: typeof import("./gateway/list").listGateways;
+    };
     group: {
         get: typeof import("./group/get").get;
         list: typeof import("./group/list").list;

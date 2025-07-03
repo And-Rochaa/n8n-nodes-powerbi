@@ -359,3 +359,96 @@ export async function getReports(
 
 	return returnData;
 }
+
+/**
+ * Get all gateways accessible to the user
+ */
+export async function getGateways(this: ILoadOptionsFunctions) {
+	const returnData: IDataObject[] = [];
+	
+	try {
+		// Obter token de autenticação
+		let authToken = this.getNodeParameter('authToken', 0) as string;
+		
+		// Remover o prefixo "Bearer" se já estiver presente no token
+		if (authToken.trim().toLowerCase().startsWith('bearer ')) {
+			authToken = authToken.trim().substring(7);
+		}
+		
+		// Preparar o header de autorização
+		const headers: IDataObject = {
+			Authorization: `Bearer ${authToken}`,
+		};
+		
+		const responseData = await powerBiApiRequestWithHeaders.call(this, 'GET', '/gateways', {}, {}, headers);
+		
+		if (responseData && responseData.value) {
+			for (const gateway of responseData.value) {
+				if (gateway.name && gateway.id) {
+					returnData.push({
+						name: gateway.name,
+						value: gateway.id,
+					});
+				}
+			}
+		}
+	} catch (error) {
+		// Se não conseguir listar gateways, retorna array vazio
+		// Isso pode acontecer se o usuário não tiver permissão de administrador de gateway
+		console.warn('Unable to list gateways:', error);
+	}
+	
+	return returnData;
+}
+
+/**
+ * Get all datasources for a specific gateway
+ */
+export async function getDatasources(this: ILoadOptionsFunctions) {
+	const returnData: IDataObject[] = [];
+	
+	try {
+		const gatewayId = this.getNodeParameter('gatewayId', '') as string;
+		
+		if (!gatewayId) {
+			return [{ name: '-- Selecione um gateway primeiro --', value: '' }];
+		}
+		
+		// Obter token de autenticação
+		let authToken = this.getNodeParameter('authToken', '') as string;
+		
+		if (!authToken) {
+			return [{ name: '-- Token de autenticação obrigatório --', value: '' }];
+		}
+		
+		// Remover o prefixo "Bearer" se já estiver presente no token
+		if (authToken.trim().toLowerCase().startsWith('bearer ')) {
+			authToken = authToken.trim().substring(7);
+		}
+		
+		// Preparar o header de autorização
+		const headers: IDataObject = {
+			Authorization: `Bearer ${authToken}`,
+		};
+		
+		const responseData = await powerBiApiRequestWithHeaders.call(this, 'GET', `/gateways/${gatewayId}/datasources`, {}, {}, headers);
+		
+		if (responseData && responseData.value) {
+			for (const datasource of responseData.value) {
+				if (datasource.datasourceName && datasource.id) {
+					returnData.push({
+						name: `${datasource.datasourceName} (${datasource.datasourceType})`,
+						value: datasource.id,
+					});
+				}
+			}
+		}
+	} catch (error) {
+		// Se não conseguir listar datasources, retorna array vazio
+		// Isso pode acontecer se o usuário não tiver permissão de administrador de gateway
+		console.warn('Unable to list datasources:', error);
+		return [{ name: 'Erro ao carregar fontes de dados. Verifique as permissões.', value: '' }];
+	}
+	
+	return returnData;
+}

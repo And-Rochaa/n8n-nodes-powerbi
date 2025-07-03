@@ -10,3 +10,5 @@ export declare function getDatasets(this: ILoadOptionsFunctions): Promise<IDataO
 export declare function getTables(this: ILoadOptionsFunctions): Promise<IDataObject[]>;
 export declare function getReports(this: ILoadOptionsFunctions): Promise<IDataObject[]>;
 export declare function getDashboards(this: ILoadOptionsFunctions): Promise<IDataObject[]>;
+export declare function getGateways(this: ILoadOptionsFunctions): Promise<IDataObject[]>;
+export declare function getDatasources(this: ILoadOptionsFunctions): Promise<IDataObject[]>;

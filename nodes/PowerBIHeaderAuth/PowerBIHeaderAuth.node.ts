@@ -16,6 +16,8 @@ import {
 	getGroups,
 	getDashboards,
 	getDatasets,
+	getDatasources,
+	getGateways,
 	getTables,
 	getReports,
 	getGroupsMultiSelect,
@@ -35,6 +37,11 @@ import {
 	datasetOperations,
 	datasetFields,
 } from '../PowerBI/descriptions/DatasetDescription';
+
+import {
+	gatewayOperations,
+	gatewayFields,
+} from './descriptions/GatewayDescription';
 
 import {
 	groupOperations,
@@ -103,6 +110,10 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 					{
 						name: 'Dataset',
 						value: 'dataset',
+					},
+					{
+						name: 'Gateway',
+						value: 'gateway',
 					},
 					{
 						name: 'Group',
@@ -779,6 +790,10 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 			...datasetOperations,
 			...datasetFields,
 
+			// GATEWAY OPERATIONS AND FIELDS
+			...gatewayOperations,
+			...gatewayFields,
+
 			// GROUP OPERATIONS AND FIELDS
 			...groupOperations,
 			...groupFields,
@@ -955,6 +970,12 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 					return [{ name: 'Erro ao carregar relatórios. Verifique o token.', value: '' }];
 				}
 			},
+			async getGateways(this: ILoadOptionsFunctions) {
+				return await getGateways.call(this);
+			},
+			async getDatasources(this: ILoadOptionsFunctions) {
+				return await getDatasources.call(this);
+			},
 		},
 	};	async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
 		const items = this.getInputData();
@@ -1027,6 +1048,16 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
                     if (operation in resources.group) {
                         // Execute a operação correspondente
                         const results = await resources.group[operation].call(this, i);
+                        returnData.push(...results);
+                        
+                        // Importante: marcar responseData como null para evitar processamento adicional
+                        responseData = null;
+                    }
+                } else if (resource === 'gateway') {
+                    // Gateway operations - usando recursos modularizados
+                    if (operation in resources.gateway) {
+                        // Execute a operação correspondente
+                        const results = await resources.gateway[operation].call(this, i);
                         returnData.push(...results);
                         
                         // Importante: marcar responseData como null para evitar processamento adicional

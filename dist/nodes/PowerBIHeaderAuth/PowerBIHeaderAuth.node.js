@@ -6,6 +6,7 @@ const GenericFunctions_1 = require("./GenericFunctions");
 const resources_1 = require("./resources");
 const DashboardDescription_1 = require("../PowerBI/descriptions/DashboardDescription");
 const DatasetDescription_1 = require("../PowerBI/descriptions/DatasetDescription");
+const GatewayDescription_1 = require("./descriptions/GatewayDescription");
 const GroupDescription_1 = require("../PowerBI/descriptions/GroupDescription");
 const ReportDescription_1 = require("../PowerBI/descriptions/ReportDescription");
 const setTimeout = globalThis.setTimeout;
@@ -65,6 +66,10 @@ class PowerBIHeaderAuth {
                         {
                             name: 'Dataset',
                             value: 'dataset',
+                        },
+                        {
+                            name: 'Gateway',
+                            value: 'gateway',
                         },
                         {
                             name: 'Group',
@@ -729,6 +734,8 @@ class PowerBIHeaderAuth {
                 ...DashboardDescription_1.dashboardFields,
                 ...DatasetDescription_1.datasetOperations,
                 ...DatasetDescription_1.datasetFields,
+                ...GatewayDescription_1.gatewayOperations,
+                ...GatewayDescription_1.gatewayFields,
                 ...GroupDescription_1.groupOperations,
                 ...GroupDescription_1.groupFields,
                 ...ReportDescription_1.reportOperations,
@@ -851,6 +858,12 @@ class PowerBIHeaderAuth {
                         return [{ name: 'Erro ao carregar relatórios. Verifique o token.', value: '' }];
                     }
                 },
+                async getGateways() {
+                    return await GenericFunctions_1.getGateways.call(this);
+                },
+                async getDatasources() {
+                    return await GenericFunctions_1.getDatasources.call(this);
+                },
             },
         };
         this.description.usableAsTool = true;
@@ -919,6 +932,13 @@ class PowerBIHeaderAuth {
                 else if (resource === 'group') {
                     if (operation in resources_1.resources.group) {
                         const results = await resources_1.resources.group[operation].call(this, i);
+                        returnData.push(...results);
+                        responseData = null;
+                    }
+                }
+                else if (resource === 'gateway') {
+                    if (operation in resources_1.resources.gateway) {
+                        const results = await resources_1.resources.gateway[operation].call(this, i);
                         returnData.push(...results);
                         responseData = null;
                     }

@@ -16,6 +16,8 @@ import {
 	getDashboards,
 	getGroupsMultiSelect,
 	getDatasets,
+	getDatasources,
+	getGateways,
 	getTables,
 	getReports,
 } from './GenericFunctions';
@@ -33,6 +35,11 @@ import {
 	datasetOperations,
 	datasetFields,
 } from './descriptions/DatasetDescription';
+
+import {
+	gatewayOperations,
+	gatewayFields,
+} from './descriptions/GatewayDescription';
 
 import {
 	groupOperations,
@@ -90,6 +97,10 @@ export class PowerBI implements INodeType {	description: INodeTypeDescription = 
 					{
 						name: 'Dataset',
 						value: 'dataset',
+					},
+					{
+						name: 'Gateway',
+						value: 'gateway',
 					},
 					{
 						name: 'Group',
@@ -245,6 +256,10 @@ export class PowerBI implements INodeType {	description: INodeTypeDescription = 
 			...datasetOperations,
 			...datasetFields,
 
+			// GATEWAY OPERATIONS
+			...gatewayOperations,
+			...gatewayFields,
+
 			// GROUP OPERATIONS
 			...groupOperations,
 			...groupFields,
@@ -268,7 +283,14 @@ export class PowerBI implements INodeType {	description: INodeTypeDescription = 
 			},
 			async getDatasets(this: ILoadOptionsFunctions) {
 				return await getDatasets.call(this);
-			},			async getTables(this: ILoadOptionsFunctions) {
+			},
+			async getDatasources(this: ILoadOptionsFunctions) {
+				return await getDatasources.call(this);
+			},
+			async getGateways(this: ILoadOptionsFunctions) {
+				return await getGateways.call(this);
+			},
+			async getTables(this: ILoadOptionsFunctions) {
 				return await getTables.call(this);
 			},
 			async getReports(this: ILoadOptionsFunctions) {
@@ -342,6 +364,15 @@ export class PowerBI implements INodeType {	description: INodeTypeDescription = 
 							if (operation in resources.dataset) {
 								// Execute a operação correspondente
 								const results = await resources.dataset[operation].call(this, i);
+								returnData.push(...results);
+							}
+							break;
+							
+						case 'gateway':
+							// Usando os recursos modularizados
+							if (operation in resources.gateway) {
+								// Execute a operação correspondente
+								const results = await resources.gateway[operation].call(this, i);
 								returnData.push(...results);
 							}
 							break;

@@ -393,3 +393,66 @@ export async function getDashboards(this: ILoadOptionsFunctions) {
 	
 	return returnData;
 }
+
+/**
+ * Get all gateways accessible to the user
+ */
+export async function getGateways(this: ILoadOptionsFunctions) {
+	const returnData: IDataObject[] = [];
+	
+	try {
+		const responseData = await powerBiApiRequest.call(this, 'GET', '/gateways', {}, {});
+		
+		if (responseData && responseData.value) {
+			for (const gateway of responseData.value) {
+				if (gateway.name && gateway.id) {
+					returnData.push({
+						name: gateway.name,
+						value: gateway.id,
+					});
+				}
+			}
+		}
+	} catch (error) {
+		// Se não conseguir listar gateways, retorna array vazio
+		// Isso pode acontecer se o usuário não tiver permissão de administrador de gateway
+		console.warn('Unable to list gateways:', error);
+	}
+	
+	return returnData;
+}
+
+/**
+ * Get all datasources for a specific gateway
+ */
+export async function getDatasources(this: ILoadOptionsFunctions) {
+	const returnData: IDataObject[] = [];
+	
+	try {
+		const gatewayId = this.getNodeParameter('gatewayId', '') as string;
+		
+		if (!gatewayId) {
+			return [{ name: '-- Selecione um gateway primeiro --', value: '' }];
+		}
+		
+		const responseData = await powerBiApiRequest.call(this, 'GET', `/gateways/${gatewayId}/datasources`, {}, {});
+		
+		if (responseData && responseData.value) {
+			for (const datasource of responseData.value) {
+				if (datasource.datasourceName && datasource.id) {
+					returnData.push({
+						name: `${datasource.datasourceName} (${datasource.datasourceType})`,
+						value: datasource.id,
+					});
+				}
+			}
+		}
+	} catch (error) {
+		// Se não conseguir listar datasources, retorna array vazio
+		// Isso pode acontecer se o usuário não tiver permissão de administrador de gateway
+		console.warn('Unable to list datasources:', error);
+		return [{ name: 'Erro ao carregar fontes de dados. Verifique as permissões.', value: '' }];
+	}
+	
+	return returnData;
+}

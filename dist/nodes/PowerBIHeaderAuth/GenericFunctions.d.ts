@@ -8,3 +8,5 @@ export declare function getDashboards(this: IExecuteFunctions | ILoadOptionsFunc
 export declare function getDatasets(this: IExecuteFunctions | ILoadOptionsFunctions, groupId: string, headers: IDataObject): Promise<IDataObject[]>;
 export declare function getTables(this: IExecuteFunctions | ILoadOptionsFunctions, groupId: string, datasetId: string, headers: IDataObject): Promise<IDataObject[]>;
 export declare function getReports(this: IExecuteFunctions | ILoadOptionsFunctions, groupId: string, headers: IDataObject): Promise<IDataObject[]>;
+export declare function getGateways(this: ILoadOptionsFunctions): Promise<IDataObject[]>;
+export declare function getDatasources(this: ILoadOptionsFunctions): Promise<IDataObject[]>;

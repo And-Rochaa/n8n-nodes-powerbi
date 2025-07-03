@@ -6,6 +6,7 @@ const GenericFunctions_1 = require("./GenericFunctions");
 const resources_1 = require("./resources");
 const DashboardDescription_1 = require("./descriptions/DashboardDescription");
 const DatasetDescription_1 = require("./descriptions/DatasetDescription");
+const GatewayDescription_1 = require("./descriptions/GatewayDescription");
 const GroupDescription_1 = require("./descriptions/GroupDescription");
 const ReportDescription_1 = require("./descriptions/ReportDescription");
 const setTimeout = globalThis.setTimeout;
@@ -53,6 +54,10 @@ class PowerBI {
                         {
                             name: 'Dataset',
                             value: 'dataset',
+                        },
+                        {
+                            name: 'Gateway',
+                            value: 'gateway',
                         },
                         {
                             name: 'Group',
@@ -204,6 +209,8 @@ class PowerBI {
                 ...DashboardDescription_1.dashboardFields,
                 ...DatasetDescription_1.datasetOperations,
                 ...DatasetDescription_1.datasetFields,
+                ...GatewayDescription_1.gatewayOperations,
+                ...GatewayDescription_1.gatewayFields,
                 ...GroupDescription_1.groupOperations,
                 ...GroupDescription_1.groupFields,
                 ...ReportDescription_1.reportOperations,
@@ -223,7 +230,14 @@ class PowerBI {
                 },
                 async getDatasets() {
                     return await GenericFunctions_1.getDatasets.call(this);
-                }, async getTables() {
+                },
+                async getDatasources() {
+                    return await GenericFunctions_1.getDatasources.call(this);
+                },
+                async getGateways() {
+                    return await GenericFunctions_1.getGateways.call(this);
+                },
+                async getTables() {
                     return await GenericFunctions_1.getTables.call(this);
                 },
                 async getReports() {
@@ -274,6 +288,12 @@ class PowerBI {
                         case 'dataset':
                             if (operation in resources_1.resources.dataset) {
                                 const results = await resources_1.resources.dataset[operation].call(this, i);
+                                returnData.push(...results);
+                            }
+                            break;
+                        case 'gateway':
+                            if (operation in resources_1.resources.gateway) {
+                                const results = await resources_1.resources.gateway[operation].call(this, i);
                                 returnData.push(...results);
                             }
                             break;

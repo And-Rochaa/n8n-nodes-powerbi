@@ -1,6 +1,7 @@
 import { adminOperations } from './admin';
 import { dashboardOperations } from './dashboard';
 import { datasetOperations } from './dataset';
+import { gatewayOperations } from './gateway';
 import { groupOperations } from './group';
 import { reportOperations } from './report';
 
@@ -9,6 +10,7 @@ export const resources = {
     admin: adminOperations,
     dashboard: dashboardOperations,
     dataset: datasetOperations,
+    gateway: gatewayOperations,
     group: groupOperations,
     report: reportOperations,
 };
