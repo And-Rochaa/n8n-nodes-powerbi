@@ -165,7 +165,9 @@ async function exportToFile(i) {
         let statusResponse = exportResponse;
         let elapsedTime = 0;
         while (exportStatus !== 'Succeeded' && exportStatus !== 'Failed' && elapsedTime < maxWaitTime) {
-            await new Promise(resolve => setTimeout(resolve, pollingInterval * 1000));
+            await new Promise(resolve => {
+                setTimeout(() => resolve(undefined), pollingInterval * 1000);
+            });
             elapsedTime += pollingInterval;
             statusResponse = await GenericFunctions_1.powerBiApiRequestWithHeaders.call(this, 'GET', statusEndpoint, {}, {}, headers);
             exportStatus = statusResponse.status;

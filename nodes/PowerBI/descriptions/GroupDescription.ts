@@ -52,7 +52,7 @@ export const groupOperations: INodeProperties[] = [
 export const groupFields: INodeProperties[] = [
 	// Fields for get, getReports, getDashboards and getDatasets operations
 	{
-		displayName: 'Group',
+		displayName: 'Group Name or ID',
 		name: 'groupId',
 		type: 'options',
 		required: true,
@@ -73,6 +73,6 @@ export const groupFields: INodeProperties[] = [
 			},
 		},
 		default: '',
-		description: 'Power BI group (workspace)',
+		description: 'Power BI group (workspace). Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 	},
 ];

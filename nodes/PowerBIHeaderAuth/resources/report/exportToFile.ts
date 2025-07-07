@@ -278,7 +278,9 @@ export async function exportToFile(
 		
 		while (exportStatus !== 'Succeeded' && exportStatus !== 'Failed' && elapsedTime < maxWaitTime) {
 			// Wait for polling interval before next check
-			await new Promise(resolve => setTimeout(resolve, pollingInterval * 1000));
+			await new Promise(resolve => {
+				setTimeout(() => resolve(undefined), pollingInterval * 1000);
+			});
 			elapsedTime += pollingInterval;
 			
 			// Check current export job status

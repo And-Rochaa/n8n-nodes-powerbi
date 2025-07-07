@@ -51,7 +51,7 @@ exports.groupOperations = [
 ];
 exports.groupFields = [
     {
-        displayName: 'Group',
+        displayName: 'Group Name or ID',
         name: 'groupId',
         type: 'options',
         required: true,
@@ -72,7 +72,7 @@ exports.groupFields = [
             },
         },
         default: '',
-        description: 'Power BI group (workspace)',
+        description: 'Power BI group (workspace). Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
     },
 ];
 //# sourceMappingURL=GroupDescription.js.map

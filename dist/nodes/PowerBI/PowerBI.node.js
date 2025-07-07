@@ -10,7 +10,6 @@ const DatasetDescription_1 = require("./descriptions/DatasetDescription");
 const GatewayDescription_1 = require("./descriptions/GatewayDescription");
 const GroupDescription_1 = require("./descriptions/GroupDescription");
 const ReportDescription_1 = require("./descriptions/ReportDescription");
-const setTimeout = globalThis.setTimeout;
 class PowerBI {
     constructor() {
         this.description = {
@@ -25,7 +24,8 @@ class PowerBI {
                 name: 'Power BI',
             },
             inputs: ["main"],
-            outputs: ["main"], credentials: [
+            outputs: ["main"],
+            credentials: [
                 {
                     name: 'powerBI',
                     required: true,
@@ -104,7 +104,7 @@ class PowerBI {
                     default: 'getInfo',
                 },
                 {
-                    displayName: 'Workspaces',
+                    displayName: 'Workspace Names or IDs',
                     name: 'workspaces',
                     type: 'multiOptions',
                     typeOptions: {
@@ -122,7 +122,7 @@ class PowerBI {
                         },
                     },
                     default: [],
-                    description: 'Select the workspaces to get information',
+                    description: 'Select the workspaces to get information. Choose from the list, or specify IDs using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
                 },
                 {
                     displayName: 'Dataset Schema',

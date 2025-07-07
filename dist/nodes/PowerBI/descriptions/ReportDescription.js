@@ -44,13 +44,13 @@ exports.reportOperations = [
 ];
 exports.reportFields = [
     {
-        displayName: 'Group (Workspace)',
+        displayName: 'Group (Workspace) Name or ID',
         name: 'groupId',
         type: 'options',
         typeOptions: {
             loadOptionsMethod: 'getGroups',
         }, default: '',
-        description: 'Power BI group (workspace) ID. Leave blank to use "My Workspace".',
+        description: 'Power BI group (workspace) ID. Leave blank to use "My Workspace". Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
         displayOptions: {
             show: {
                 resource: [
@@ -65,7 +65,7 @@ exports.reportFields = [
         },
     },
     {
-        displayName: 'Report ID',
+        displayName: 'Report Name or ID',
         name: 'reportId',
         type: 'options',
         typeOptions: {
@@ -84,7 +84,7 @@ exports.reportFields = [
             },
         },
         default: '',
-        description: 'ID of the report to retrieve',
+        description: 'ID of the report to retrieve. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
     },
     {
         displayName: 'Workspace Name or ID',
@@ -105,7 +105,7 @@ exports.reportFields = [
                 ],
             },
         },
-        description: 'The ID of the workspace. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code-examples/expressions/">expression</a>.',
+        description: 'The ID of the workspace. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code-examples/expressions/">expression</a>. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
     },
     {
         displayName: 'Report Name or ID',
@@ -129,7 +129,7 @@ exports.reportFields = [
                 ],
             },
         },
-        description: 'The ID of the report. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code-examples/expressions/">expression</a>.',
+        description: 'The ID of the report. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code-examples/expressions/">expression</a>. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
     },
     {
         displayName: 'Report Type',
@@ -365,7 +365,7 @@ exports.reportFields = [
                         ],
                     },
                 },
-                description: 'JSON array of page configurations. Example: [{"pageName": "ReportSection1", "visualName": "VisualName1"}, {"pageName": "ReportSection2"}]',
+                description: 'JSON array of page configurations. Example: [{"pageName": "ReportSection1", "visualName": "VisualName1"}, {"pageName": "ReportSection2"}].',
                 typeOptions: {
                     alwaysOpenEditWindow: true,
                 },
@@ -389,7 +389,7 @@ exports.reportFields = [
                         ],
                     },
                 },
-                description: 'JSON array of filter configurations. Example: [{"filter": "Table1/Column1 eq \'value\'"}]',
+                description: 'JSON array of filter configurations. Example: [{"filter": "Table1/Column1 eq \'value\'"}].',
                 typeOptions: {
                     alwaysOpenEditWindow: true,
                 },
@@ -469,7 +469,7 @@ exports.reportFields = [
                         ],
                     },
                 },
-                description: 'JSON array of identity configurations for RLS. Example: [{"username": "user1@contoso.com", "roles": ["Role1", "Role2"]}]',
+                description: 'JSON array of identity configurations for RLS. Example: [{"username": "user1@contoso.com", "roles": ["Role1", "Role2"]}].',
                 typeOptions: {
                     alwaysOpenEditWindow: true,
                 },
@@ -523,7 +523,7 @@ exports.reportFields = [
                         ],
                     },
                 },
-                description: 'JSON array of parameter configurations. Example: [{"name": "Parameter1", "value": "Value1"}, {"name": "Parameter2", "value": "Value2"}]',
+                description: 'JSON array of parameter configurations. Example: [{"name": "Parameter1", "value": "Value1"}, {"name": "Parameter2", "value": "Value2"}].',
                 typeOptions: {
                     alwaysOpenEditWindow: true,
                 },
@@ -547,7 +547,7 @@ exports.reportFields = [
                         ],
                     },
                 },
-                description: 'JSON object with format-specific settings. Example: {"PageWidth": "8.5in", "PageHeight": "11in"}',
+                description: 'JSON object with format-specific settings. Example: {"PageWidth": "8.5in", "PageHeight": "11in"}.',
                 typeOptions: {
                     alwaysOpenEditWindow: true,
                 },
@@ -571,7 +571,7 @@ exports.reportFields = [
                         ],
                     },
                 },
-                description: 'JSON array of identity configurations for RLS. Example: [{"username": "user1@contoso.com", "roles": ["Role1", "Role2"]}]',
+                description: 'JSON array of identity configurations for RLS. Example: [{"username": "user1@contoso.com", "roles": ["Role1", "Role2"]}].',
                 typeOptions: {
                     alwaysOpenEditWindow: true,
                 },

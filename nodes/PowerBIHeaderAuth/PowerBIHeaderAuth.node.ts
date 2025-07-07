@@ -59,12 +59,10 @@ import {
 	reportFields,
 } from '../PowerBI/descriptions/ReportDescription';
 
-// For setTimeout usage in polling operations
-const setTimeout = globalThis.setTimeout;
-
-export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDescription = {
+export class PowerBIHeaderAuth implements INodeType {
+	description: INodeTypeDescription = {
 		displayName: 'Power BI Header Auth',
-		name: 'powerBIHeaderAuth',
+		name: 'powerBiHeaderAuth',
 		icon: 'file:powerbi.svg',
 		group: ['transform'],
 		version: 1,
@@ -99,7 +97,8 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 						],
 					},
 				},
-			},{
+			},
+			{
 				displayName: 'Resource',
 				name: 'resource',
 				type: 'options',
@@ -167,7 +166,7 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 				],
 				default: 'getInfo',
 			},{
-				displayName: 'Workspaces',
+				displayName: 'Workspace Names or IDs',
 				name: 'workspaces',
 				type: 'multiOptions',
 				typeOptions: {
@@ -185,7 +184,7 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 					},
 				},
 				default: [],
-				description: 'Select the workspaces to get information',
+				description: 'Select the workspaces to get information. Choose from the list, or specify IDs using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 			},
 			{
 				displayName: 'Dataset Schema',
@@ -423,7 +422,7 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 				displayName: 'State',
 				name: 'state',
 				type: 'string',
-				required: false,
+
 				displayOptions: {
 					show: {
 						resource: [
@@ -443,6 +442,7 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 				displayName: 'Token URL',
 				name: 'tokenUrl',
 				type: 'string',
+				typeOptions: { password: true },
 				required: true,
 				displayOptions: {
 					show: {
@@ -574,6 +574,7 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 				displayName: 'Token URL',
 				name: 'tokenUrl',
 				type: 'string',
+				typeOptions: { password: true },
 				required: true,
 				displayOptions: {
 					show: {
@@ -631,6 +632,7 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 				displayName: 'Refresh Token',
 				name: 'refreshToken',
 				type: 'string',
+				typeOptions: { password: true },
 				required: true,
 				displayOptions: {
 					show: {
@@ -851,7 +853,7 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 					
 					if (!authToken) {
 						// Return message indicating that token is required
-						return [{ name: '-- Authentication token required --', value: '' }];
+						return [{ name: '-- Authentication Token Required --', value: '' }];
 					}
 					
 					// Remove "Bearer" prefix if already present in token
@@ -865,14 +867,14 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 					
 					return await getGroups.call(this, authHeader);
 				} catch (error) {
-					return [{ name: 'Error loading groups. Check the token.', value: '' }];
+					return [{ name: 'Error Loading Groups. Check the Token.', value: '' }];
 				}
 			},			async getGroupsMultiSelect(this: ILoadOptionsFunctions) {
 				try {
 					let authToken = this.getNodeParameter('authToken', '') as string;
 					if (!authToken) {
 						// Return message indicating that token is required
-						return [{ name: '-- Authentication token required --', value: '' }];
+						return [{ name: '-- Authentication Token Required --', value: '' }];
 					}
 					
 					// Remove "Bearer" prefix if already present in token
@@ -886,19 +888,19 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 					
 					return await getGroupsMultiSelect.call(this, authHeader);
 				} catch (error) {
-					return [{ name: 'Error loading groups. Check the token.', value: '' }];
+					return [{ name: 'Error Loading Groups. Check the Token.', value: '' }];
 				}
 			},			async getDashboards(this: ILoadOptionsFunctions) {
 				try {
 					let authToken = this.getNodeParameter('authToken', '') as string;
 					if (!authToken) {
 						// Return message indicating that token is required
-						return [{ name: '-- Authentication token required --', value: '' }];
+						return [{ name: '-- Authentication Token Required --', value: '' }];
 					}
 					
 					const groupId = this.getNodeParameter('groupId', '') as string;
 					if (!groupId) {
-						return [{ name: '-- Select a workspace first --', value: '' }];
+						return [{ name: '-- Select a Workspace First --', value: '' }];
 					}
 					
 					// Remove "Bearer" prefix if already present in token
@@ -912,19 +914,19 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 					
 					return await getDashboards.call(this, groupId, authHeader);
 				} catch (error) {
-					return [{ name: 'Error loading dashboards. Check the token.', value: '' }];
+					return [{ name: 'Error Loading Dashboards. Check the Token.', value: '' }];
 				}
 			},			async getDatasets(this: ILoadOptionsFunctions) {
 				try {
 					const authToken = this.getNodeParameter('authToken', '') as string;
 					if (!authToken) {
 						// Return message indicating that token is required
-						return [{ name: '-- Authentication token required --', value: '' }];
+						return [{ name: '-- Authentication Token Required --', value: '' }];
 					}
 					
 					const groupId = this.getNodeParameter('groupId', '') as string;
 					if (!groupId) {
-						return [{ name: '-- Select a workspace first --', value: '' }];
+						return [{ name: '-- Select a Workspace First --', value: '' }];
 					}
 					
 					const authHeader = { 
@@ -933,20 +935,20 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 					
 					return await getDatasets.call(this, groupId, authHeader);
 				} catch (error) {
-					return [{ name: 'Error loading datasets. Check the token.', value: '' }];
+					return [{ name: 'Error Loading Datasets. Check the Token.', value: '' }];
 				}
 			},			async getTables(this: ILoadOptionsFunctions) {
 				try {
 					const authToken = this.getNodeParameter('authToken', '') as string;
 					if (!authToken) {
 						// Return message indicating that token is required
-						return [{ name: '-- Authentication token required --', value: '' }];
+						return [{ name: '-- Authentication Token Required --', value: '' }];
 					}
 					
 					const groupId = this.getNodeParameter('groupId', '') as string;
 					const datasetId = this.getNodeParameter('datasetId', '') as string;
 					if (!datasetId) {
-						return [{ name: '-- Select a dataset first --', value: '' }];
+						return [{ name: '-- Select a Dataset First --', value: '' }];
 					}
 					
 					const authHeader = { 
@@ -955,19 +957,19 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 					
 					return await getTables.call(this, groupId, datasetId, authHeader);
 				} catch (error) {
-					return [{ name: 'Error loading tables. Check the token.', value: '' }];
+					return [{ name: 'Error Loading Tables. Check the Token.', value: '' }];
 				}
 			},			async getReports(this: ILoadOptionsFunctions) {
 				try {
 					let authToken = this.getNodeParameter('authToken', '') as string;
 					if (!authToken) {
 						// Return message indicating that token is required
-						return [{ name: '-- Authentication token required --', value: '' }];
+						return [{ name: '-- Authentication Token Required --', value: '' }];
 					}
 					
 					const groupId = this.getNodeParameter('groupId', '') as string;
 					if (!groupId) {
-						return [{ name: '-- Select a workspace first --', value: '' }];
+						return [{ name: '-- Select a Workspace First --', value: '' }];
 					}
 					
 					// Remove "Bearer" prefix if already present in token
@@ -981,7 +983,7 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 					
 					return await getReports.call(this, groupId, authHeader);
 				} catch (error) {
-					return [{ name: 'Error loading reports. Check the token.', value: '' }];
+					return [{ name: 'Error Loading Reports. Check the Token.', value: '' }];
 				}
 			},
 			async getDataflows(this: ILoadOptionsFunctions) {
@@ -989,12 +991,12 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 					const authToken = this.getNodeParameter('authToken', '') as string;
 					if (!authToken) {
 						// Return message indicating that token is required
-						return [{ name: '-- Authentication token required --', value: '' }];
+						return [{ name: '-- Authentication Token Required --', value: '' }];
 					}
 					
 					const groupId = this.getNodeParameter('groupId', '') as string;
 					if (!groupId) {
-						return [{ name: '-- Select a workspace first --', value: '' }];
+						return [{ name: '-- Select a Workspace First --', value: '' }];
 					}
 					
 					const authHeader = { 
@@ -1003,7 +1005,7 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 					
 					return await getDataflows.call(this, groupId, authHeader);
 				} catch (error) {
-					return [{ name: 'Error loading dataflows. Check the token.', value: '' }];
+					return [{ name: 'Error Loading Dataflows. Check the Token.', value: '' }];
 				}
 			},
 			async getGateways(this: ILoadOptionsFunctions) {
@@ -1013,17 +1015,22 @@ export class PowerBIHeaderAuth implements INodeType {	description: INodeTypeDesc
 				return await getDatasources.call(this);
 			},
 		},
-	};	async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
+	};
+	
+	async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
 		const items = this.getInputData();
 		const returnData: INodeExecutionData[] = [];
 		let responseData;
 		const resource = this.getNodeParameter('resource', 0) as string;
-		const operation = this.getNodeParameter('operation', 0) as string;		// Check if it's a token resource operation (no authentication needed)
+		const operation = this.getNodeParameter('operation', 0) as string;
+		
+		// Check if it's a token resource operation (no authentication needed)
 		const isAuthExemptOperation = (resource === 'token');
 		
 		// Get token from input parameter (or default value in node) only if not an authentication-exempt operation
 		let authToken = '';
-		if (!isAuthExemptOperation) {			try {
+		if (!isAuthExemptOperation) {
+			try {
 				// First try to get from input parameter
 				if (items[0]?.json?.access_token) {
 					authToken = items[0].json.access_token as string;

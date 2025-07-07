@@ -39,14 +39,14 @@ export const dashboardOperations: INodeProperties[] = [
 
 export const dashboardFields: INodeProperties[] = [	// Field to select group (workspace)
 	{
-		displayName: 'Group (Workspace)',
+		displayName: 'Group (Workspace) Name or ID',
 		name: 'groupId',
 		type: 'options',
 		typeOptions: {
 			loadOptionsMethod: 'getGroups',
 		},
 		default: '',
-		description: 'Power BI group (workspace) ID. Leave blank to use "My Workspace".',
+		description: 'Power BI group (workspace) ID. Leave blank to use "My Workspace". Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 		displayOptions: {
 			show: {
 				resource: [
@@ -61,7 +61,7 @@ export const dashboardFields: INodeProperties[] = [	// Field to select group (wo
 		},
 	},	// Fields for get and getTiles operations
 	{
-		displayName: 'Dashboard ID',
+		displayName: 'Dashboard Name or ID',
 		name: 'dashboardId',
 		type: 'options',
 		typeOptions: {
@@ -81,6 +81,6 @@ export const dashboardFields: INodeProperties[] = [	// Field to select group (wo
 			},
 		},
 		default: '',
-		description: 'ID of the dashboard to retrieve',
+		description: 'ID of the dashboard to retrieve. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 	},
 ];

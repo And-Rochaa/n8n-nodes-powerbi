@@ -10,12 +10,11 @@ const DataflowDescription_1 = require("./descriptions/DataflowDescription");
 const GatewayDescription_1 = require("./descriptions/GatewayDescription");
 const GroupDescription_1 = require("../PowerBI/descriptions/GroupDescription");
 const ReportDescription_1 = require("../PowerBI/descriptions/ReportDescription");
-const setTimeout = globalThis.setTimeout;
 class PowerBIHeaderAuth {
     constructor() {
         this.description = {
             displayName: 'Power BI Header Auth',
-            name: 'powerBIHeaderAuth',
+            name: 'powerBiHeaderAuth',
             icon: 'file:powerbi.svg',
             group: ['transform'],
             version: 1,
@@ -50,7 +49,8 @@ class PowerBIHeaderAuth {
                             ],
                         },
                     },
-                }, {
+                },
+                {
                     displayName: 'Resource',
                     name: 'resource',
                     type: 'options',
@@ -118,7 +118,7 @@ class PowerBIHeaderAuth {
                     ],
                     default: 'getInfo',
                 }, {
-                    displayName: 'Workspaces',
+                    displayName: 'Workspace Names or IDs',
                     name: 'workspaces',
                     type: 'multiOptions',
                     typeOptions: {
@@ -136,7 +136,7 @@ class PowerBIHeaderAuth {
                         },
                     },
                     default: [],
-                    description: 'Select the workspaces to get information',
+                    description: 'Select the workspaces to get information. Choose from the list, or specify IDs using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
                 },
                 {
                     displayName: 'Dataset Schema',
@@ -372,7 +372,6 @@ class PowerBIHeaderAuth {
                     displayName: 'State',
                     name: 'state',
                     type: 'string',
-                    required: false,
                     displayOptions: {
                         show: {
                             resource: [
@@ -390,6 +389,7 @@ class PowerBIHeaderAuth {
                     displayName: 'Token URL',
                     name: 'tokenUrl',
                     type: 'string',
+                    typeOptions: { password: true },
                     required: true,
                     displayOptions: {
                         show: {
@@ -519,6 +519,7 @@ class PowerBIHeaderAuth {
                     displayName: 'Token URL',
                     name: 'tokenUrl',
                     type: 'string',
+                    typeOptions: { password: true },
                     required: true,
                     displayOptions: {
                         show: {
@@ -576,6 +577,7 @@ class PowerBIHeaderAuth {
                     displayName: 'Refresh Token',
                     name: 'refreshToken',
                     type: 'string',
+                    typeOptions: { password: true },
                     required: true,
                     displayOptions: {
                         show: {
@@ -755,7 +757,7 @@ class PowerBIHeaderAuth {
                         let authToken = '';
                         authToken = this.getNodeParameter('authToken', '');
                         if (!authToken) {
-                            return [{ name: '-- Authentication token required --', value: '' }];
+                            return [{ name: '-- Authentication Token Required --', value: '' }];
                         }
                         if (authToken.trim().toLowerCase().startsWith('bearer ')) {
                             authToken = authToken.trim().substring(7);
@@ -766,13 +768,13 @@ class PowerBIHeaderAuth {
                         return await GenericFunctions_1.getGroups.call(this, authHeader);
                     }
                     catch (error) {
-                        return [{ name: 'Error loading groups. Check the token.', value: '' }];
+                        return [{ name: 'Error Loading Groups. Check the Token.', value: '' }];
                     }
                 }, async getGroupsMultiSelect() {
                     try {
                         let authToken = this.getNodeParameter('authToken', '');
                         if (!authToken) {
-                            return [{ name: '-- Authentication token required --', value: '' }];
+                            return [{ name: '-- Authentication Token Required --', value: '' }];
                         }
                         if (authToken.trim().toLowerCase().startsWith('bearer ')) {
                             authToken = authToken.trim().substring(7);
@@ -783,17 +785,17 @@ class PowerBIHeaderAuth {
                         return await GenericFunctions_1.getGroupsMultiSelect.call(this, authHeader);
                     }
                     catch (error) {
-                        return [{ name: 'Error loading groups. Check the token.', value: '' }];
+                        return [{ name: 'Error Loading Groups. Check the Token.', value: '' }];
                     }
                 }, async getDashboards() {
                     try {
                         let authToken = this.getNodeParameter('authToken', '');
                         if (!authToken) {
-                            return [{ name: '-- Authentication token required --', value: '' }];
+                            return [{ name: '-- Authentication Token Required --', value: '' }];
                         }
                         const groupId = this.getNodeParameter('groupId', '');
                         if (!groupId) {
-                            return [{ name: '-- Select a workspace first --', value: '' }];
+                            return [{ name: '-- Select a Workspace First --', value: '' }];
                         }
                         if (authToken.trim().toLowerCase().startsWith('bearer ')) {
                             authToken = authToken.trim().substring(7);
@@ -804,17 +806,17 @@ class PowerBIHeaderAuth {
                         return await GenericFunctions_1.getDashboards.call(this, groupId, authHeader);
                     }
                     catch (error) {
-                        return [{ name: 'Error loading dashboards. Check the token.', value: '' }];
+                        return [{ name: 'Error Loading Dashboards. Check the Token.', value: '' }];
                     }
                 }, async getDatasets() {
                     try {
                         const authToken = this.getNodeParameter('authToken', '');
                         if (!authToken) {
-                            return [{ name: '-- Authentication token required --', value: '' }];
+                            return [{ name: '-- Authentication Token Required --', value: '' }];
                         }
                         const groupId = this.getNodeParameter('groupId', '');
                         if (!groupId) {
-                            return [{ name: '-- Select a workspace first --', value: '' }];
+                            return [{ name: '-- Select a Workspace First --', value: '' }];
                         }
                         const authHeader = {
                             Authorization: `Bearer ${authToken}`
@@ -822,18 +824,18 @@ class PowerBIHeaderAuth {
                         return await GenericFunctions_1.getDatasets.call(this, groupId, authHeader);
                     }
                     catch (error) {
-                        return [{ name: 'Error loading datasets. Check the token.', value: '' }];
+                        return [{ name: 'Error Loading Datasets. Check the Token.', value: '' }];
                     }
                 }, async getTables() {
                     try {
                         const authToken = this.getNodeParameter('authToken', '');
                         if (!authToken) {
-                            return [{ name: '-- Authentication token required --', value: '' }];
+                            return [{ name: '-- Authentication Token Required --', value: '' }];
                         }
                         const groupId = this.getNodeParameter('groupId', '');
                         const datasetId = this.getNodeParameter('datasetId', '');
                         if (!datasetId) {
-                            return [{ name: '-- Select a dataset first --', value: '' }];
+                            return [{ name: '-- Select a Dataset First --', value: '' }];
                         }
                         const authHeader = {
                             Authorization: `Bearer ${authToken}`
@@ -841,17 +843,17 @@ class PowerBIHeaderAuth {
                         return await GenericFunctions_1.getTables.call(this, groupId, datasetId, authHeader);
                     }
                     catch (error) {
-                        return [{ name: 'Error loading tables. Check the token.', value: '' }];
+                        return [{ name: 'Error Loading Tables. Check the Token.', value: '' }];
                     }
                 }, async getReports() {
                     try {
                         let authToken = this.getNodeParameter('authToken', '');
                         if (!authToken) {
-                            return [{ name: '-- Authentication token required --', value: '' }];
+                            return [{ name: '-- Authentication Token Required --', value: '' }];
                         }
                         const groupId = this.getNodeParameter('groupId', '');
                         if (!groupId) {
-                            return [{ name: '-- Select a workspace first --', value: '' }];
+                            return [{ name: '-- Select a Workspace First --', value: '' }];
                         }
                         if (authToken.trim().toLowerCase().startsWith('bearer ')) {
                             authToken = authToken.trim().substring(7);
@@ -862,18 +864,18 @@ class PowerBIHeaderAuth {
                         return await GenericFunctions_1.getReports.call(this, groupId, authHeader);
                     }
                     catch (error) {
-                        return [{ name: 'Error loading reports. Check the token.', value: '' }];
+                        return [{ name: 'Error Loading Reports. Check the Token.', value: '' }];
                     }
                 },
                 async getDataflows() {
                     try {
                         const authToken = this.getNodeParameter('authToken', '');
                         if (!authToken) {
-                            return [{ name: '-- Authentication token required --', value: '' }];
+                            return [{ name: '-- Authentication Token Required --', value: '' }];
                         }
                         const groupId = this.getNodeParameter('groupId', '');
                         if (!groupId) {
-                            return [{ name: '-- Select a workspace first --', value: '' }];
+                            return [{ name: '-- Select a Workspace First --', value: '' }];
                         }
                         const authHeader = {
                             Authorization: `Bearer ${authToken}`
@@ -881,7 +883,7 @@ class PowerBIHeaderAuth {
                         return await GenericFunctions_1.getDataflows.call(this, groupId, authHeader);
                     }
                     catch (error) {
-                        return [{ name: 'Error loading dataflows. Check the token.', value: '' }];
+                        return [{ name: 'Error Loading Dataflows. Check the Token.', value: '' }];
                     }
                 },
                 async getGateways() {

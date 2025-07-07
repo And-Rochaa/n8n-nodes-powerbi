@@ -62,14 +62,14 @@ export const datasetOperations: INodeProperties[] = [
 
 export const datasetFields: INodeProperties[] = [	// Field to select the group (workspace)
 	{
-		displayName: 'Group (Workspace)',
+		displayName: 'Group (Workspace) Name or ID',
 		name: 'groupId',
 		type: 'options',
 		typeOptions: {
 			loadOptionsMethod: 'getGroups',
 		},
 		default: '',
-		description: 'Power BI group (workspace) ID. Leave blank to use "My Workspace".',
+		description: 'Power BI group (workspace) ID. Leave blank to use "My Workspace". Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 		displayOptions: {
 			show: {
 				resource: [
@@ -88,7 +88,7 @@ export const datasetFields: INodeProperties[] = [	// Field to select the group (
 		},
 	},	// Fields for get, refresh, getTables, addRows, executeQueries, getRefreshHistory operations
 	{
-		displayName: 'Dataset',
+		displayName: 'Dataset Name or ID',
 		name: 'datasetId',
 		type: 'options',
 		typeOptions: {
@@ -112,10 +112,10 @@ export const datasetFields: INodeProperties[] = [	// Field to select the group (
 			},
 		},
 		default: '',
-		description: 'ID of the dataset to be retrieved',
+		description: 'ID of the dataset to be retrieved. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 	},	// Field for addRows operation
 	{
-		displayName: 'Table Name',
+		displayName: 'Table Name or ID',
 		name: 'tableName',
 		type: 'options',
 		typeOptions: {
@@ -134,7 +134,7 @@ export const datasetFields: INodeProperties[] = [	// Field to select the group (
 			},
 		},
 		default: '',
-		description: 'Name of the table to add rows to',
+		description: 'Name of the table to add rows to. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 	},{
 		displayName: 'Data',
 		name: 'data',

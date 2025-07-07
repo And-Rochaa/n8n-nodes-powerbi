@@ -58,7 +58,7 @@ export const gatewayOperations: INodeProperties[] = [
 export const gatewayFields: INodeProperties[] = [
 	// Gateway ID field for getDatasource operation
 	{
-		displayName: 'Gateway',
+		displayName: 'Gateway Name or ID',
 		name: 'gatewayId',
 		type: 'options',
 		typeOptions: {
@@ -72,11 +72,11 @@ export const gatewayFields: INodeProperties[] = [
 		},
 		default: '',
 		required: true,
-		description: 'The gateway that contains the datasource',
+		description: 'The gateway that contains the datasource. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 	},
 	// Datasource ID field for getDatasource operation
 	{
-		displayName: 'Datasource',
+		displayName: 'Datasource Name or ID',
 		name: 'datasourceId',
 		type: 'options',
 		typeOptions: {
@@ -91,11 +91,11 @@ export const gatewayFields: INodeProperties[] = [
 		},
 		default: '',
 		required: true,
-		description: 'The datasource to be retrieved',
+		description: 'The datasource to be retrieved. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 	},
 	// Gateway ID field for getDatasourceStatus operation
 	{
-		displayName: 'Gateway',
+		displayName: 'Gateway Name or ID',
 		name: 'gatewayId',
 		type: 'options',
 		typeOptions: {
@@ -109,11 +109,11 @@ export const gatewayFields: INodeProperties[] = [
 		},
 		default: '',
 		required: true,
-		description: 'The gateway that contains the datasource',
+		description: 'The gateway that contains the datasource. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 	},
 	// Datasource ID field for getDatasourceStatus operation
 	{
-		displayName: 'Datasource',
+		displayName: 'Datasource Name or ID',
 		name: 'datasourceId',
 		type: 'options',
 		typeOptions: {
@@ -128,11 +128,11 @@ export const gatewayFields: INodeProperties[] = [
 		},
 		default: '',
 		required: true,
-		description: 'The datasource to check status for',
+		description: 'The datasource to check status for. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 	},
 	// Gateway ID field for getDatasources operation
 	{
-		displayName: 'Gateway',
+		displayName: 'Gateway Name or ID',
 		name: 'gatewayId',
 		type: 'options',
 		typeOptions: {
@@ -146,11 +146,11 @@ export const gatewayFields: INodeProperties[] = [
 		},
 		default: '',
 		required: true,
-		description: 'The gateway to get datasources from',
+		description: 'The gateway to get datasources from. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 	},
 	// Gateway ID field for getDatasourceUsers operation
 	{
-		displayName: 'Gateway',
+		displayName: 'Gateway Name or ID',
 		name: 'gatewayId',
 		type: 'options',
 		typeOptions: {
@@ -164,11 +164,11 @@ export const gatewayFields: INodeProperties[] = [
 		},
 		default: '',
 		required: true,
-		description: 'The gateway that contains the datasource',
+		description: 'The gateway that contains the datasource. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 	},
 	// Datasource ID field for getDatasourceUsers operation
 	{
-		displayName: 'Datasource',
+		displayName: 'Datasource Name or ID',
 		name: 'datasourceId',
 		type: 'options',
 		typeOptions: {
@@ -183,11 +183,11 @@ export const gatewayFields: INodeProperties[] = [
 		},
 		default: '',
 		required: true,
-		description: 'The datasource to get users for',
+		description: 'The datasource to get users for. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 	},
 	// Gateway ID field for get operation
 	{
-		displayName: 'Gateway',
+		displayName: 'Gateway Name or ID',
 		name: 'gatewayId',
 		type: 'options',
 		typeOptions: {
@@ -201,6 +201,6 @@ export const gatewayFields: INodeProperties[] = [
 		},
 		default: '',
 		required: true,
-		description: 'The gateway to be retrieved',
+		description: 'The gateway to be retrieved. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 	},
 ];

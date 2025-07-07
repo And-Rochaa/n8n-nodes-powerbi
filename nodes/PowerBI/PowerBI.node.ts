@@ -58,10 +58,9 @@ import {
 } from './descriptions/ReportDescription';
 
 // Importing execution functions removed - now implemented directly
-// For use of setTimeout in polling operations
-const setTimeout = globalThis.setTimeout;
 
-export class PowerBI implements INodeType {	description: INodeTypeDescription = {
+export class PowerBI implements INodeType {
+	description: INodeTypeDescription = {
 		displayName: 'Power BI',
 		name: 'powerBI',
 		icon: 'file:powerbi.svg',
@@ -73,7 +72,8 @@ export class PowerBI implements INodeType {	description: INodeTypeDescription = 
 			name: 'Power BI',
 		},
 		inputs: [NodeConnectionType.Main],
-		outputs: [NodeConnectionType.Main],		credentials: [
+		outputs: [NodeConnectionType.Main],
+		credentials: [
 			{
 				name: 'powerBI',
 				required: true,
@@ -118,10 +118,12 @@ export class PowerBI implements INodeType {	description: INodeTypeDescription = 
 					},
 					{
 						name: 'Report',
-						value: 'report',					},
+						value: 'report',
+					},
 				],
 				default: 'dashboard',
-			},			// ADMIN OPERATIONS
+			},
+			// ADMIN OPERATIONS
 			{
 				displayName: 'Operation',
 				name: 'operation',
@@ -149,9 +151,10 @@ export class PowerBI implements INodeType {	description: INodeTypeDescription = 
 					},
 				],
 				default: 'getInfo',
-			},			// Admin fields
+			},
+			// Admin fields
 			{
-				displayName: 'Workspaces',
+				displayName: 'Workspace Names or IDs',
 				name: 'workspaces',
 				type: 'multiOptions',
 				typeOptions: {
@@ -169,7 +172,7 @@ export class PowerBI implements INodeType {	description: INodeTypeDescription = 
 					},
 				},
 				default: [],
-				description: 'Select the workspaces to get information',
+				description: 'Select the workspaces to get information. Choose from the list, or specify IDs using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 			},
 			{
 				displayName: 'Dataset Schema',
@@ -357,7 +360,8 @@ export class PowerBI implements INodeType {	description: INodeTypeDescription = 
 		try {
 			// Execution based on selected resource and operation
 			for (let i = 0; i < length; i++) {
-				try {					switch (resource) {
+				try {
+					switch (resource) {
 						case 'admin':
 							// Using modularized resources
 							if (operation in resources.admin) {

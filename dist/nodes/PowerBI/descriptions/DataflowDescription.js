@@ -51,7 +51,7 @@ exports.dataflowOperations = [
 ];
 exports.dataflowFields = [
     {
-        displayName: 'Workspace',
+        displayName: 'Workspace Name or ID',
         name: 'groupId',
         type: 'options',
         typeOptions: {
@@ -65,10 +65,10 @@ exports.dataflowFields = [
         },
         default: '',
         required: true,
-        description: 'The workspace to get dataflows from',
+        description: 'The workspace to get dataflows from. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
     },
     {
-        displayName: 'Workspace',
+        displayName: 'Workspace Name or ID',
         name: 'groupId',
         type: 'options',
         typeOptions: {
@@ -82,10 +82,10 @@ exports.dataflowFields = [
         },
         default: '',
         required: true,
-        description: 'The workspace that contains the dataflow',
+        description: 'The workspace that contains the dataflow. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
     },
     {
-        displayName: 'Dataflow',
+        displayName: 'Dataflow Name or ID',
         name: 'dataflowId',
         type: 'options',
         typeOptions: {
@@ -100,10 +100,10 @@ exports.dataflowFields = [
         },
         default: '',
         required: true,
-        description: 'The dataflow to get the definition for',
+        description: 'The dataflow to get the definition for. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
     },
     {
-        displayName: 'Workspace',
+        displayName: 'Workspace Name or ID',
         name: 'groupId',
         type: 'options',
         typeOptions: {
@@ -117,10 +117,10 @@ exports.dataflowFields = [
         },
         default: '',
         required: true,
-        description: 'The workspace that contains the dataflow',
+        description: 'The workspace that contains the dataflow. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
     },
     {
-        displayName: 'Dataflow',
+        displayName: 'Dataflow Name or ID',
         name: 'dataflowId',
         type: 'options',
         typeOptions: {
@@ -135,10 +135,10 @@ exports.dataflowFields = [
         },
         default: '',
         required: true,
-        description: 'The dataflow to get data sources for',
+        description: 'The dataflow to get data sources for. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
     },
     {
-        displayName: 'Workspace',
+        displayName: 'Workspace Name or ID',
         name: 'groupId',
         type: 'options',
         typeOptions: {
@@ -152,10 +152,10 @@ exports.dataflowFields = [
         },
         default: '',
         required: true,
-        description: 'The workspace that contains the dataflow',
+        description: 'The workspace that contains the dataflow. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
     },
     {
-        displayName: 'Dataflow',
+        displayName: 'Dataflow Name or ID',
         name: 'dataflowId',
         type: 'options',
         typeOptions: {
@@ -170,10 +170,10 @@ exports.dataflowFields = [
         },
         default: '',
         required: true,
-        description: 'The dataflow to get transactions for',
+        description: 'The dataflow to get transactions for. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
     },
     {
-        displayName: 'Workspace',
+        displayName: 'Workspace Name or ID',
         name: 'groupId',
         type: 'options',
         typeOptions: {
@@ -187,10 +187,10 @@ exports.dataflowFields = [
         },
         default: '',
         required: true,
-        description: 'The workspace that contains the dataflow',
+        description: 'The workspace that contains the dataflow. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
     },
     {
-        displayName: 'Dataflow',
+        displayName: 'Dataflow Name or ID',
         name: 'dataflowId',
         type: 'options',
         typeOptions: {
@@ -205,7 +205,7 @@ exports.dataflowFields = [
         },
         default: '',
         required: true,
-        description: 'The dataflow to refresh',
+        description: 'The dataflow to refresh. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
     },
     {
         displayName: 'Notification Option',
@@ -250,7 +250,7 @@ exports.dataflowFields = [
                 operation: ['refresh'],
             },
         },
-        default: '',
+        default: 'default',
         description: 'The type of refresh process to use (optional)',
     },
 ];

@@ -52,7 +52,7 @@ export const dataflowOperations: INodeProperties[] = [
 export const dataflowFields: INodeProperties[] = [
 	// Group ID field for list operation
 	{
-		displayName: 'Group',
+		displayName: 'Group Name or ID',
 		name: 'groupId',
 		type: 'options',
 		typeOptions: {
@@ -66,11 +66,11 @@ export const dataflowFields: INodeProperties[] = [
 		},
 		default: '',
 		required: true,
-		description: 'The workspace (group) to get dataflows from',
+		description: 'The workspace (group) to get dataflows from. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 	},
 	// Group ID field for get operation
 	{
-		displayName: 'Group',
+		displayName: 'Group Name or ID',
 		name: 'groupId',
 		type: 'options',
 		typeOptions: {
@@ -84,11 +84,11 @@ export const dataflowFields: INodeProperties[] = [
 		},
 		default: '',
 		required: true,
-		description: 'The workspace that contains the dataflow',
+		description: 'The workspace that contains the dataflow. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 	},
 	// Dataflow ID field for get operation
 	{
-		displayName: 'Dataflow',
+		displayName: 'Dataflow Name or ID',
 		name: 'dataflowId',
 		type: 'options',
 		typeOptions: {
@@ -103,11 +103,11 @@ export const dataflowFields: INodeProperties[] = [
 		},
 		default: '',
 		required: true,
-		description: 'The dataflow to get the definition for',
+		description: 'The dataflow to get the definition for. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 	},
 	// Group ID field for getDatasources operation
 	{
-		displayName: 'Group',
+		displayName: 'Group Name or ID',
 		name: 'groupId',
 		type: 'options',
 		typeOptions: {
@@ -121,11 +121,11 @@ export const dataflowFields: INodeProperties[] = [
 		},
 		default: '',
 		required: true,
-		description: 'The workspace that contains the dataflow',
+		description: 'The workspace that contains the dataflow. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 	},
 	// Dataflow ID field for getDatasources operation
 	{
-		displayName: 'Dataflow',
+		displayName: 'Dataflow Name or ID',
 		name: 'dataflowId',
 		type: 'options',
 		typeOptions: {
@@ -140,11 +140,11 @@ export const dataflowFields: INodeProperties[] = [
 		},
 		default: '',
 		required: true,
-		description: 'The dataflow to get data sources for',
+		description: 'The dataflow to get data sources for. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 	},
 	// Group ID field for getTransactions operation
 	{
-		displayName: 'Group',
+		displayName: 'Group Name or ID',
 		name: 'groupId',
 		type: 'options',
 		typeOptions: {
@@ -158,11 +158,11 @@ export const dataflowFields: INodeProperties[] = [
 		},
 		default: '',
 		required: true,
-		description: 'The workspace that contains the dataflow',
+		description: 'The workspace that contains the dataflow. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 	},
 	// Dataflow ID field for getTransactions operation
 	{
-		displayName: 'Dataflow',
+		displayName: 'Dataflow Name or ID',
 		name: 'dataflowId',
 		type: 'options',
 		typeOptions: {
@@ -177,11 +177,11 @@ export const dataflowFields: INodeProperties[] = [
 		},
 		default: '',
 		required: true,
-		description: 'The dataflow to get transactions for',
+		description: 'The dataflow to get transactions for. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 	},
 	// Group ID field for refresh operation
 	{
-		displayName: 'Group',
+		displayName: 'Group Name or ID',
 		name: 'groupId',
 		type: 'options',
 		typeOptions: {
@@ -195,11 +195,11 @@ export const dataflowFields: INodeProperties[] = [
 		},
 		default: '',
 		required: true,
-		description: 'The workspace that contains the dataflow',
+		description: 'The workspace that contains the dataflow. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 	},
 	// Dataflow ID field for refresh operation
 	{
-		displayName: 'Dataflow',
+		displayName: 'Dataflow Name or ID',
 		name: 'dataflowId',
 		type: 'options',
 		typeOptions: {
@@ -214,7 +214,7 @@ export const dataflowFields: INodeProperties[] = [
 		},
 		default: '',
 		required: true,
-		description: 'The dataflow to refresh',
+		description: 'The dataflow to refresh. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 	},
 	// Notify Option field for refresh operation
 	{
@@ -261,7 +261,7 @@ export const dataflowFields: INodeProperties[] = [
 				operation: ['refresh'],
 			},
 		},
-		default: '',
+		default: 'default',
 		description: 'The type of refresh process to use (optional)',
 	},
 ];
