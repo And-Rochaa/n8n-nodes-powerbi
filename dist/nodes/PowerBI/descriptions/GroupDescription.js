@@ -16,22 +16,10 @@ exports.groupOperations = [
         },
         options: [
             {
-                name: 'List',
-                value: 'list',
-                description: 'List all groups (workspaces)',
-                action: 'List a group',
-            },
-            {
                 name: 'Get',
                 value: 'get',
                 description: 'Get a specific group',
                 action: 'Get a group',
-            },
-            {
-                name: 'Get Reports',
-                value: 'getReports',
-                description: 'Get reports from a group',
-                action: 'Get reports from a group',
             },
             {
                 name: 'Get Dashboards',
@@ -44,6 +32,18 @@ exports.groupOperations = [
                 value: 'getDatasets',
                 description: 'Get datasets from a group',
                 action: 'Get datasets from a group',
+            },
+            {
+                name: 'Get Reports',
+                value: 'getReports',
+                description: 'Get reports from a group',
+                action: 'Get reports from a group',
+            },
+            {
+                name: 'List',
+                value: 'list',
+                description: 'List all groups (workspaces)',
+                action: 'List a group',
             },
         ],
         default: 'list',

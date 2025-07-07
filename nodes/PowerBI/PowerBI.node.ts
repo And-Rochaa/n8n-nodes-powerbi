@@ -59,10 +59,10 @@ import {
 
 // Importing execution functions removed - now implemented directly
 
-export class PowerBI implements INodeType {
+export class PowerBi implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'Power BI',
-		name: 'powerBI',
+		name: 'powerBi',
 		icon: 'file:powerbi.svg',
 		group: ['transform'],
 		version: 1,
@@ -71,11 +71,11 @@ export class PowerBI implements INodeType {
 		defaults: {
 			name: 'Power BI',
 		},
-		inputs: [NodeConnectionType.Main],
-		outputs: [NodeConnectionType.Main],
+		inputs: ['main'],
+		outputs: ['main'],
 		credentials: [
 			{
-				name: 'powerBI',
+				name: 'powerBiApiOAuth2Api',
 				required: true,
 			},
 		],
@@ -189,7 +189,7 @@ export class PowerBI implements INodeType {
 						],
 					},
 				},
-				description: 'Include dataset schema',
+				description: 'Whether to include dataset schema',
 			},
 			{
 				displayName: 'Dataset Expressions',
@@ -206,7 +206,7 @@ export class PowerBI implements INodeType {
 						],
 					},
 				},
-				description: 'Include dataset expressions',
+				description: 'Whether to include dataset expressions',
 			},
 			{
 				displayName: 'Lineage',
@@ -223,7 +223,7 @@ export class PowerBI implements INodeType {
 						],
 					},
 				},
-				description: 'Include data lineage information',
+				description: 'Whether to include data lineage information',
 			},
 			{
 				displayName: 'Datasource Details',
@@ -240,7 +240,7 @@ export class PowerBI implements INodeType {
 						],
 					},
 				},
-				description: 'Include data source details',
+				description: 'Whether to include data source details',
 			},
 			{
 				displayName: 'Scan ID',

@@ -1,14 +1,10 @@
 module.exports = {
   // Exportando corretamente as credenciais e os nós
   credentials: {
-    PowerBI: require('./dist/credentials/PowerBI.credentials').PowerBI,
+    PowerBiApiOAuth2Api: require('./dist/credentials/PowerBiApiOAuth2Api.credentials').PowerBiApiOAuth2Api,
   },
   nodes: {
-    PowerBI: require('./dist/nodes/PowerBI/PowerBI.node').PowerBI,
-    PowerBIHeaderAuth: require('./dist/nodes/PowerBIHeaderAuth/PowerBIHeaderAuth.node').PowerBIHeaderAuth,
+    PowerBi: require('./dist/nodes/PowerBI/PowerBi.node').PowerBi,
+    PowerBiHeaderAuth: require('./dist/nodes/PowerBIHeaderAuth/PowerBiHeaderAuth.node').PowerBiHeaderAuth,
   },
-  // Exportações individuais para compatibilidade
-  PowerBI: require('./dist/credentials/PowerBI.credentials').PowerBI,
-  PowerBINode: require('./dist/nodes/PowerBI/PowerBI.node').PowerBI,
-  PowerBIHeaderAuthNode: require('./dist/nodes/PowerBIHeaderAuth/PowerBIHeaderAuth.node').PowerBIHeaderAuth,
 };

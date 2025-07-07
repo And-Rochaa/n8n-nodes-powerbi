@@ -15,12 +15,6 @@ export const dataflowOperations: INodeProperties[] = [
 		},
 		options: [
 			{
-				name: 'Get Dataflows',
-				value: 'list',
-				description: 'Returns a list of all dataflows from the specified workspace',
-				action: 'Get dataflows',
-			},
-			{
 				name: 'Get Dataflow',
 				value: 'get',
 				description: 'Exports the specified dataflow definition to a JSON file',
@@ -37,6 +31,12 @@ export const dataflowOperations: INodeProperties[] = [
 				value: 'getTransactions',
 				description: 'Returns a list of transactions for the specified dataflow',
 				action: 'Get dataflow transactions',
+			},
+			{
+				name: 'Get Dataflows',
+				value: 'list',
+				description: 'Returns a list of all dataflows from the specified workspace',
+				action: 'Get dataflows',
 			},
 			{
 				name: 'Refresh Dataflow',

@@ -20,7 +20,7 @@ import {
 export async function getRopcAccessToken(
 	this: IExecuteFunctions | IExecuteSingleFunctions | ILoadOptionsFunctions,
 ): Promise<string> {
-	const credentials = await this.getCredentials('powerBI') as IDataObject;
+	const credentials = await this.getCredentials('powerBiApiOAuth2Api') as IDataObject;
 
 	if (credentials.authType !== 'ropc') {
 		throw new NodeOperationError(this.getNode(), 'Authentication method is not configured as ROPC');
@@ -105,7 +105,7 @@ export async function powerBiApiRequest(
 					// Using the requestOAuth2 method with specific options for binary data
 			const response = await this.helpers.requestOAuth2.call(
 				this,
-				'powerBI',
+				'powerBiApiOAuth2Api',
 				oauth2Options,
 				{ tokenType: 'Bearer', includeCredentialsOnRefreshOnBody: true }
 			);
@@ -121,7 +121,7 @@ export async function powerBiApiRequest(
 			return response.body || response;		} else {			// For regular JSON requests
 			const response = await this.helpers.requestOAuth2.call(
 				this,
-				'powerBI',
+				'powerBiApiOAuth2Api',
 				options,
 				{ tokenType: 'Bearer', includeCredentialsOnRefreshOnBody: true }
 			);

@@ -16,12 +16,6 @@ exports.dataflowOperations = [
         },
         options: [
             {
-                name: 'Get Dataflows',
-                value: 'list',
-                description: 'Returns a list of dataflows from the specified workspace',
-                action: 'Get dataflows',
-            },
-            {
                 name: 'Get Dataflow',
                 value: 'get',
                 description: 'Exports the specified dataflow definition to a JSON file',
@@ -38,6 +32,12 @@ exports.dataflowOperations = [
                 value: 'getTransactions',
                 description: 'Returns a list of transactions for the specified dataflow',
                 action: 'Get dataflow transactions',
+            },
+            {
+                name: 'Get Dataflows',
+                value: 'list',
+                description: 'Returns a list of dataflows from the specified workspace',
+                action: 'Get dataflows',
             },
             {
                 name: 'Refresh Dataflow',

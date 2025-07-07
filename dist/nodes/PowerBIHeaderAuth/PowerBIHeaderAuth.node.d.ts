@@ -1,5 +1,5 @@
 import { IExecuteFunctions, ILoadOptionsFunctions, INodeExecutionData, INodeType, INodeTypeDescription } from 'n8n-workflow';
-export declare class PowerBIHeaderAuth implements INodeType {
+export declare class PowerBiHeaderAuth implements INodeType {
     description: INodeTypeDescription;
     constructor();
     methods: {

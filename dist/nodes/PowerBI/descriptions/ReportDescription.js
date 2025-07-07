@@ -211,10 +211,6 @@ exports.reportFields = [
         },
         options: [
             {
-                name: 'PDF',
-                value: 'PDF',
-            },
-            {
                 name: 'Accessible PDF',
                 value: 'ACCESSIBLEPDF',
             },
@@ -227,6 +223,10 @@ exports.reportFields = [
                 value: 'IMAGE',
             },
             {
+                name: 'MHTML (Web Archive)',
+                value: 'MHTML',
+            },
+            {
                 name: 'Microsoft Excel (XLSX)',
                 value: 'XLSX',
             },
@@ -235,8 +235,8 @@ exports.reportFields = [
                 value: 'DOCX',
             },
             {
-                name: 'MHTML (Web Archive)',
-                value: 'MHTML',
+                name: 'PDF',
+                value: 'PDF',
             },
             {
                 name: 'XML',
@@ -277,7 +277,7 @@ exports.reportFields = [
                 ],
             },
         },
-        description: 'If activated, the file will be available as a binary file for download and also as base64 in the fileBase64 field for use in integrations such as WhatsApp', },
+        description: 'Whether to make the file available as a binary file for download and also as base64 in the fileBase64 field for use in integrations such as WhatsApp', },
     {
         displayName: 'Additional Fields',
         name: 'additionalFields',
@@ -332,74 +332,18 @@ exports.reportFields = [
         },
         options: [
             {
-                displayName: 'Include Hidden Pages',
-                name: 'includeHiddenPages',
-                type: 'boolean',
-                default: false,
-                description: 'Whether to include hidden pages in the export',
-            },
-            {
-                displayName: 'Locale',
-                name: 'locale',
+                displayName: 'Dataset ID',
+                name: 'datasetToBind',
                 type: 'string',
                 default: '',
-                placeholder: 'e.g. en-US',
-                description: 'Locale to use for the export',
-            },
-            {
-                displayName: 'Export Specific Pages',
-                name: 'exportSpecificPages',
-                type: 'boolean',
-                default: false,
-                description: 'Whether to export specific pages only',
-            },
-            {
-                displayName: 'Pages',
-                name: 'pages',
-                type: 'string',
-                default: '[]',
                 displayOptions: {
                     show: {
-                        exportSpecificPages: [
+                        useAlternativeDataset: [
                             true,
                         ],
                     },
                 },
-                description: 'JSON array of page configurations. Example: [{"pageName": "ReportSection1", "visualName": "VisualName1"}, {"pageName": "ReportSection2"}].',
-                typeOptions: {
-                    alwaysOpenEditWindow: true,
-                },
-            },
-            {
-                displayName: 'Use Report Level Filters',
-                name: 'useReportLevelFilters',
-                type: 'boolean',
-                default: false,
-                description: 'Whether to apply filters at the report level',
-            },
-            {
-                displayName: 'Report Level Filters',
-                name: 'reportLevelFilters',
-                type: 'string',
-                default: '[]',
-                displayOptions: {
-                    show: {
-                        useReportLevelFilters: [
-                            true,
-                        ],
-                    },
-                },
-                description: 'JSON array of filter configurations. Example: [{"filter": "Table1/Column1 eq \'value\'"}].',
-                typeOptions: {
-                    alwaysOpenEditWindow: true,
-                },
-            },
-            {
-                displayName: 'Use Default Bookmark',
-                name: 'useDefaultBookmark',
-                type: 'boolean',
-                default: false,
-                description: 'Whether to apply a default bookmark to all pages',
+                description: 'The ID of the dataset to bind to',
             },
             {
                 displayName: 'Default Bookmark Name',
@@ -430,32 +374,11 @@ exports.reportFields = [
                 description: 'The state of the bookmark to apply',
             },
             {
-                displayName: 'Use Alternative Dataset',
-                name: 'useAlternativeDataset',
+                displayName: 'Export Specific Pages',
+                name: 'exportSpecificPages',
                 type: 'boolean',
                 default: false,
-                description: 'Whether to bind the report to a different dataset',
-            },
-            {
-                displayName: 'Dataset ID',
-                name: 'datasetToBind',
-                type: 'string',
-                default: '',
-                displayOptions: {
-                    show: {
-                        useAlternativeDataset: [
-                            true,
-                        ],
-                    },
-                },
-                description: 'The ID of the dataset to bind to',
-            },
-            {
-                displayName: 'Use Identities (RLS)',
-                name: 'useIdentities',
-                type: 'boolean',
-                default: false,
-                description: 'Whether to apply Row-Level Security identities',
+                description: 'Whether to export specific pages only',
             },
             {
                 displayName: 'Identities',
@@ -473,6 +396,83 @@ exports.reportFields = [
                 typeOptions: {
                     alwaysOpenEditWindow: true,
                 },
+            },
+            {
+                displayName: 'Include Hidden Pages',
+                name: 'includeHiddenPages',
+                type: 'boolean',
+                default: false,
+                description: 'Whether to include hidden pages in the export',
+            },
+            {
+                displayName: 'Locale',
+                name: 'locale',
+                type: 'string',
+                default: '',
+                placeholder: 'e.g. en-US',
+                description: 'Locale to use for the export',
+            },
+            {
+                displayName: 'Pages',
+                name: 'pages',
+                type: 'string',
+                default: '[]',
+                displayOptions: {
+                    show: {
+                        exportSpecificPages: [
+                            true,
+                        ],
+                    },
+                },
+                description: 'JSON array of page configurations. Example: [{"pageName": "ReportSection1", "visualName": "VisualName1"}, {"pageName": "ReportSection2"}].',
+                typeOptions: {
+                    alwaysOpenEditWindow: true,
+                },
+            },
+            {
+                displayName: 'Report Level Filters',
+                name: 'reportLevelFilters',
+                type: 'string',
+                default: '[]',
+                displayOptions: {
+                    show: {
+                        useReportLevelFilters: [
+                            true,
+                        ],
+                    },
+                },
+                description: 'JSON array of filter configurations. Example: [{"filter": "Table1/Column1 eq \'value\'"}].',
+                typeOptions: {
+                    alwaysOpenEditWindow: true,
+                },
+            },
+            {
+                displayName: 'Use Alternative Dataset',
+                name: 'useAlternativeDataset',
+                type: 'boolean',
+                default: false,
+                description: 'Whether to bind the report to a different dataset',
+            },
+            {
+                displayName: 'Use Default Bookmark',
+                name: 'useDefaultBookmark',
+                type: 'boolean',
+                default: false,
+                description: 'Whether to apply a default bookmark to all pages',
+            },
+            {
+                displayName: 'Use Identities (RLS)',
+                name: 'useIdentities',
+                type: 'boolean',
+                default: false,
+                description: 'Whether to apply Row-Level Security identities',
+            },
+            {
+                displayName: 'Use Report Level Filters',
+                name: 'useReportLevelFilters',
+                type: 'boolean',
+                default: false,
+                description: 'Whether to apply filters at the report level',
             },
         ],
     },
@@ -497,19 +497,46 @@ exports.reportFields = [
         },
         options: [
             {
+                displayName: 'Format Settings',
+                name: 'formatSettings',
+                type: 'string',
+                default: '{}',
+                displayOptions: {
+                    show: {
+                        useFormatSettings: [
+                            true,
+                        ],
+                    },
+                },
+                description: 'JSON object with format-specific settings. Example: {"PageWidth": "8.5in", "PageHeight": "11in"}.',
+                typeOptions: {
+                    alwaysOpenEditWindow: true,
+                },
+            },
+            {
+                displayName: 'Identities',
+                name: 'identities',
+                type: 'string',
+                default: '[]',
+                displayOptions: {
+                    show: {
+                        useIdentities: [
+                            true,
+                        ],
+                    },
+                },
+                description: 'JSON array of identity configurations for RLS. Example: [{"username": "user1@contoso.com", "roles": ["Role1", "Role2"]}].',
+                typeOptions: {
+                    alwaysOpenEditWindow: true,
+                },
+            },
+            {
                 displayName: 'Locale',
                 name: 'locale',
                 type: 'string',
                 default: '',
                 placeholder: 'e.g. en-US',
                 description: 'Locale to use for the export',
-            },
-            {
-                displayName: 'Use Parameters',
-                name: 'useParameters',
-                type: 'boolean',
-                default: false,
-                description: 'Whether to provide report parameters',
             },
             {
                 displayName: 'Parameter Values',
@@ -536,23 +563,6 @@ exports.reportFields = [
                 description: 'Whether to provide format-specific settings',
             },
             {
-                displayName: 'Format Settings',
-                name: 'formatSettings',
-                type: 'string',
-                default: '{}',
-                displayOptions: {
-                    show: {
-                        useFormatSettings: [
-                            true,
-                        ],
-                    },
-                },
-                description: 'JSON object with format-specific settings. Example: {"PageWidth": "8.5in", "PageHeight": "11in"}.',
-                typeOptions: {
-                    alwaysOpenEditWindow: true,
-                },
-            },
-            {
                 displayName: 'Use Identities (RLS)',
                 name: 'useIdentities',
                 type: 'boolean',
@@ -560,21 +570,11 @@ exports.reportFields = [
                 description: 'Whether to apply Row-Level Security identities',
             },
             {
-                displayName: 'Identities',
-                name: 'identities',
-                type: 'string',
-                default: '[]',
-                displayOptions: {
-                    show: {
-                        useIdentities: [
-                            true,
-                        ],
-                    },
-                },
-                description: 'JSON array of identity configurations for RLS. Example: [{"username": "user1@contoso.com", "roles": ["Role1", "Role2"]}].',
-                typeOptions: {
-                    alwaysOpenEditWindow: true,
-                },
+                displayName: 'Use Parameters',
+                name: 'useParameters',
+                type: 'boolean',
+                default: false,
+                description: 'Whether to provide report parameters',
             },
         ],
     },

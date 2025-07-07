@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getDataflows = exports.getDatasources = exports.getGateways = exports.getDashboards = exports.getReports = exports.getTables = exports.getDatasets = exports.getGroupsMultiSelect = exports.getGroups = exports.powerBiApiRequestAllItems = exports.powerBiApiRequest = exports.getRopcAccessToken = void 0;
 const n8n_workflow_1 = require("n8n-workflow");
 async function getRopcAccessToken() {
-    const credentials = await this.getCredentials('powerBI');
+    const credentials = await this.getCredentials('powerBiApiOAuth2Api');
     if (credentials.authType !== 'ropc') {
         throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'Authentication method is not configured as ROPC');
     }
@@ -69,14 +69,14 @@ async function powerBiApiRequest(method, endpoint, body = {}, qs = {}, requestOp
                 resolveWithFullResponse: true,
                 encoding: null,
             };
-            const response = await this.helpers.requestOAuth2.call(this, 'powerBI', oauth2Options, { tokenType: 'Bearer', includeCredentialsOnRefreshOnBody: true });
+            const response = await this.helpers.requestOAuth2.call(this, 'powerBiApiOAuth2Api', oauth2Options, { tokenType: 'Bearer', includeCredentialsOnRefreshOnBody: true });
             if (requestOptions.returnFullResponse) {
                 return response;
             }
             return response.body || response;
         }
         else {
-            const response = await this.helpers.requestOAuth2.call(this, 'powerBI', options, { tokenType: 'Bearer', includeCredentialsOnRefreshOnBody: true });
+            const response = await this.helpers.requestOAuth2.call(this, 'powerBiApiOAuth2Api', options, { tokenType: 'Bearer', includeCredentialsOnRefreshOnBody: true });
             return response;
         }
     }

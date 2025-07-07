@@ -59,7 +59,7 @@ import {
 	reportFields,
 } from '../PowerBI/descriptions/ReportDescription';
 
-export class PowerBIHeaderAuth implements INodeType {
+export class PowerBiHeaderAuth implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'Power BI Header Auth',
 		name: 'powerBiHeaderAuth',
@@ -71,8 +71,8 @@ export class PowerBIHeaderAuth implements INodeType {
 		defaults: {
 			name: 'Power BI (Header Auth)',
 		},
-		inputs: [NodeConnectionType.Main],
-		outputs: [NodeConnectionType.Main],
+		inputs: ['main'],
+		outputs: ['main'],
 		credentials: [],
 		requestDefaults: {
 			baseURL: 'https://api.powerbi.com/v1.0/myorg',
@@ -113,12 +113,12 @@ export class PowerBIHeaderAuth implements INodeType {
 						value: 'dashboard',
 					},
 					{
-						name: 'Dataset',
-						value: 'dataset',
-					},
-					{
 						name: 'Dataflow',
 						value: 'dataflow',
+					},
+					{
+						name: 'Dataset',
+						value: 'dataset',
 					},
 					{
 						name: 'Gateway',
@@ -201,7 +201,7 @@ export class PowerBIHeaderAuth implements INodeType {
 						],
 					},
 				},
-				description: 'Include dataset schema',
+				description: 'Whether to include dataset schema',
 			},
 			{
 				displayName: 'Dataset Expressions',
@@ -218,7 +218,7 @@ export class PowerBIHeaderAuth implements INodeType {
 						],
 					},
 				},
-				description: 'Include DAX expressions from datasets',
+				description: 'Whether to include DAX expressions from datasets',
 			},
 			{
 				displayName: 'Lineage',
@@ -235,7 +235,7 @@ export class PowerBIHeaderAuth implements INodeType {
 						],
 					},
 				},
-				description: 'Include lineage information',
+				description: 'Whether to include lineage information',
 			},			{
 				displayName: 'Datasource Details',
 				name: 'datasourceDetails',
@@ -251,7 +251,7 @@ export class PowerBIHeaderAuth implements INodeType {
 						],
 					},
 				},
-				description: 'Include data source details',
+				description: 'Whether to include data source details',
 			},
 			
 			// TOKEN OPERATIONS

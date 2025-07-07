@@ -1,5 +1,5 @@
 import { IExecuteFunctions, ILoadOptionsFunctions, INodeExecutionData, INodeType, INodeTypeDescription } from 'n8n-workflow';
-export declare class PowerBI implements INodeType {
+export declare class PowerBi implements INodeType {
     description: INodeTypeDescription;
     methods: {
         loadOptions: {

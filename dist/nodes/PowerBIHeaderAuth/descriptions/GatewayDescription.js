@@ -28,16 +28,16 @@ exports.gatewayOperations = [
                 action: 'Get datasource status',
             },
             {
-                name: 'Get Datasources',
-                value: 'getDatasources',
-                description: 'Returns a list of datasources from the specified gateway',
-                action: 'Get gateway datasources',
-            },
-            {
                 name: 'Get Datasource Users',
                 value: 'getDatasourceUsers',
                 description: 'Returns a list of users who have access to the specified datasource',
                 action: 'Get datasource users',
+            },
+            {
+                name: 'Get Datasources',
+                value: 'getDatasources',
+                description: 'Returns a list of datasources from the specified gateway',
+                action: 'Get gateway datasources',
             },
             {
                 name: 'Get Gateway',

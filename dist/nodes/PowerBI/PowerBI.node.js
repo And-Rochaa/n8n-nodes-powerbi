@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PowerBI = void 0;
+exports.PowerBi = void 0;
 const n8n_workflow_1 = require("n8n-workflow");
 const GenericFunctions_1 = require("./GenericFunctions");
 const resources_1 = require("./resources");
@@ -10,11 +10,11 @@ const DatasetDescription_1 = require("./descriptions/DatasetDescription");
 const GatewayDescription_1 = require("./descriptions/GatewayDescription");
 const GroupDescription_1 = require("./descriptions/GroupDescription");
 const ReportDescription_1 = require("./descriptions/ReportDescription");
-class PowerBI {
+class PowerBi {
     constructor() {
         this.description = {
             displayName: 'Power BI',
-            name: 'powerBI',
+            name: 'powerBi',
             icon: 'file:powerbi.svg',
             group: ['transform'],
             version: 1,
@@ -23,11 +23,11 @@ class PowerBI {
             defaults: {
                 name: 'Power BI',
             },
-            inputs: ["main"],
-            outputs: ["main"],
+            inputs: ['main'],
+            outputs: ['main'],
             credentials: [
                 {
-                    name: 'powerBI',
+                    name: 'powerBiApiOAuth2Api',
                     required: true,
                 },
             ],
@@ -139,7 +139,7 @@ class PowerBI {
                             ],
                         },
                     },
-                    description: 'Include dataset schema',
+                    description: 'Whether to include dataset schema',
                 },
                 {
                     displayName: 'Dataset Expressions',
@@ -156,7 +156,7 @@ class PowerBI {
                             ],
                         },
                     },
-                    description: 'Include dataset expressions',
+                    description: 'Whether to include dataset expressions',
                 },
                 {
                     displayName: 'Lineage',
@@ -173,7 +173,7 @@ class PowerBI {
                             ],
                         },
                     },
-                    description: 'Include data lineage information',
+                    description: 'Whether to include data lineage information',
                 },
                 {
                     displayName: 'Datasource Details',
@@ -190,7 +190,7 @@ class PowerBI {
                             ],
                         },
                     },
-                    description: 'Include data source details',
+                    description: 'Whether to include data source details',
                 },
                 {
                     displayName: 'Scan ID',
@@ -351,5 +351,5 @@ class PowerBI {
         }
     }
 }
-exports.PowerBI = PowerBI;
-//# sourceMappingURL=PowerBI.node.js.map
+exports.PowerBi = PowerBi;
+//# sourceMappingURL=PowerBi.node.js.map

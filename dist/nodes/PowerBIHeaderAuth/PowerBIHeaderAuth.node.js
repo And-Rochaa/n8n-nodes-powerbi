@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PowerBIHeaderAuth = void 0;
+exports.PowerBiHeaderAuth = void 0;
 const n8n_workflow_1 = require("n8n-workflow");
 const GenericFunctions_1 = require("./GenericFunctions");
 const resources_1 = require("./resources");
@@ -10,7 +10,7 @@ const DataflowDescription_1 = require("./descriptions/DataflowDescription");
 const GatewayDescription_1 = require("./descriptions/GatewayDescription");
 const GroupDescription_1 = require("../PowerBI/descriptions/GroupDescription");
 const ReportDescription_1 = require("../PowerBI/descriptions/ReportDescription");
-class PowerBIHeaderAuth {
+class PowerBiHeaderAuth {
     constructor() {
         this.description = {
             displayName: 'Power BI Header Auth',
@@ -23,8 +23,8 @@ class PowerBIHeaderAuth {
             defaults: {
                 name: 'Power BI (Header Auth)',
             },
-            inputs: ["main"],
-            outputs: ["main"],
+            inputs: ['main'],
+            outputs: ['main'],
             credentials: [],
             requestDefaults: {
                 baseURL: 'https://api.powerbi.com/v1.0/myorg',
@@ -65,12 +65,12 @@ class PowerBIHeaderAuth {
                             value: 'dashboard',
                         },
                         {
-                            name: 'Dataset',
-                            value: 'dataset',
-                        },
-                        {
                             name: 'Dataflow',
                             value: 'dataflow',
+                        },
+                        {
+                            name: 'Dataset',
+                            value: 'dataset',
                         },
                         {
                             name: 'Gateway',
@@ -153,7 +153,7 @@ class PowerBIHeaderAuth {
                             ],
                         },
                     },
-                    description: 'Include dataset schema',
+                    description: 'Whether to include dataset schema',
                 },
                 {
                     displayName: 'Dataset Expressions',
@@ -170,7 +170,7 @@ class PowerBIHeaderAuth {
                             ],
                         },
                     },
-                    description: 'Include DAX expressions from datasets',
+                    description: 'Whether to include DAX expressions from datasets',
                 },
                 {
                     displayName: 'Lineage',
@@ -187,7 +187,7 @@ class PowerBIHeaderAuth {
                             ],
                         },
                     },
-                    description: 'Include lineage information',
+                    description: 'Whether to include lineage information',
                 }, {
                     displayName: 'Datasource Details',
                     name: 'datasourceDetails',
@@ -203,7 +203,7 @@ class PowerBIHeaderAuth {
                             ],
                         },
                     },
-                    description: 'Include data source details',
+                    description: 'Whether to include data source details',
                 },
                 {
                     displayName: 'Operation',
@@ -1026,5 +1026,5 @@ class PowerBIHeaderAuth {
         return this.prepareOutputData(returnData);
     }
 }
-exports.PowerBIHeaderAuth = PowerBIHeaderAuth;
-//# sourceMappingURL=PowerBIHeaderAuth.node.js.map
+exports.PowerBiHeaderAuth = PowerBiHeaderAuth;
+//# sourceMappingURL=PowerBiHeaderAuth.node.js.map
