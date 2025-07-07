@@ -59,7 +59,7 @@ import {
 	reportFields,
 } from '../PowerBI/descriptions/ReportDescription';
 
-export class PowerBIHeaderAuth implements INodeType {
+export class PowerBiHeaderAuth implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'Power BI Header Auth',
 		name: 'powerBiHeaderAuth',
@@ -1066,86 +1066,86 @@ export class PowerBIHeaderAuth implements INodeType {
 		
 		for (let i = 0; i < items.length; i++) {
 			try {                // Implementation of cases for each resource
-                if (resource === 'dashboard') {
-                    // Dashboard operations - using modularized resources
-                    if (operation in resources.dashboard) {
-                        // Execute corresponding operation
-                        const results = await resources.dashboard[operation].call(this, i);
-                        returnData.push(...results);
-                        
-                        // Important: mark responseData as null to avoid additional processing
-                        responseData = null;
-                    }
-                } else if (resource === 'dataset') {
-                    // Dataset operations - using modularized resources
-                    if (operation in resources.dataset) {
-                        // Execute corresponding operation
-                        const results = await resources.dataset[operation].call(this, i);
-                        returnData.push(...results);
-                        
-                        // Important: mark responseData as null to avoid additional processing
-                        responseData = null;
-                    }
-                } else if (resource === 'dataflow') {
-                    // Dataflow operations - using modularized resources
-                    if (operation in resources.dataflow) {
-                        // Execute corresponding operation
-                        const results = await resources.dataflow[operation].call(this, i);
-                        returnData.push(...results);
-                        
-                        // Important: mark responseData as null to avoid additional processing
-                        responseData = null;
-                    }
-                } else if (resource === 'group') {
-                    // Group operations - using modularized resources
-                    if (operation in resources.group) {
-                        // Execute corresponding operation
-                        const results = await resources.group[operation].call(this, i);
-                        returnData.push(...results);
-                        
-                        // Important: mark responseData as null to avoid additional processing
-                        responseData = null;
-                    }
-                } else if (resource === 'gateway') {
-                    // Gateway operations - using modularized resources
-                    if (operation in resources.gateway) {
-                        // Execute corresponding operation
-                        const results = await resources.gateway[operation].call(this, i);
-                        returnData.push(...results);
-                        
-                        // Important: mark responseData as null to avoid additional processing
-                        responseData = null;
-                    }
-                } else if (resource === 'report') {
-                    // Report operations - using modularized resources
-                    if (operation in resources.report) {
-                        // Execute corresponding operation
-                        const results = await resources.report[operation].call(this, i);
-                        returnData.push(...results);
-                        
-                        // Important: mark responseData as null to avoid additional processing
-                        responseData = null;
-                    }                } else if (resource === 'admin') {
-                    // Admin operations - using modularized resources
-                    if (operation in resources.admin) {
-                        // Execute corresponding operation
-                        const results = await resources.admin[operation].call(this, i);
-                        returnData.push(...results);
-                        
-                        // Important: mark responseData as null to avoid additional processing
-                        responseData = null;
-                    }
-                } else if (resource === 'token') {
-                    // Token operations - using modularized resources
-                    if (operation in resources.token) {
-                        // Execute corresponding operation
-                        const results = await resources.token[operation].call(this, i);
-                        returnData.push(...results);
-                        
-                        // Important: mark responseData as null to avoid additional processing
-                        responseData = null;
-                    }
-                }				// If responseData is null here, it means it has already been processed (especially for groups)
+				if (resource === 'dashboard') {
+					// Dashboard operations - using modularized resources
+					if (operation in resources.dashboard) {
+						// Execute corresponding operation
+						const results = await resources.dashboard[operation].call(this, i);
+						returnData.push(...results);
+						
+						// Important: mark responseData as null to avoid additional processing
+						responseData = null;
+					}
+				} else if (resource === 'dataset') {
+					// Dataset operations - using modularized resources
+					if (operation in resources.dataset) {
+						// Execute corresponding operation
+						const results = await resources.dataset[operation].call(this, i);
+						returnData.push(...results);
+						
+						// Important: mark responseData as null to avoid additional processing
+						responseData = null;
+					}
+				} else if (resource === 'dataflow') {
+					// Dataflow operations - using modularized resources
+					if (operation in resources.dataflow) {
+						// Execute corresponding operation
+						const results = await resources.dataflow[operation].call(this, i);
+						returnData.push(...results);
+						
+						// Important: mark responseData as null to avoid additional processing
+						responseData = null;
+					}
+				} else if (resource === 'group') {
+					// Group operations - using modularized resources
+					if (operation in resources.group) {
+						// Execute corresponding operation
+						const results = await resources.group[operation].call(this, i);
+						returnData.push(...results);
+						
+						// Important: mark responseData as null to avoid additional processing
+						responseData = null;
+					}
+				} else if (resource === 'gateway') {
+					// Gateway operations - using modularized resources
+					if (operation in resources.gateway) {
+						// Execute corresponding operation
+						const results = await resources.gateway[operation].call(this, i);
+						returnData.push(...results);
+						
+						// Important: mark responseData as null to avoid additional processing
+						responseData = null;
+					}
+				} else if (resource === 'report') {
+					// Report operations - using modularized resources
+					if (operation in resources.report) {
+						// Execute corresponding operation
+						const results = await resources.report[operation].call(this, i);
+						returnData.push(...results);
+						
+						// Important: mark responseData as null to avoid additional processing
+						responseData = null;
+					}                } else if (resource === 'admin') {
+					// Admin operations - using modularized resources
+					if (operation in resources.admin) {
+						// Execute corresponding operation
+						const results = await resources.admin[operation].call(this, i);
+						returnData.push(...results);
+						
+						// Important: mark responseData as null to avoid additional processing
+						responseData = null;
+					}
+				} else if (resource === 'token') {
+					// Token operations - using modularized resources
+					if (operation in resources.token) {
+						// Execute corresponding operation
+						const results = await resources.token[operation].call(this, i);
+						returnData.push(...results);
+						
+						// Important: mark responseData as null to avoid additional processing
+						responseData = null;
+					}
+				}				// If responseData is null here, it means it has already been processed (especially for groups)
 				// This happens because we add items directly to returnData above
 				if (responseData === null) {
 					continue;
@@ -1187,5 +1187,5 @@ export class PowerBIHeaderAuth implements INodeType {
 	}
 }
 
-// Export default for n8n compatibility
-export default PowerBIHeaderAuth;
+// Export default para compatibilidade n8n
+export default PowerBiHeaderAuth;
