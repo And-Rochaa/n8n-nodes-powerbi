@@ -9,6 +9,8 @@ This package contains nodes for n8n that enable complete integration with Micros
 This Community Node was created and made freely available by **Anderson Rocha from Universo Automático** for the community and was designed to simplify and abstract all the complexity of using Power BI APIs.
 
 ### Social Media
+
+- Linkedin: [https://www.linkedin.com/in/andersonsantosrocha](https://www.linkedin.com/in/andersonsantosrocha)
 - YouTube: [https://www.youtube.com/@universoautomatico](https://www.youtube.com/@universoautomatico)
 - Instagram: [https://www.instagram.com/universoautomatico/](https://www.instagram.com/universoautomatico/)
 - N8N + Power BI Training: [https://n8npowerbi.com/](https://n8npowerbi.com/)
