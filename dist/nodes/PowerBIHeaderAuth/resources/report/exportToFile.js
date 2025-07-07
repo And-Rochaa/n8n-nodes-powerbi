@@ -19,7 +19,7 @@ async function exportToFile(i) {
     const waitForCompletion = this.getNodeParameter('waitForCompletion', i, true);
     const downloadFile = this.getNodeParameter('downloadFile', i, false);
     const additionalFields = this.getNodeParameter('additionalFields', i, {});
-    const maxWaitTime = additionalFields.maxWaitTime || 300;
+    const maxWaitTime = additionalFields.maxWaitTime || 600;
     const pollingInterval = additionalFields.pollingInterval || 5;
     const exportEndpoint = groupId && groupId !== 'me' ?
         `/groups/${groupId}/reports/${reportId}/ExportTo` : `/reports/${reportId}/ExportTo`;
@@ -166,7 +166,17 @@ async function exportToFile(i) {
         let elapsedTime = 0;
         while (exportStatus !== 'Succeeded' && exportStatus !== 'Failed' && elapsedTime < maxWaitTime) {
             await new Promise(resolve => {
-                setTimeout(() => resolve(undefined), pollingInterval * 1000);
+                let elapsed = 0;
+                const check = () => {
+                    elapsed += 100;
+                    if (elapsed >= pollingInterval * 1000) {
+                        resolve(undefined);
+                    }
+                    else {
+                        Promise.resolve().then(check);
+                    }
+                };
+                check();
             });
             elapsedTime += pollingInterval;
             statusResponse = await GenericFunctions_1.powerBiApiRequestWithHeaders.call(this, 'GET', statusEndpoint, {}, {}, headers);

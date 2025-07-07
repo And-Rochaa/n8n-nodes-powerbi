@@ -75,7 +75,7 @@ export async function exportToFile(
 	const exportFormat = this.getNodeParameter('exportFormat', i) as string;
 	const waitForCompletion = this.getNodeParameter('waitForCompletion', i, true) as boolean;
 	const additionalFields = this.getNodeParameter('additionalFields', i, {}) as IDataObject;
-	const maxWaitTime = (additionalFields.maxWaitTime as number) || 300; // maximum wait time in seconds
+	const maxWaitTime = (additionalFields.maxWaitTime as number) || 600; // maximum wait time in seconds
 	const pollingInterval = (additionalFields.pollingInterval as number) || 5; // polling interval in seconds
 	
 	// Build endpoint based on selected group
@@ -91,65 +91,57 @@ export async function exportToFile(
 	const reportType = this.getNodeParameter('reportType', i, 'powerBI') as string;
 	
 	if (reportType === 'powerBI') {
-		// Settings for Power BI reports
+		// Configuration for Power BI reports
 		const powerBIConfig: IPowerBIReportExportConfiguration = {};
 		
-		// Basic settings
-		const includeHiddenPages = this.getNodeParameter('includeHiddenPages', i, false) as boolean;
-		const locale = this.getNodeParameter('locale', i, '') as string;
+		// Get Power BI report configuration from collection
+		const powerBIReportConfig = this.getNodeParameter('powerBIReportConfig', i, {}) as IDataObject;
 		
-		if (includeHiddenPages || locale) {
+		// Basic configuration
+		if (powerBIReportConfig.includeHiddenPages !== undefined || powerBIReportConfig.locale) {
 			powerBIConfig.settings = {};
 			
-			if (includeHiddenPages) {
-				powerBIConfig.settings.includeHiddenPages = includeHiddenPages;
+			if (powerBIReportConfig.includeHiddenPages !== undefined) {
+				powerBIConfig.settings.includeHiddenPages = powerBIReportConfig.includeHiddenPages as boolean;
 			}
 			
-			if (locale) {
-				powerBIConfig.settings.locale = locale;
+			if (powerBIReportConfig.locale) {
+				powerBIConfig.settings.locale = powerBIReportConfig.locale as string;
 			}
 		}
 		
 		// Check if there are specific pages to export
-		const exportSpecificPages = this.getNodeParameter('exportSpecificPages', i, false) as boolean;
-		
-		if (exportSpecificPages) {
-			const pagesJson = this.getNodeParameter('pages', i, '[]') as string;
+		if (powerBIReportConfig.exportSpecificPages === true && powerBIReportConfig.pages) {
 			try {
-				const pages: IExportReportPage[] = JSON.parse(pagesJson);
+				const pages: IExportReportPage[] = JSON.parse(powerBIReportConfig.pages as string);
 				if (pages.length > 0) {
 					powerBIConfig.pages = pages;
 				}
 			} catch (error) {
 				throw new NodeOperationError(this.getNode(), 'Invalid JSON format for pages', {
-					description: 'Please ensure the JSON format is correct.',
+					description: 'Make sure the JSON format is correct.',
 				});
 			}
 		}
 		
 		// Check if there are report-level filters
-		const useReportLevelFilters = this.getNodeParameter('useReportLevelFilters', i, false) as boolean;
-		
-		if (useReportLevelFilters) {
-			const filtersJson = this.getNodeParameter('reportLevelFilters', i, '[]') as string;
+		if (powerBIReportConfig.useReportLevelFilters === true && powerBIReportConfig.reportLevelFilters) {
 			try {
-				const filters: IExportFilter[] = JSON.parse(filtersJson);
+				const filters: IExportFilter[] = JSON.parse(powerBIReportConfig.reportLevelFilters as string);
 				if (filters.length > 0) {
 					powerBIConfig.reportLevelFilters = filters;
 				}
 			} catch (error) {
 				throw new NodeOperationError(this.getNode(), 'Invalid JSON format for filters', {
-					description: 'Please ensure the JSON format is correct.',
+					description: 'Make sure the JSON format is correct.',
 				});
 			}
 		}
 		
 		// Check if there is a default bookmark
-		const useDefaultBookmark = this.getNodeParameter('useDefaultBookmark', i, false) as boolean;
-		
-		if (useDefaultBookmark) {
-			const bookmarkName = this.getNodeParameter('defaultBookmarkName', i, '') as string;
-			const bookmarkState = this.getNodeParameter('defaultBookmarkState', i, '') as string;
+		if (powerBIReportConfig.useDefaultBookmark === true) {
+			const bookmarkName = powerBIReportConfig.defaultBookmarkName as string;
+			const bookmarkState = powerBIReportConfig.defaultBookmarkState as string;
 			
 			if (bookmarkName || bookmarkState) {
 				powerBIConfig.defaultBookmark = {};
@@ -165,20 +157,16 @@ export async function exportToFile(
 		}
 		
 		// Check if there is an alternative dataset to bind
-		const useAlternativeDataset = this.getNodeParameter('useAlternativeDataset', i, false) as boolean;
-		
-		if (useAlternativeDataset) {
-			const datasetId = this.getNodeParameter('datasetToBind', i, '') as string;
+		if (powerBIReportConfig.useAlternativeDataset === true) {
+			const datasetId = powerBIReportConfig.datasetToBind as string;
 			if (datasetId) {
 				powerBIConfig.datasetToBind = datasetId;
 			}
 		}
 		
 		// Check if identities should be used for RLS (Row-Level Security)
-		const useIdentities = this.getNodeParameter('useIdentities', i, false) as boolean;
-		
-		if (useIdentities) {
-			const identitiesJson = this.getNodeParameter('identities', i, '[]') as string;
+		if (powerBIReportConfig.useIdentities === true) {
+			const identitiesJson = powerBIReportConfig.identities as string;
 			try {
 				const identities: IEffectiveIdentity[] = JSON.parse(identitiesJson);
 				if (identities.length > 0) {
@@ -293,7 +281,16 @@ export async function exportToFile(
 		while (exportStatus !== 'Succeeded' && exportStatus !== 'Failed' && elapsedTime < maxWaitTime) {
 			// Wait for the polling interval before the next check
 			await new Promise(resolve => {
-				setTimeout(() => resolve(undefined), pollingInterval * 1000);
+				let elapsed = 0;
+				const check = () => {
+					elapsed += 100;
+					if (elapsed >= pollingInterval * 1000) {
+						resolve(undefined);
+					} else {
+						Promise.resolve().then(check);
+					}
+				};
+				check();
 			});
 			elapsedTime += pollingInterval;
 			

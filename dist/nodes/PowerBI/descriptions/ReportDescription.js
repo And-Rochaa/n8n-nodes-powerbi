@@ -299,7 +299,7 @@ exports.reportFields = [
                 displayName: 'Maximum Wait Time',
                 name: 'maxWaitTime',
                 type: 'number',
-                default: 300,
+                default: 600,
                 description: 'Maximum time to wait for export completion in seconds',
             },
             {

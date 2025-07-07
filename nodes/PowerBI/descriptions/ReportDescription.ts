@@ -301,7 +301,7 @@ export const reportFields: INodeProperties[] = [	// Field to select group (works
 				displayName: 'Maximum Wait Time',
 				name: 'maxWaitTime',
 				type: 'number',
-				default: 300,
+				default: 600,
 				description: 'Maximum time to wait for export completion in seconds',
 			},
 			{

@@ -89,7 +89,7 @@ export async function exportToFile(
 	
 	// Get additional fields
 	const additionalFields = this.getNodeParameter('additionalFields', i, {}) as IDataObject;
-	const maxWaitTime = (additionalFields.maxWaitTime as number) || 300; // maximum time in seconds
+	const maxWaitTime = (additionalFields.maxWaitTime as number) || 600; // maximum time in seconds
 	const pollingInterval = (additionalFields.pollingInterval as number) || 5; // polling interval in seconds
 	
 	// Build endpoint based on selected group
@@ -279,7 +279,16 @@ export async function exportToFile(
 		while (exportStatus !== 'Succeeded' && exportStatus !== 'Failed' && elapsedTime < maxWaitTime) {
 			// Wait for polling interval before next check
 			await new Promise(resolve => {
-				setTimeout(() => resolve(undefined), pollingInterval * 1000);
+				let elapsed = 0;
+				const check = () => {
+					elapsed += 100;
+					if (elapsed >= pollingInterval * 1000) {
+						resolve(undefined);
+					} else {
+						Promise.resolve().then(check);
+					}
+				};
+				check();
 			});
 			elapsedTime += pollingInterval;
 			

@@ -11,7 +11,7 @@ async function exportToFile(i) {
     const exportFormat = this.getNodeParameter('exportFormat', i);
     const waitForCompletion = this.getNodeParameter('waitForCompletion', i, true);
     const additionalFields = this.getNodeParameter('additionalFields', i, {});
-    const maxWaitTime = additionalFields.maxWaitTime || 300;
+    const maxWaitTime = additionalFields.maxWaitTime || 600;
     const pollingInterval = additionalFields.pollingInterval || 5;
     const exportEndpoint = groupId && groupId !== 'me' ?
         `/groups/${groupId}/reports/${reportId}/ExportTo` : `/reports/${reportId}/ExportTo`;
@@ -21,51 +21,45 @@ async function exportToFile(i) {
     const reportType = this.getNodeParameter('reportType', i, 'powerBI');
     if (reportType === 'powerBI') {
         const powerBIConfig = {};
-        const includeHiddenPages = this.getNodeParameter('includeHiddenPages', i, false);
-        const locale = this.getNodeParameter('locale', i, '');
-        if (includeHiddenPages || locale) {
+        const powerBIReportConfig = this.getNodeParameter('powerBIReportConfig', i, {});
+        if (powerBIReportConfig.includeHiddenPages !== undefined || powerBIReportConfig.locale) {
             powerBIConfig.settings = {};
-            if (includeHiddenPages) {
-                powerBIConfig.settings.includeHiddenPages = includeHiddenPages;
+            if (powerBIReportConfig.includeHiddenPages !== undefined) {
+                powerBIConfig.settings.includeHiddenPages = powerBIReportConfig.includeHiddenPages;
             }
-            if (locale) {
-                powerBIConfig.settings.locale = locale;
+            if (powerBIReportConfig.locale) {
+                powerBIConfig.settings.locale = powerBIReportConfig.locale;
             }
         }
-        const exportSpecificPages = this.getNodeParameter('exportSpecificPages', i, false);
-        if (exportSpecificPages) {
-            const pagesJson = this.getNodeParameter('pages', i, '[]');
+        if (powerBIReportConfig.exportSpecificPages === true && powerBIReportConfig.pages) {
             try {
-                const pages = JSON.parse(pagesJson);
+                const pages = JSON.parse(powerBIReportConfig.pages);
                 if (pages.length > 0) {
                     powerBIConfig.pages = pages;
                 }
             }
             catch (error) {
                 throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'Invalid JSON format for pages', {
-                    description: 'Please ensure the JSON format is correct.',
+                    description: 'Make sure the JSON format is correct.',
                 });
             }
         }
-        const useReportLevelFilters = this.getNodeParameter('useReportLevelFilters', i, false);
-        if (useReportLevelFilters) {
-            const filtersJson = this.getNodeParameter('reportLevelFilters', i, '[]');
+        if (powerBIReportConfig.useReportLevelFilters === true && powerBIReportConfig.reportLevelFilters) {
             try {
-                const filters = JSON.parse(filtersJson);
+                const filters = JSON.parse(powerBIReportConfig.reportLevelFilters);
                 if (filters.length > 0) {
                     powerBIConfig.reportLevelFilters = filters;
                 }
             }
             catch (error) {
                 throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'Invalid JSON format for filters', {
-                    description: 'Please ensure the JSON format is correct.',
+                    description: 'Make sure the JSON format is correct.',
                 });
             }
         }
-        const useDefaultBookmark = this.getNodeParameter('useDefaultBookmark', i, false);
-        if (useDefaultBookmark) {
-            const bookmarkName = this.getNodeParameter('defaultBookmarkName', i, '');
-            const bookmarkState = this.getNodeParameter('defaultBookmarkState', i, '');
+        if (powerBIReportConfig.useDefaultBookmark === true) {
+            const bookmarkName = powerBIReportConfig.defaultBookmarkName;
+            const bookmarkState = powerBIReportConfig.defaultBookmarkState;
             if (bookmarkName || bookmarkState) {
                 powerBIConfig.defaultBookmark = {};
                 if (bookmarkName) {
@@ -76,16 +70,14 @@ async function exportToFile(i) {
                 }
             }
         }
-        const useAlternativeDataset = this.getNodeParameter('useAlternativeDataset', i, false);
-        if (useAlternativeDataset) {
-            const datasetId = this.getNodeParameter('datasetToBind', i, '');
+        if (powerBIReportConfig.useAlternativeDataset === true) {
+            const datasetId = powerBIReportConfig.datasetToBind;
             if (datasetId) {
                 powerBIConfig.datasetToBind = datasetId;
             }
         }
-        const useIdentities = this.getNodeParameter('useIdentities', i, false);
-        if (useIdentities) {
-            const identitiesJson = this.getNodeParameter('identities', i, '[]');
+        if (powerBIReportConfig.useIdentities === true) {
+            const identitiesJson = powerBIReportConfig.identities;
             try {
                 const identities = JSON.parse(identitiesJson);
                 if (identities.length > 0) {
@@ -173,7 +165,17 @@ async function exportToFile(i) {
         let elapsedTime = 0;
         while (exportStatus !== 'Succeeded' && exportStatus !== 'Failed' && elapsedTime < maxWaitTime) {
             await new Promise(resolve => {
-                setTimeout(() => resolve(undefined), pollingInterval * 1000);
+                let elapsed = 0;
+                const check = () => {
+                    elapsed += 100;
+                    if (elapsed >= pollingInterval * 1000) {
+                        resolve(undefined);
+                    }
+                    else {
+                        Promise.resolve().then(check);
+                    }
+                };
+                check();
             });
             elapsedTime += pollingInterval;
             statusResponse = await GenericFunctions_1.powerBiApiRequest.call(this, 'GET', statusEndpoint, {});
