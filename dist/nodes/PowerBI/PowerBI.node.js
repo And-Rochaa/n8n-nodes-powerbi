@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PowerBi = void 0;
+exports.PowerBI = void 0;
 const n8n_workflow_1 = require("n8n-workflow");
 const GenericFunctions_1 = require("./GenericFunctions");
 const resources_1 = require("./resources");
@@ -10,7 +10,7 @@ const DatasetDescription_1 = require("./descriptions/DatasetDescription");
 const GatewayDescription_1 = require("./descriptions/GatewayDescription");
 const GroupDescription_1 = require("./descriptions/GroupDescription");
 const ReportDescription_1 = require("./descriptions/ReportDescription");
-class PowerBi {
+class PowerBI {
     constructor() {
         this.description = {
             displayName: 'Power BI',
@@ -351,5 +351,6 @@ class PowerBi {
         }
     }
 }
-exports.PowerBi = PowerBi;
-//# sourceMappingURL=PowerBi.node.js.map
+exports.PowerBI = PowerBI;
+exports.default = PowerBI;
+//# sourceMappingURL=PowerBI.node.js.map

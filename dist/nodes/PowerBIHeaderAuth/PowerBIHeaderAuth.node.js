@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PowerBiHeaderAuth = void 0;
+exports.PowerBIHeaderAuth = void 0;
 const n8n_workflow_1 = require("n8n-workflow");
 const GenericFunctions_1 = require("./GenericFunctions");
 const resources_1 = require("./resources");
@@ -10,7 +10,7 @@ const DataflowDescription_1 = require("./descriptions/DataflowDescription");
 const GatewayDescription_1 = require("./descriptions/GatewayDescription");
 const GroupDescription_1 = require("../PowerBI/descriptions/GroupDescription");
 const ReportDescription_1 = require("../PowerBI/descriptions/ReportDescription");
-class PowerBiHeaderAuth {
+class PowerBIHeaderAuth {
     constructor() {
         this.description = {
             displayName: 'Power BI Header Auth',
@@ -1026,5 +1026,6 @@ class PowerBiHeaderAuth {
         return this.prepareOutputData(returnData);
     }
 }
-exports.PowerBiHeaderAuth = PowerBiHeaderAuth;
-//# sourceMappingURL=PowerBiHeaderAuth.node.js.map
+exports.PowerBIHeaderAuth = PowerBIHeaderAuth;
+exports.default = PowerBIHeaderAuth;
+//# sourceMappingURL=PowerBIHeaderAuth.node.js.map

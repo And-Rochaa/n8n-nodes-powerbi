@@ -59,7 +59,7 @@ import {
 
 // Importing execution functions removed - now implemented directly
 
-export class PowerBi implements INodeType {
+export class PowerBI implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'Power BI',
 		name: 'powerBi',
@@ -450,3 +450,6 @@ export class PowerBi implements INodeType {
 		}
 	}
 }
+
+// Export default for n8n compatibility
+export default PowerBI;

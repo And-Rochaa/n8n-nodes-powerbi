@@ -59,7 +59,7 @@ import {
 	reportFields,
 } from '../PowerBI/descriptions/ReportDescription';
 
-export class PowerBiHeaderAuth implements INodeType {
+export class PowerBIHeaderAuth implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'Power BI Header Auth',
 		name: 'powerBiHeaderAuth',
@@ -1186,3 +1186,6 @@ export class PowerBiHeaderAuth implements INodeType {
 		return this.prepareOutputData(returnData);
 	}
 }
+
+// Export default for n8n compatibility
+export default PowerBIHeaderAuth;
