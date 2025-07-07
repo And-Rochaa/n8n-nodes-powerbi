@@ -45,8 +45,8 @@
             "dist/credentials/PowerBiApiOAuth2Api.credentials.js"
         ],
         "nodes": [
-            "dist/nodes/PowerBI/PowerBi.node.js",
-            "dist/nodes/PowerBIHeaderAuth/PowerBiHeaderAuth.node.js"
+            "dist/nodes/PowerBI/PowerBI.node.js",
+            "dist/nodes/PowerBIHeaderAuth/PowerBIHeaderAuth.node.js"
         ]
     },
     "devDependencies": {

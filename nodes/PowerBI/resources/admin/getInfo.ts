@@ -56,7 +56,7 @@ export async function getInfo(
 		// Use direct authentication to ensure the POST method is used correctly
 	const responseData = await this.helpers.requestWithAuthentication.call(
 		this,
-		'powerBI',
+		'powerBiApiOAuth2Api',
 		options
 	);
 	

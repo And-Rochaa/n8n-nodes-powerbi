@@ -1028,4 +1028,4 @@ class PowerBIHeaderAuth {
 }
 exports.PowerBIHeaderAuth = PowerBIHeaderAuth;
 exports.default = PowerBIHeaderAuth;
-//# sourceMappingURL=PowerBIHeaderAuth.node.js.map
+//# sourceMappingURL=PowerBiHeaderAuth.node.js.map
