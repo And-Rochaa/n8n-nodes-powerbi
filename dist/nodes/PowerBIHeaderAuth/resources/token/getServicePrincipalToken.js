@@ -11,18 +11,19 @@ async function getServicePrincipalToken(i) {
     const grantType = this.getNodeParameter('grantType', i, 'client_credentials');
     try {
         const tokenUrl = `https://login.microsoftonline.com/${tenantId}/oauth2/token`;
+        const formData = new URLSearchParams({
+            grant_type: grantType,
+            client_id: clientId,
+            client_secret: clientSecret,
+            resource: resource,
+        });
         const options = {
             method: 'POST',
             url: tokenUrl,
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
-            form: {
-                grant_type: grantType,
-                client_id: clientId,
-                client_secret: clientSecret,
-                resource: resource,
-            },
+            body: formData.toString(),
             json: true,
         };
         const response = await this.helpers.httpRequest(options);

@@ -26,18 +26,20 @@ export async function getServicePrincipalToken(
 		const tokenUrl = `https://login.microsoftonline.com/${tenantId}/oauth2/token`;
 		
 		// Request configuration
+		const formData = new URLSearchParams({
+			grant_type: grantType,
+			client_id: clientId,
+			client_secret: clientSecret,
+			resource: resource,
+		});
+
 		const options = {
 			method: 'POST' as IHttpRequestMethods,
 			url: tokenUrl,
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded',
 			},
-			form: {
-				grant_type: grantType,
-				client_id: clientId,
-				client_secret: clientSecret,
-				resource: resource,
-			},
+			body: formData.toString(),
 			json: true,
 		};
 		
