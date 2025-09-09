@@ -3,6 +3,7 @@ import {
 	INodeExecutionData,
 	IDataObject,
 	JsonObject,
+	IHttpRequestMethods,
 } from 'n8n-workflow';
 
 /**
@@ -25,7 +26,7 @@ export async function getToken(
 		try {
 		// Request configuration
 		const options = {
-			method: 'POST',
+			method: 'POST' as IHttpRequestMethods,
 			url: tokenUrl,
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded',
@@ -42,7 +43,7 @@ export async function getToken(
 		};
 		
 		// Make HTTP request
-		const response = await this.helpers.request(options) as JsonObject;
+		const response = await this.helpers.httpRequest(options) as JsonObject;
 		
 		// Check if response contains an access token
 		if (!response.access_token) {

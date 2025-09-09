@@ -25,7 +25,7 @@ async function getServicePrincipalToken(i) {
             },
             json: true,
         };
-        const response = await this.helpers.request(options);
+        const response = await this.helpers.httpRequest(options);
         if (!response.access_token) {
             throw new Error('Response does not contain a valid access token');
         }

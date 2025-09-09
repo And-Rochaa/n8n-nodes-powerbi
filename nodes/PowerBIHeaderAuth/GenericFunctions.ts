@@ -68,9 +68,8 @@ export async function powerBiApiRequestWithHeaders(
 		
 		// If it's a request expecting a binary file (json: false)
 		if (httpRequestOptions.json === false) {
-			const response = await this.helpers.request!({
+			const response = await this.helpers.httpRequest({
 				...httpRequestOptions,
-				resolveWithFullResponse: true,
 				encoding: null
 			});
 
@@ -79,10 +78,10 @@ export async function powerBiApiRequestWithHeaders(
 				return response;
 			}
 			// Otherwise, return only the file content
-			return response.body;
+			return response;
 		} else {
 			// For regular JSON requests
-			const response = await this.helpers.request(httpRequestOptions);
+			const response = await this.helpers.httpRequest(httpRequestOptions);
 
 			return response;
 		}

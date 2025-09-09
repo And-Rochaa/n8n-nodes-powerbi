@@ -14,57 +14,6 @@ import {
 /**
  * Make an API request to Power BI API
  */
-/**
- * Get access token using ROPC authentication (Resource Owner Password Credentials)
- */
-export async function getRopcAccessToken(
-	this: IExecuteFunctions | IExecuteSingleFunctions | ILoadOptionsFunctions,
-): Promise<string> {
-	const credentials = await this.getCredentials('powerBiApiOAuth2Api') as IDataObject;
-
-	if (credentials.authType !== 'ropc') {
-		throw new NodeOperationError(this.getNode(), 'Authentication method is not configured as ROPC');
-	}
-
-	const options: IHttpRequestOptions = {
-		headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-		method: 'POST',
-		body: {
-			grant_type: 'password',
-			resource: 'https://analysis.windows.net/powerbi/api',
-			client_id: credentials.ropcClientId as string,
-			username: credentials.username as string,
-			password: credentials.password as string,
-		},
-		url: 'https://login.microsoftonline.com/common/oauth2/token',
-		json: true,
-	};
-	// Add client_secret only if provided (optional for public clients)
-	if (credentials.ropcClientSecret) {
-		(options.body as IDataObject).client_secret = credentials.ropcClientSecret as string;
-	}
-
-	try {
-		const response = await this.helpers.request(options) as IDataObject;
-
-		if (response.access_token) {
-			return response.access_token as string;
-		} else {
-			throw new NodeOperationError(this.getNode(), 'Could not obtain access token', {
-				description: JSON.stringify(response),
-			});
-		}
-	} catch (error) {
-		if (error.message && error.message.includes('AADSTS')) {
-			throw new NodeApiError(this.getNode(), error as JsonObject, {
-				message: 'Azure AD authentication error: ' + error.error_description || error.message,
-				description: 'Check your credentials and permissions.',
-			});
-		}
-		throw new NodeApiError(this.getNode(), error as JsonObject);
-	}
-}
-
 export async function powerBiApiRequest(
 	this: IExecuteFunctions | IExecuteSingleFunctions | ILoadOptionsFunctions,
 	method: string,

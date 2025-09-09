@@ -1,7 +1,6 @@
 /// <reference types="node" />
 /// <reference types="node" />
 import { IExecuteFunctions, IExecuteSingleFunctions, ILoadOptionsFunctions, IDataObject, JsonObject, INodePropertyOptions } from 'n8n-workflow';
-export declare function getRopcAccessToken(this: IExecuteFunctions | IExecuteSingleFunctions | ILoadOptionsFunctions): Promise<string>;
 export declare function powerBiApiRequest(this: IExecuteFunctions | IExecuteSingleFunctions | ILoadOptionsFunctions, method: string, endpoint: string, body?: IDataObject, qs?: IDataObject, requestOptions?: IDataObject): Promise<JsonObject | Buffer | string>;
 export declare function powerBiApiRequestAllItems(this: IExecuteFunctions | ILoadOptionsFunctions, propertyName: string, method: string, endpoint: string, body?: IDataObject, query?: IDataObject): Promise<any>;
 export declare function getGroups(this: ILoadOptionsFunctions): Promise<IDataObject[]>;

@@ -1,50 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getDataflows = exports.getDatasources = exports.getGateways = exports.getDashboards = exports.getReports = exports.getTables = exports.getDatasets = exports.getGroupsMultiSelect = exports.getGroups = exports.powerBiApiRequestAllItems = exports.powerBiApiRequest = exports.getRopcAccessToken = void 0;
+exports.getDataflows = exports.getDatasources = exports.getGateways = exports.getDashboards = exports.getReports = exports.getTables = exports.getDatasets = exports.getGroupsMultiSelect = exports.getGroups = exports.powerBiApiRequestAllItems = exports.powerBiApiRequest = void 0;
 const n8n_workflow_1 = require("n8n-workflow");
-async function getRopcAccessToken() {
-    const credentials = await this.getCredentials('powerBiApiOAuth2Api');
-    if (credentials.authType !== 'ropc') {
-        throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'Authentication method is not configured as ROPC');
-    }
-    const options = {
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        method: 'POST',
-        body: {
-            grant_type: 'password',
-            resource: 'https://analysis.windows.net/powerbi/api',
-            client_id: credentials.ropcClientId,
-            username: credentials.username,
-            password: credentials.password,
-        },
-        url: 'https://login.microsoftonline.com/common/oauth2/token',
-        json: true,
-    };
-    if (credentials.ropcClientSecret) {
-        options.body.client_secret = credentials.ropcClientSecret;
-    }
-    try {
-        const response = await this.helpers.request(options);
-        if (response.access_token) {
-            return response.access_token;
-        }
-        else {
-            throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'Could not obtain access token', {
-                description: JSON.stringify(response),
-            });
-        }
-    }
-    catch (error) {
-        if (error.message && error.message.includes('AADSTS')) {
-            throw new n8n_workflow_1.NodeApiError(this.getNode(), error, {
-                message: 'Azure AD authentication error: ' + error.error_description || error.message,
-                description: 'Check your credentials and permissions.',
-            });
-        }
-        throw new n8n_workflow_1.NodeApiError(this.getNode(), error);
-    }
-}
-exports.getRopcAccessToken = getRopcAccessToken;
 async function powerBiApiRequest(method, endpoint, body = {}, qs = {}, requestOptions = {}) {
     const options = {
         headers: {

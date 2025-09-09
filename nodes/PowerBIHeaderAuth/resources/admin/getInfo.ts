@@ -63,7 +63,7 @@ export async function getInfo(
 	};
 	
 	// Use direct HTTP request
-	const responseData = await this.helpers.request(options);
+	const responseData = await this.helpers.httpRequest(options);
 	
 	returnData.push({
 		json: responseData,

@@ -34,18 +34,17 @@ async function powerBiApiRequestWithHeaders(method, endpoint, body = {}, qs = {}
             }
         }
         if (httpRequestOptions.json === false) {
-            const response = await this.helpers.request({
+            const response = await this.helpers.httpRequest({
                 ...httpRequestOptions,
-                resolveWithFullResponse: true,
                 encoding: null
             });
             if (httpRequestOptions.returnFullResponse) {
                 return response;
             }
-            return response.body;
+            return response;
         }
         else {
-            const response = await this.helpers.request(httpRequestOptions);
+            const response = await this.helpers.httpRequest(httpRequestOptions);
             return response;
         }
     }

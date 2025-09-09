@@ -35,7 +35,7 @@ async function getInfo(i) {
             ...headers,
         },
     };
-    const responseData = await this.helpers.request(options);
+    const responseData = await this.helpers.httpRequest(options);
     returnData.push({
         json: responseData,
     });

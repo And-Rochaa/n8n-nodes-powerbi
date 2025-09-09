@@ -352,6 +352,5 @@ class PowerBi {
     }
 }
 exports.PowerBi = PowerBi;
-exports.PowerBI = PowerBi;
 exports.default = PowerBi;
 //# sourceMappingURL=PowerBi.node.js.map

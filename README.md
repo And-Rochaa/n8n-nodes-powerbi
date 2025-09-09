@@ -137,7 +137,7 @@ To use the Power BI node with OAuth2 authentication, you need to register an app
 1. In the registered application's side menu, click **API permissions**.
 2. Click **Add a permission**.
 3. Select **Power BI Service**.
-4. You can choose between **Delegated permissions** (for OAuth2 and ROPC) or **Application permissions** (for Service Principal):
+4. You can choose between **Delegated permissions** (for OAuth2) or **Application permissions** (for Service Principal):
    
    **For delegated permissions (recommended for most cases):**
    - Dataset.Read.All
