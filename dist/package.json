@@ -1,6 +1,6 @@
 {
     "name": "n8n-nodes-powerbi",
-    "version": "2.2.1",
+    "version": "2.3.0",
     "description": "n8n nodes for integration with Power BI APIs",
     "keywords": [
         "n8n",
@@ -42,11 +42,11 @@
     "n8n": {
         "n8nNodesApiVersion": 1,
         "credentials": [
-            "dist/credentials/PowerBiApiOAuth2Api.credentials.js"
+            "dist/credentials/PowerBiApiOAuth2Api.credentials.js",
+            "dist/credentials/PowerBiApi.credentials.js"
         ],
         "nodes": [
-            "dist/nodes/PowerBI/PowerBi.node.js",
-            "dist/nodes/PowerBIHeaderAuth/PowerBiHeaderAuth.node.js"
+            "dist/nodes/PowerBI/PowerBi.node.js"
         ]
     },
     "peerDependencies": {

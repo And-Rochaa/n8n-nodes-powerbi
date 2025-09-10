@@ -1,14 +1,10 @@
-import {
-    ICredentialTestRequest,
-    ICredentialType,
-    INodeProperties,
-} from 'n8n-workflow';
+import type { ICredentialTestRequest, ICredentialType, INodeProperties } from 'n8n-workflow';
 
 export class PowerBiApiOAuth2Api implements ICredentialType {
     name = 'powerBiApiOAuth2Api';
+    extends = ['oAuth2Api'];
     displayName = 'Power BI OAuth2 API';
     documentationUrl = 'https://docs.microsoft.com/en-us/rest/api/power-bi/';
-    extends = ['oAuth2Api'];
     icon = 'file:powerbi.svg';
     properties: INodeProperties[] = [
         {

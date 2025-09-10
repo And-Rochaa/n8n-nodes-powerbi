@@ -20,20 +20,38 @@ async function powerBiApiRequest(method, endpoint, body = {}, qs = {}, requestOp
         if (Object.keys(body).length === 0) {
             delete options.body;
         }
-        if (options.json === false) {
-            const oauth2Options = {
+        const authentication = this.getNodeParameter('authentication', 0, 'oAuth2');
+        const credentialsType = authentication === 'apiKey' ? 'powerBiApi' : 'powerBiApiOAuth2Api';
+        if (authentication === 'oAuth2') {
+            const authOptions = {
                 ...options,
-                resolveWithFullResponse: true,
-                encoding: null,
             };
-            const response = await this.helpers.requestOAuth2.call(this, 'powerBiApiOAuth2Api', oauth2Options, { tokenType: 'Bearer', includeCredentialsOnRefreshOnBody: true });
+            if (options.json === false) {
+                authOptions.encoding = null;
+            }
+            const response = await this.helpers.requestWithAuthentication.call(this, credentialsType, authOptions, {
+                oauth2: {
+                    includeCredentialsOnRefreshOnBody: true,
+                    tokenType: 'Bearer',
+                },
+                authenticateErrorsCodes: [401, 403],
+            });
             if (requestOptions.returnFullResponse) {
                 return response;
             }
-            return response.body || response;
+            return response;
         }
         else {
-            const response = await this.helpers.requestOAuth2.call(this, 'powerBiApiOAuth2Api', options, { tokenType: 'Bearer', includeCredentialsOnRefreshOnBody: true });
+            const authOptions = {
+                ...options,
+            };
+            if (options.json === false) {
+                authOptions.encoding = null;
+            }
+            const response = await this.helpers.requestWithAuthentication.call(this, credentialsType, authOptions, {});
+            if (requestOptions.returnFullResponse) {
+                return response;
+            }
             return response;
         }
     }

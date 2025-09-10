@@ -57,6 +57,11 @@ import {
 	reportFields,
 } from './descriptions/ReportDescription';
 
+import {
+	tokenOperations,
+	tokenFields,
+} from './descriptions/TokenDescription';
+
 // Importing execution functions removed - now implemented directly
 
 export class PowerBi implements INodeType {
@@ -76,7 +81,27 @@ export class PowerBi implements INodeType {
 		credentials: [
 			{
 				name: 'powerBiApiOAuth2Api',
-				required: true,
+				required: false,
+				displayOptions: {
+					show: {
+						authentication: ['oAuth2'],
+					},
+					hide: {
+						resource: ['token'],
+					},
+				},
+			},
+			{
+				name: 'powerBiApi',
+				required: false,
+				displayOptions: {
+					show: {
+						authentication: ['apiKey'],
+					},
+					hide: {
+						resource: ['token'],
+					},
+				},
 			},
 		],
 		requestDefaults: {
@@ -86,6 +111,27 @@ export class PowerBi implements INodeType {
 			},
 		},
 		properties: [
+			{
+				displayName: 'Authentication',
+				name: 'authentication',
+				type: 'options',
+				options: [
+					{
+						name: 'OAuth2',
+						value: 'oAuth2',
+					},
+					{
+						name: 'Bearer Token',
+						value: 'apiKey',
+					},
+				],
+				default: 'oAuth2',
+				displayOptions: {
+					hide: {
+						resource: ['token'],
+					},
+				},
+			},
 			{
 				displayName: 'Resource',
 				name: 'resource',
@@ -119,6 +165,10 @@ export class PowerBi implements INodeType {
 					{
 						name: 'Report',
 						value: 'report',
+					},
+					{
+						name: 'Token',
+						value: 'token',
 					},
 				],
 				default: 'dashboard',
@@ -284,6 +334,10 @@ export class PowerBi implements INodeType {
 			// REPORT OPERATIONS
 			...reportOperations,
 			...reportFields,
+
+			// TOKEN OPERATIONS
+			...tokenOperations,
+			...tokenFields,
 		],
 	};
 	// Methods to load options
@@ -421,6 +475,15 @@ export class PowerBi implements INodeType {
 							if (operation in resources.dataflow) {
 								// Execute the corresponding operation
 								const results = await resources.dataflow[operation].call(this, i);
+								returnData.push(...results);
+							}
+							break;
+							
+						case 'token':
+							// Using modularized resources for token operations
+							if (operation in resources.token) {
+								// Execute the corresponding operation
+								const results = await resources.token[operation].call(this, i);
 								returnData.push(...results);
 							}
 							break;

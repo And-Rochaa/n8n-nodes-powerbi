@@ -4,9 +4,9 @@ exports.PowerBiApiOAuth2Api = void 0;
 class PowerBiApiOAuth2Api {
     constructor() {
         this.name = 'powerBiApiOAuth2Api';
+        this.extends = ['oAuth2Api'];
         this.displayName = 'Power BI OAuth2 API';
         this.documentationUrl = 'https://docs.microsoft.com/en-us/rest/api/power-bi/';
-        this.extends = ['oAuth2Api'];
         this.icon = 'file:powerbi.svg';
         this.properties = [
             {

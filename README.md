@@ -27,31 +27,27 @@ This Community Node was created and made freely available by **Anderson Rocha fr
 
 ## Features
 
-This package offers two main nodes:
+This package offers a unified Power BI node with flexible authentication methods:
 
-### 1. Power BI
+### Power BI Node
 
-Main node that uses OAuth2 authentication with Microsoft Entra ID (formerly Azure AD) and offers complete functionality for:
+Comprehensive node that supports two authentication methods:
 
+1. **OAuth2 Authentication**: Interactive authentication with Microsoft Entra ID (formerly Azure AD)
+2. **Bearer Token Authentication**: Direct token authentication for API integrations
+
+#### Available Features:
 - Managing reports, dashboards, and datasets
 - Workspace (groups) administration
 - DAX query execution
-- Data refresh
-- Report export
+- Data refresh operations
+- Report export in multiple formats
 - Gateway management
 - Dataflow operations
 
-### 2. Power BI (Header Auth)
-
-Alternative node that allows authentication via Bearer token passed directly as a parameter. Useful for:
-
-- Integration with other flows that already have authentication tokens
-- Implementation of custom authentication flows
-- Quick testing and prototyping
-
-Both nodes can be used as AI tools in the n8n AI Assistant, enabling natural language-based automations.
 
 ## Available Resources
+
 
 ### Administration Resources
 - **Get Workspace Information**: Retrieves complete details about workspaces, including dataset schema, DAX expressions, lineage, and data sources
@@ -101,17 +97,29 @@ Both nodes can be used as AI tools in the n8n AI Assistant, enabling natural lan
 
 ## Authentication Methods
 
-This node supports OAuth2 authentication:
+This node supports two authentication methods:
 
-1. **OAuth2**: For applications acting on behalf of a user through interactive flow.
+### 1. OAuth2 Authentication
+- **Use case**: Applications acting on behalf of a user through interactive authentication flow
+- **Credential type**: Power BI OAuth2 API
+- **Token management**: Automatic refresh when tokens expire
 
-### Token Renewal
+### 2. Bearer Token Authentication  
+- **Use case**: Direct API integration with pre-obtained tokens
+- **Credential type**: Power BI API
+- **Token management**: Manual token management required
 
-It's important to note that Power BI credentials typically expire around 1 hour to 1 hour and 30 minutes. n8n refreshes service tokens only when a 401 error occurs when the token expires, but Power BI by default returns a 403 error. The credential will be maintained once n8n includes this 403 error status in its authentication handling.
+### Choosing Authentication Method
+
+In the node configuration:
+1. Select **Authentication** type (OAuth2 or Bearer Token)
+2. The appropriate credential field will appear automatically
+3. Configure the matching credential type
+
 
 ### AI Tools Integration
 
-The Power BI and Power BI (Header Auth) nodes have been configured as AI tools within n8n, allowing them to:
+The Power BI node has been configured as an AI tool within n8n, allowing it to:
 
 1. Be easily accessed by n8n's AI assistant
 2. Be used in natural language-driven automations
@@ -177,34 +185,27 @@ Note the following values that will be needed to configure the node in n8n:
 - **Client Secret**: The value you copied when creating the client secret
 - **Tenant ID**: Found in **Overview** > **Directory (tenant) ID**
 
-## Using the Nodes
+## Using the Node
 
-### Power BI (OAuth2)
+### Power BI Node Configuration
 
 1. Add the Power BI node to your workflow.
-2. Configure the OAuth2 credential:
+2. **Select Authentication Method**: Choose between OAuth2 or Bearer Token
+3. **Configure Credentials**:
+
+#### For OAuth2 Authentication:
+1. Create a "Power BI OAuth2 API" credential with:
    - **Client ID**: The registered application ID
    - **Client Secret**: The generated client secret
    - **Scope**: Leave blank or use `https://analysis.windows.net/powerbi/api/.default`
-   - **Auth URI**: `https://login.microsoftonline.com/common/oauth2/v2.0/authorize`
-   - **Token URI**: `https://login.microsoftonline.com/common/oauth2/v2.0/token`
-   - **Auth URL Query Parameters**: 
-     ```json
-     {
-       "resource": "https://analysis.windows.net/powerbi/api"
-     }
-     ```
-3. Select the desired resource (dashboard, report, dataset, group, gateway, dataflow) and operation.
-4. Configure the operation-specific parameters.
 
-### Power BI (Header Auth)
+#### For Bearer Token Authentication:
+1. Create a "Power BI API" credential with:
+   - **Bearer Token**: Your API access token
 
-1. Add the Power BI Header Auth node to your workflow.
-2. Provide a Bearer authentication token in the format:
-   - Without "Bearer" prefix: `eyJ0eXAiOiJKV...`
-   - Or with prefix: `Bearer eyJ0eXAiOiJKV...`
-3. Select the desired resource and operation.
-4. Configure the operation-specific parameters.
+4. **Select Resource and Operation**: Choose the desired resource (dashboard, report, dataset, etc.) and operation
+5. **Configure Parameters**: Set operation-specific parameters as needed
+
 
 ## Limitations and Troubleshooting
 
@@ -214,20 +215,6 @@ Note the following values that will be needed to configure the node in n8n:
 - **Permissions**: Many operations require administrative or owner permissions in the workspace
 - **Some operations require Premium license**: Certain operations like programmatic refresh or DAX queries in large volumes may require Premium capacity
 
-### Common Issues
-
-1. **403 Forbidden Error**: 
-   - Verify that the user or application has adequate permissions in Power BI
-   - Confirm that the necessary API permissions have been granted in Microsoft Entra ID
-   - Check if administrative consent has been provided for the permissions
-
-2. **401 Unauthorized Error**:
-   - The token may have expired - verify that your credentials are valid
-   - Check if the Client Secret is still valid (they expire as configured)
-
-3. **Dataset refresh errors**:
-   - Ensure that the dataset allows API refreshes
-   - Verify that data source credentials are updated in the dataset
 
 ## Additional Resources
 

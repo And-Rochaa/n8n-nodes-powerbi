@@ -12,7 +12,7 @@ import {
 } from 'n8n-workflow';
 
 /**
- * Make an API request to Power BI API
+ * Make an API request to Power BI API using OAuth2 or Bearer Token
  */
 export async function powerBiApiRequest(
 	this: IExecuteFunctions | IExecuteSingleFunctions | ILoadOptionsFunctions,
@@ -43,43 +43,64 @@ export async function powerBiApiRequest(
 			delete options.body;
 		}
 		
+		// Get authentication type from node parameter (like Calendly)
+		const authentication = this.getNodeParameter('authentication', 0, 'oAuth2') as string;
 		
-		// If it is a request expecting a binary file (json: false)
-		if (options.json === false) {
-			const oauth2Options = {
+		const credentialsType = authentication === 'apiKey' ? 'powerBiApi' : 'powerBiApiOAuth2Api';
+		
+		if (authentication === 'oAuth2') {
+			// Use OAuth2 authentication with requestWithAuthentication
+			const authOptions = {
 				...options,
-				resolveWithFullResponse: true,
-				encoding: null,
 			};
-					// Using the requestOAuth2 method with specific options for binary data
-			const response = await this.helpers.requestOAuth2.call(
-				this,
-				'powerBiApiOAuth2Api',
-				oauth2Options,
-				{ tokenType: 'Bearer', includeCredentialsOnRefreshOnBody: true }
-			);
 			
+			if (options.json === false) {
+				authOptions.encoding = null;
+			}
 
-			
-			// For file downloads, returnFullResponse allows access to headers
+			const response = await this.helpers.requestWithAuthentication.call(
+				this,
+				credentialsType,
+				authOptions,
+				{
+					oauth2: {
+						includeCredentialsOnRefreshOnBody: true,
+						tokenType: 'Bearer',
+					},
+					// Treat 403 as authentication error for auto token refresh
+					authenticateErrorsCodes: [401, 403],
+				}
+			);
+
 			if (requestOptions.returnFullResponse) {
 				return response;
 			}
+			return response as JsonObject;
+		} else {
+			// Use Bearer token authentication with requestWithAuthentication (same as OAuth2)
+			const authOptions = {
+				...options,
+			};
 			
-			// Otherwise, return only the file content
-			return response.body || response;		} else {			// For regular JSON requests
-			const response = await this.helpers.requestOAuth2.call(
+			if (options.json === false) {
+				authOptions.encoding = null;
+			}
+
+			const response = await this.helpers.requestWithAuthentication.call(
 				this,
-				'powerBiApiOAuth2Api',
-				options,
-				{ tokenType: 'Bearer', includeCredentialsOnRefreshOnBody: true }
+				credentialsType,
+				authOptions,
+				{
+					// No special OAuth2 options for Bearer token, but still pass empty object for consistency
+				}
 			);
+
+			if (requestOptions.returnFullResponse) {
+				return response;
+			}
 			return response as JsonObject;
 		}
 	} catch (error) {
-		// No need to convert 403 errors to 401 anymore
-		// n8n now captures authentication errors before this conversion takes effect
-		
 		throw new NodeApiError(this.getNode(), error as JsonObject);
 	}
 }
