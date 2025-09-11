@@ -6,9 +6,8 @@ async function getScanResult(i) {
     const returnData = [];
     const scanId = this.getNodeParameter('scanId', i);
     const responseData = await GenericFunctions_1.powerBiApiRequest.call(this, 'GET', `/admin/workspaces/scanResult/${scanId}`);
-    returnData.push({
-        json: responseData,
-    });
+    const executionData = this.helpers.constructExecutionMetaData(this.helpers.returnJsonArray(responseData), { itemData: { item: i } });
+    returnData.push(...executionData);
     return returnData;
 }
 exports.getScanResult = getScanResult;

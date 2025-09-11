@@ -28,11 +28,11 @@ export async function getDatasets(
 	
 	// Process the response data
 	const datasetItems = (responseData.value as IDataObject[] || []);
-	for (const item of datasetItems) {
-		returnData.push({
-			json: item,
-		});
-	}
+	const executionData = this.helpers.constructExecutionMetaData(
+		this.helpers.returnJsonArray(datasetItems),
+		{ itemData: { item: i } }
+	);
+	returnData.push(...executionData);
 	
 	return returnData;
 }

@@ -385,11 +385,8 @@ class PowerBi {
                 }
                 catch (error) {
                     if (this.continueOnFail()) {
-                        returnData.push({
-                            json: {
-                                error: error.message,
-                            },
-                        });
+                        const executionData = this.helpers.constructExecutionMetaData(this.helpers.returnJsonArray({ error: error.message }), { itemData: { item: i } });
+                        returnData.push(...executionData);
                         continue;
                     }
                     throw error;

@@ -10,11 +10,8 @@ async function getTiles(i) {
         `/groups/${groupId}/dashboards/${dashboardId}/tiles` : `/dashboards/${dashboardId}/tiles`;
     const responseData = await GenericFunctions_1.powerBiApiRequest.call(this, 'GET', endpoint);
     const tileItems = (responseData.value || []);
-    for (const item of tileItems) {
-        returnData.push({
-            json: item,
-        });
-    }
+    const executionData = this.helpers.constructExecutionMetaData(this.helpers.returnJsonArray(tileItems), { itemData: { item: i } });
+    returnData.push(...executionData);
     return returnData;
 }
 exports.getTiles = getTiles;

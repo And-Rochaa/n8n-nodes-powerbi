@@ -26,19 +26,21 @@ export async function list(
 		// Check if there are gateways in the response
 		if (response.value && Array.isArray(response.value)) {
 			// Return each gateway as a separate item
-			response.value.forEach((gateway: any) => {
-				returnData.push({
-					json: gateway,
-				});
-			});
+			const executionData = this.helpers.constructExecutionMetaData(
+				this.helpers.returnJsonArray(response.value),
+				{ itemData: { item: i } }
+			);
+			returnData.push(...executionData);
 		} else {
 			// If there are no gateways, return empty object
-			returnData.push({
-				json: {
+			const executionData = this.helpers.constructExecutionMetaData(
+				this.helpers.returnJsonArray({
 					message: 'No gateways found',
 					value: [],
-				},
-			});
+				}),
+				{ itemData: { item: i } }
+			);
+			returnData.push(...executionData);
 		}
 
 		return returnData;

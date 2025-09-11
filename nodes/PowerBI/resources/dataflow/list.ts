@@ -23,19 +23,25 @@ export async function listDataflows(
 			endpoint,
 		);
 
+		const returnData: INodeExecutionData[] = [];
+		
 		// If the response contains a 'value' property, return individual items
 		if (responseData.value && Array.isArray(responseData.value)) {
-			return responseData.value.map((dataflow: any) => ({
-				json: dataflow,
-				pairedItem: { item: index },
-			}));
+			const executionData = this.helpers.constructExecutionMetaData(
+				this.helpers.returnJsonArray(responseData.value),
+				{ itemData: { item: index } }
+			);
+			returnData.push(...executionData);
+		} else {
+			// If there's no 'value' property, return the complete response
+			const executionData = this.helpers.constructExecutionMetaData(
+				this.helpers.returnJsonArray(responseData),
+				{ itemData: { item: index } }
+			);
+			returnData.push(...executionData);
 		}
 
-		// If there's no 'value' property, return the complete response
-		return [{
-			json: responseData,
-			pairedItem: { item: index },
-		}];
+		return returnData;
 
 	} catch (error) {
 		// Better error handling with more details

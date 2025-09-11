@@ -8,19 +8,15 @@ async function list(i) {
     try {
         const response = await GenericFunctions_1.powerBiApiRequest.call(this, 'GET', '/gateways');
         if (response.value && Array.isArray(response.value)) {
-            response.value.forEach((gateway) => {
-                returnData.push({
-                    json: gateway,
-                });
-            });
+            const executionData = this.helpers.constructExecutionMetaData(this.helpers.returnJsonArray(response.value), { itemData: { item: i } });
+            returnData.push(...executionData);
         }
         else {
-            returnData.push({
-                json: {
-                    message: 'No gateways found',
-                    value: [],
-                },
-            });
+            const executionData = this.helpers.constructExecutionMetaData(this.helpers.returnJsonArray({
+                message: 'No gateways found',
+                value: [],
+            }), { itemData: { item: i } });
+            returnData.push(...executionData);
         }
         return returnData;
     }

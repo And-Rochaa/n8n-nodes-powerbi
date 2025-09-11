@@ -20,9 +20,8 @@ async function addRows(i) {
     await GenericFunctions_1.powerBiApiRequest.call(this, 'POST', endpoint, {
         rows,
     });
-    returnData.push({
-        json: { success: true, message: 'Rows added successfully' },
-    });
+    const executionData = this.helpers.constructExecutionMetaData(this.helpers.returnJsonArray({ success: true, message: 'Rows added successfully' }), { itemData: { item: i } });
+    returnData.push(...executionData);
     return returnData;
 }
 exports.addRows = addRows;

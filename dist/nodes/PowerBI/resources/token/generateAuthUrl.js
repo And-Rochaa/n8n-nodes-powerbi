@@ -14,18 +14,17 @@ async function generateAuthUrl(i) {
     if (state) {
         authUrl += `&state=${encodeURIComponent(state)}`;
     }
-    returnData.push({
-        json: {
-            authUrl,
-            baseUrl,
-            clientId,
-            responseType,
-            redirectUri,
-            responseMode,
-            scope,
-            state,
-        },
-    });
+    const executionData = this.helpers.constructExecutionMetaData(this.helpers.returnJsonArray({
+        authUrl,
+        baseUrl,
+        clientId,
+        responseType,
+        redirectUri,
+        responseMode,
+        scope,
+        state,
+    }), { itemData: { item: i } });
+    returnData.push(...executionData);
     return returnData;
 }
 exports.generateAuthUrl = generateAuthUrl;

@@ -25,9 +25,11 @@ export async function getScanResult(
 		`/admin/workspaces/scanResult/${scanId}`,
 	);
 	
-	returnData.push({
-		json: responseData,
-	});
+	const executionData = this.helpers.constructExecutionMetaData(
+		this.helpers.returnJsonArray(responseData),
+		{ itemData: { item: i } }
+	);
+	returnData.push(...executionData);
 	
 	return returnData;
 }

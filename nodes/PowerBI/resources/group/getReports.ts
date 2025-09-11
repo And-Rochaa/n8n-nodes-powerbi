@@ -28,11 +28,11 @@ export async function getReports(
 	
 	// Process the response data
 	const reportItems = (responseData.value as IDataObject[] || []);
-	for (const item of reportItems) {
-		returnData.push({
-			json: item,
-		});
-	}
+	const executionData = this.helpers.constructExecutionMetaData(
+		this.helpers.returnJsonArray(reportItems),
+		{ itemData: { item: i } }
+	);
+	returnData.push(...executionData);
 	
 	return returnData;
 }

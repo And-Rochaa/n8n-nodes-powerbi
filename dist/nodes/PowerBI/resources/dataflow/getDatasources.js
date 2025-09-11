@@ -16,15 +16,11 @@ async function getDatasources(index) {
         const endpoint = `/groups/${groupId}/dataflows/${dataflowId}/datasources`;
         const responseData = await GenericFunctions_1.powerBiApiRequest.call(this, 'GET', endpoint);
         if (responseData.value && Array.isArray(responseData.value)) {
-            return responseData.value.map((datasource) => ({
-                json: datasource,
-                pairedItem: { item: index },
-            }));
+            const executionData = this.helpers.constructExecutionMetaData(this.helpers.returnJsonArray(responseData.value), { itemData: { item: index } });
+            return executionData;
         }
-        return [{
-                json: responseData,
-                pairedItem: { item: index },
-            }];
+        const executionData = this.helpers.constructExecutionMetaData(this.helpers.returnJsonArray(responseData), { itemData: { item: index } });
+        return executionData;
     }
     catch (error) {
         if (error.statusCode === 403) {

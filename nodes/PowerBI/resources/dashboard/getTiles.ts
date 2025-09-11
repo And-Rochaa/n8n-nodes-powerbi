@@ -33,11 +33,11 @@ export async function getTiles(
 	
 	// Process the response data
 	const tileItems = (responseData.value as IDataObject[] || []);
-	for (const item of tileItems) {
-		returnData.push({
-			json: item,
-		});
-	}
+	const executionData = this.helpers.constructExecutionMetaData(
+		this.helpers.returnJsonArray(tileItems),
+		{ itemData: { item: i } }
+	);
+	returnData.push(...executionData);
 	
 	return returnData;
 }

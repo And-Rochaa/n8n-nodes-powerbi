@@ -7,11 +7,8 @@ async function getDatasets(i) {
     const groupId = this.getNodeParameter('groupId', i);
     const responseData = await GenericFunctions_1.powerBiApiRequest.call(this, 'GET', `/groups/${groupId}/datasets`);
     const datasetItems = (responseData.value || []);
-    for (const item of datasetItems) {
-        returnData.push({
-            json: item,
-        });
-    }
+    const executionData = this.helpers.constructExecutionMetaData(this.helpers.returnJsonArray(datasetItems), { itemData: { item: i } });
+    returnData.push(...executionData);
     return returnData;
 }
 exports.getDatasets = getDatasets;

@@ -24,7 +24,8 @@ async function refresh(index) {
         }
         const endpoint = `/groups/${groupId}/dataflows/${dataflowId}/refreshes`;
         await GenericFunctions_1.powerBiApiRequest.call(this, 'POST', endpoint, body, qs);
-        return [{ json: { success: true, message: 'Dataflow refresh triggered successfully' } }];
+        const executionData = this.helpers.constructExecutionMetaData([{ json: { success: true, message: 'Dataflow refresh triggered successfully' } }], { itemData: { item: index } });
+        return executionData;
     }
     catch (error) {
         if (error.statusCode === 403) {

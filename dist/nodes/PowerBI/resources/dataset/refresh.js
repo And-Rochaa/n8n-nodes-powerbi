@@ -9,9 +9,8 @@ async function refresh(i) {
     const endpoint = groupId && groupId !== 'me' ?
         `/groups/${groupId}/datasets/${datasetId}/refreshes` : `/datasets/${datasetId}/refreshes`;
     await GenericFunctions_1.powerBiApiRequest.call(this, 'POST', endpoint);
-    returnData.push({
-        json: { success: true, message: 'Refresh started successfully' },
-    });
+    const executionData = this.helpers.constructExecutionMetaData(this.helpers.returnJsonArray({ success: true, message: 'Refresh started successfully' }), { itemData: { item: i } });
+    returnData.push(...executionData);
     return returnData;
 }
 exports.refresh = refresh;

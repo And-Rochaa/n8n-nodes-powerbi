@@ -28,11 +28,11 @@ export async function getDashboards(
 	
 	// Process the response data
 	const dashboardItems = (responseData.value as IDataObject[] || []);
-	for (const item of dashboardItems) {
-		returnData.push({
-			json: item,
-		});
-	}
+	const executionData = this.helpers.constructExecutionMetaData(
+		this.helpers.returnJsonArray(dashboardItems),
+		{ itemData: { item: i } }
+	);
+	returnData.push(...executionData);
 	
 	return returnData;
 }

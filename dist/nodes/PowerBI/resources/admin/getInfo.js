@@ -31,9 +31,8 @@ async function getInfo(i) {
         },
     };
     const responseData = await this.helpers.requestWithAuthentication.call(this, 'powerBiApiOAuth2Api', options);
-    returnData.push({
-        json: responseData,
-    });
+    const executionData = this.helpers.constructExecutionMetaData(this.helpers.returnJsonArray(responseData), { itemData: { item: i } });
+    returnData.push(...executionData);
     return returnData;
 }
 exports.getInfo = getInfo;

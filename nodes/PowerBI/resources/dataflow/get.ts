@@ -24,7 +24,11 @@ export async function get(this: IExecuteFunctions, index: number): Promise<INode
 		);
 
 		// The API returns the dataflow definition as JSON
-		return [{ json: responseData }];
+		const executionData = this.helpers.constructExecutionMetaData(
+			[{ json: responseData }],
+			{ itemData: { item: index } }
+		);
+		return executionData;
 	} catch (error) {
 		if (error.statusCode === 403) {
 			throw new NodeOperationError(this.getNode(), 'Access denied. Please verify that you have permissions to access this dataflow.');

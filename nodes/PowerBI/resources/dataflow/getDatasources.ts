@@ -25,17 +25,19 @@ export async function getDatasources(this: IExecuteFunctions, index: number): Pr
 
 		// If the response contains a 'value' property, return individual datasources
 		if (responseData.value && Array.isArray(responseData.value)) {
-			return responseData.value.map((datasource: any) => ({
-				json: datasource,
-				pairedItem: { item: index },
-			}));
+			const executionData = this.helpers.constructExecutionMetaData(
+				this.helpers.returnJsonArray(responseData.value),
+				{ itemData: { item: index } }
+			);
+			return executionData;
 		}
 
 		// If there's no 'value' property, return the complete response
-		return [{
-			json: responseData,
-			pairedItem: { item: index },
-		}];
+		const executionData = this.helpers.constructExecutionMetaData(
+			this.helpers.returnJsonArray(responseData),
+			{ itemData: { item: index } }
+		);
+		return executionData;
 
 	} catch (error) {
 		if (error.statusCode === 403) {

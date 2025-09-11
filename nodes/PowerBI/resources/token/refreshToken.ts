@@ -50,10 +50,12 @@ export async function refreshToken(
 		// Process and return token data
 		const tokenData = await response.json();
 		
-		returnData.push({
-			json: tokenData,
-		});
-		
+		const executionData = this.helpers.constructExecutionMetaData(
+			this.helpers.returnJsonArray(tokenData),
+			{ itemData: { item: i } }
+		);
+		returnData.push(...executionData);
+
 		return returnData;
 	} catch (error) {
 		// Handle errors

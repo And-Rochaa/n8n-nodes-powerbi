@@ -7,11 +7,8 @@ async function getDashboards(i) {
     const groupId = this.getNodeParameter('groupId', i);
     const responseData = await GenericFunctions_1.powerBiApiRequest.call(this, 'GET', `/groups/${groupId}/dashboards`);
     const dashboardItems = (responseData.value || []);
-    for (const item of dashboardItems) {
-        returnData.push({
-            json: item,
-        });
-    }
+    const executionData = this.helpers.constructExecutionMetaData(this.helpers.returnJsonArray(dashboardItems), { itemData: { item: i } });
+    returnData.push(...executionData);
     return returnData;
 }
 exports.getDashboards = getDashboards;

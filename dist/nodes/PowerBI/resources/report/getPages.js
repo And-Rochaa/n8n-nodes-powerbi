@@ -10,11 +10,8 @@ async function getPages(i) {
         `/groups/${groupId}/reports/${reportId}/pages` : `/reports/${reportId}/pages`;
     const responseData = await GenericFunctions_1.powerBiApiRequest.call(this, 'GET', endpoint);
     const pageItems = (responseData.value || []);
-    for (const item of pageItems) {
-        returnData.push({
-            json: item,
-        });
-    }
+    const executionData = this.helpers.constructExecutionMetaData(this.helpers.returnJsonArray(pageItems), { itemData: { item: i } });
+    returnData.push(...executionData);
     return returnData;
 }
 exports.getPages = getPages;

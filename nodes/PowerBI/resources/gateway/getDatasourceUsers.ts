@@ -28,19 +28,21 @@ export async function getDatasourceUsers(
 			endpoint,
 		);
 
-		// If the response contains a 'value' property, return individual items
+		// If the response contains a 'value' property, return individual users
 		if (responseData.value && Array.isArray(responseData.value)) {
-			return responseData.value.map((user: any) => ({
-				json: user,
-				pairedItem: { item: index },
-			}));
+			const executionData = this.helpers.constructExecutionMetaData(
+				this.helpers.returnJsonArray(responseData.value),
+				{ itemData: { item: index } }
+			);
+			return executionData;
 		}
 
 		// If there's no 'value' property, return the complete response
-		return [{
-			json: responseData,
-			pairedItem: { item: index },
-		}];
+		const executionData = this.helpers.constructExecutionMetaData(
+			this.helpers.returnJsonArray(responseData),
+			{ itemData: { item: index } }
+		);
+		return executionData;
 
 	} catch (error) {
 		// Better error handling with more details

@@ -14,9 +14,8 @@ async function getRefreshHistory(i) {
     const endpoint = groupId && groupId !== 'me' ?
         `/groups/${groupId}/datasets/${datasetId}/refreshes` : `/datasets/${datasetId}/refreshes`;
     const responseData = await GenericFunctions_1.powerBiApiRequest.call(this, 'GET', endpoint, {}, queryParams);
-    returnData.push({
-        json: responseData,
-    });
+    const executionData = this.helpers.constructExecutionMetaData(this.helpers.returnJsonArray(responseData), { itemData: { item: i } });
+    returnData.push(...executionData);
     return returnData;
 }
 exports.getRefreshHistory = getRefreshHistory;

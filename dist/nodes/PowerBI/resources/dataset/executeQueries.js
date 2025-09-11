@@ -27,9 +27,8 @@ async function executeQueries(i) {
         requestBody.impersonatedUserName = impersonatedUserName.trim();
     }
     const responseData = await GenericFunctions_1.powerBiApiRequest.call(this, 'POST', endpoint, requestBody);
-    returnData.push({
-        json: responseData,
-    });
+    const executionData = this.helpers.constructExecutionMetaData(this.helpers.returnJsonArray(responseData), { itemData: { item: i } });
+    returnData.push(...executionData);
     return returnData;
 }
 exports.executeQueries = executeQueries;

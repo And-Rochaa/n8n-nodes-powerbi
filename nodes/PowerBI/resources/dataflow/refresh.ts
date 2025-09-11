@@ -39,7 +39,11 @@ export async function refresh(this: IExecuteFunctions, index: number): Promise<I
 		);
 
 		// The API returns 200 OK with no content on success
-		return [{ json: { success: true, message: 'Dataflow refresh triggered successfully' } }];
+		const executionData = this.helpers.constructExecutionMetaData(
+			[{ json: { success: true, message: 'Dataflow refresh triggered successfully' } }],
+			{ itemData: { item: index } }
+		);
+		return executionData;
 	} catch (error) {
 		if (error.statusCode === 403) {
 			throw new NodeOperationError(this.getNode(), 'Access denied. Please verify that you have permissions to refresh this dataflow.');

@@ -6,9 +6,8 @@ async function get(i) {
     const returnData = [];
     const groupId = this.getNodeParameter('groupId', i);
     const responseData = await GenericFunctions_1.powerBiApiRequest.call(this, 'GET', `/groups/${groupId}`);
-    returnData.push({
-        json: responseData,
-    });
+    const executionData = this.helpers.constructExecutionMetaData(this.helpers.returnJsonArray(responseData), { itemData: { item: i } });
+    returnData.push(...executionData);
     return returnData;
 }
 exports.get = get;

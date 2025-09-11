@@ -25,17 +25,19 @@ export async function getTransactions(this: IExecuteFunctions, index: number): P
 
 		// If the response contains a 'value' property, return individual transactions
 		if (responseData.value && Array.isArray(responseData.value)) {
-			return responseData.value.map((transaction: any) => ({
-				json: transaction,
-				pairedItem: { item: index },
-			}));
+			const executionData = this.helpers.constructExecutionMetaData(
+				this.helpers.returnJsonArray(responseData.value),
+				{ itemData: { item: index } }
+			);
+			return executionData;
 		}
 
 		// If there's no 'value' property, return the complete response
-		return [{
-			json: responseData,
-			pairedItem: { item: index },
-		}];
+		const executionData = this.helpers.constructExecutionMetaData(
+			this.helpers.returnJsonArray(responseData),
+			{ itemData: { item: index } }
+		);
+		return executionData;
 
 	} catch (error) {
 		if (error.statusCode === 403) {

@@ -15,15 +15,11 @@ async function getDatasourceUsers(index) {
     try {
         const responseData = await GenericFunctions_1.powerBiApiRequest.call(this, 'GET', endpoint);
         if (responseData.value && Array.isArray(responseData.value)) {
-            return responseData.value.map((user) => ({
-                json: user,
-                pairedItem: { item: index },
-            }));
+            const executionData = this.helpers.constructExecutionMetaData(this.helpers.returnJsonArray(responseData.value), { itemData: { item: index } });
+            return executionData;
         }
-        return [{
-                json: responseData,
-                pairedItem: { item: index },
-            }];
+        const executionData = this.helpers.constructExecutionMetaData(this.helpers.returnJsonArray(responseData), { itemData: { item: index } });
+        return executionData;
     }
     catch (error) {
         const errorMessage = error.message || error.toString();

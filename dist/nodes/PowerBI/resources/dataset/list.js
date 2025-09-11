@@ -9,11 +9,8 @@ async function list(i) {
         `/groups/${groupId}/datasets` : '/datasets';
     const responseData = await GenericFunctions_1.powerBiApiRequest.call(this, 'GET', endpoint);
     const datasetItems = (responseData.value || []);
-    for (const item of datasetItems) {
-        returnData.push({
-            json: item,
-        });
-    }
+    const executionData = this.helpers.constructExecutionMetaData(this.helpers.returnJsonArray(datasetItems), { itemData: { item: i } });
+    returnData.push(...executionData);
     return returnData;
 }
 exports.list = list;

@@ -10,11 +10,8 @@ async function getTables(i) {
         `/groups/${groupId}/datasets/${datasetId}/tables` : `/datasets/${datasetId}/tables`;
     const responseData = await GenericFunctions_1.powerBiApiRequest.call(this, 'GET', endpoint);
     const tableItems = (responseData.value || []);
-    for (const item of tableItems) {
-        returnData.push({
-            json: item,
-        });
-    }
+    const executionData = this.helpers.constructExecutionMetaData(this.helpers.returnJsonArray(tableItems), { itemData: { item: i } });
+    returnData.push(...executionData);
     return returnData;
 }
 exports.getTables = getTables;

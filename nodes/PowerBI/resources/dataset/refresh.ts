@@ -29,9 +29,11 @@ export async function refresh(
 		endpoint,
 	);
 	
-	returnData.push({
-		json: { success: true, message: 'Refresh started successfully' },
-	});
+	const executionData = this.helpers.constructExecutionMetaData(
+		this.helpers.returnJsonArray({ success: true, message: 'Refresh started successfully' }),
+		{ itemData: { item: i } }
+	);
+	returnData.push(...executionData);
 	
 	return returnData;
 }

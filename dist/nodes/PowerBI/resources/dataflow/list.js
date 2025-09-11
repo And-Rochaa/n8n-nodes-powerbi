@@ -10,16 +10,16 @@ async function listDataflows(index) {
     const endpoint = `/groups/${groupId}/dataflows`;
     try {
         const responseData = await GenericFunctions_1.powerBiApiRequest.call(this, 'GET', endpoint);
+        const returnData = [];
         if (responseData.value && Array.isArray(responseData.value)) {
-            return responseData.value.map((dataflow) => ({
-                json: dataflow,
-                pairedItem: { item: index },
-            }));
+            const executionData = this.helpers.constructExecutionMetaData(this.helpers.returnJsonArray(responseData.value), { itemData: { item: index } });
+            returnData.push(...executionData);
         }
-        return [{
-                json: responseData,
-                pairedItem: { item: index },
-            }];
+        else {
+            const executionData = this.helpers.constructExecutionMetaData(this.helpers.returnJsonArray(responseData), { itemData: { item: index } });
+            returnData.push(...executionData);
+        }
+        return returnData;
     }
     catch (error) {
         const errorMessage = error.message || error.toString();

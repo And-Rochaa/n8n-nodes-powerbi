@@ -5,10 +5,22 @@ export async function getGateway(
 	this: IExecuteFunctions,
 	index: number
 ): Promise<INodeExecutionData[]> {
+	const returnData: INodeExecutionData[] = [];
 	const gatewayId = this.getNodeParameter('gatewayId', index) as string;
-	const qs = {};
+	const endpoint = `/gateways/${gatewayId}`;
 	
-	const responseData = await powerBiApiRequest.call(this, 'GET', `/gateways/${gatewayId}`, {}, qs);
+	// Make API call
+	const responseData = await powerBiApiRequest.call(
+		this,
+		'GET',
+		endpoint,
+	);
 	
-	return this.helpers.returnJsonArray(responseData);
+	const executionData = this.helpers.constructExecutionMetaData(
+		this.helpers.returnJsonArray(responseData),
+		{ itemData: { item: index } }
+	);
+	returnData.push(...executionData);
+	
+	return returnData;
 }

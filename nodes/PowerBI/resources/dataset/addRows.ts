@@ -41,9 +41,11 @@ export async function addRows(
 		},
 	);
 	
-	returnData.push({
-		json: { success: true, message: 'Rows added successfully' },
-	});
-	
+	const executionData = this.helpers.constructExecutionMetaData(
+		this.helpers.returnJsonArray({ success: true, message: 'Rows added successfully' }),
+		{ itemData: { item: i } }
+	);
+	returnData.push(...executionData);
+
 	return returnData;
 }

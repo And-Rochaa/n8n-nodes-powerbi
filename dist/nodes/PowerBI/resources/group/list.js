@@ -6,11 +6,8 @@ async function list(i) {
     const returnData = [];
     const responseData = await GenericFunctions_1.powerBiApiRequest.call(this, 'GET', '/groups');
     const groupItems = (responseData.value || []);
-    for (const item of groupItems) {
-        returnData.push({
-            json: item,
-        });
-    }
+    const executionData = this.helpers.constructExecutionMetaData(this.helpers.returnJsonArray(groupItems), { itemData: { item: i } });
+    returnData.push(...executionData);
     return returnData;
 }
 exports.list = list;

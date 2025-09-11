@@ -38,9 +38,8 @@ async function getServicePrincipalToken(i) {
             resource: response.resource,
             ext_expires_in: response.ext_expires_in,
         };
-        returnData.push({
-            json: responseData,
-        });
+        const executionData = this.helpers.constructExecutionMetaData(this.helpers.returnJsonArray(responseData), { itemData: { item: i } });
+        returnData.push(...executionData);
         return returnData;
     }
     catch (error) {

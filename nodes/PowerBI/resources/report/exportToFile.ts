@@ -263,9 +263,11 @@ export async function exportToFile(
 		
 		if (!waitForCompletion) {
 			// Return export job details immediately
-			returnData.push({
-				json: exportResponse,
-			});
+			const executionData = this.helpers.constructExecutionMetaData(
+				[{ json: exportResponse }],
+				{ itemData: { item: i } }
+			);
+			returnData.push(...executionData);
 			return returnData;
 		}
 		
@@ -362,7 +364,7 @@ export async function exportToFile(
 						mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 					}
 							// Return the status data and the file in base64
-					returnData.push({
+					const executionData = this.helpers.constructExecutionMetaData([{
 						json: {
 							...statusResponse,
 							fileBase64: base64Data,
@@ -374,7 +376,8 @@ export async function exportToFile(
 								fileName: `${statusResponse.reportName}${statusResponse.resourceFileExtension || ''}`,
 							}
 						}
-					});				} catch (downloadError) {
+					}], { itemData: { item: i } });
+					returnData.push(...executionData);				} catch (downloadError) {
 					throw new NodeApiError(this.getNode(), downloadError, {
 						message: 'Failed to download the exported file',
 						description: 'The report was exported successfully, but the file could not be downloaded.'
@@ -382,9 +385,11 @@ export async function exportToFile(
 				}
 			} else {
 				// Return only the status data without downloading the file
-				returnData.push({
-					json: statusResponse,
-				});
+				const executionData = this.helpers.constructExecutionMetaData(
+					[{ json: statusResponse }],
+					{ itemData: { item: i } }
+				);
+				returnData.push(...executionData);
 			}
 		} else if (exportStatus === 'Failed') {
 			let errorDescription = 'Timeout exceeded or unknown error';

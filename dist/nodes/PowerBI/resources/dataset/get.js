@@ -9,9 +9,8 @@ async function get(i) {
     const endpoint = groupId && groupId !== 'me' ?
         `/groups/${groupId}/datasets/${datasetId}` : `/datasets/${datasetId}`;
     const responseData = await GenericFunctions_1.powerBiApiRequest.call(this, 'GET', endpoint);
-    returnData.push({
-        json: responseData,
-    });
+    const executionData = this.helpers.constructExecutionMetaData(this.helpers.returnJsonArray(responseData), { itemData: { item: i } });
+    returnData.push(...executionData);
     return returnData;
 }
 exports.get = get;

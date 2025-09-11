@@ -33,11 +33,11 @@ export async function getPages(
 	
 	// Process the response data
 	const pageItems = (responseData.value as IDataObject[] || []);
-	for (const item of pageItems) {
-		returnData.push({
-			json: item,
-		});
-	}
+	const executionData = this.helpers.constructExecutionMetaData(
+		this.helpers.returnJsonArray(pageItems),
+		{ itemData: { item: i } }
+	);
+	returnData.push(...executionData);
 	
 	return returnData;
 }

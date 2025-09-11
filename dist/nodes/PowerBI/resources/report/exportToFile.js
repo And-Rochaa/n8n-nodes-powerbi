@@ -153,9 +153,8 @@ async function exportToFile(i) {
         const exportResponse = await GenericFunctions_1.powerBiApiRequest.call(this, 'POST', exportEndpoint, body);
         const exportId = exportResponse.id;
         if (!waitForCompletion) {
-            returnData.push({
-                json: exportResponse,
-            });
+            const executionData = this.helpers.constructExecutionMetaData([{ json: exportResponse }], { itemData: { item: i } });
+            returnData.push(...executionData);
             return returnData;
         }
         const statusEndpoint = groupId && groupId !== 'me' ?
@@ -226,19 +225,20 @@ async function exportToFile(i) {
                     else if (fileExtension === '.xlsx') {
                         mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
                     }
-                    returnData.push({
-                        json: {
-                            ...statusResponse,
-                            fileBase64: base64Data,
-                        },
-                        binary: {
-                            data: {
-                                mimeType,
-                                data: base64Data,
-                                fileName: `${statusResponse.reportName}${statusResponse.resourceFileExtension || ''}`,
+                    const executionData = this.helpers.constructExecutionMetaData([{
+                            json: {
+                                ...statusResponse,
+                                fileBase64: base64Data,
+                            },
+                            binary: {
+                                data: {
+                                    mimeType,
+                                    data: base64Data,
+                                    fileName: `${statusResponse.reportName}${statusResponse.resourceFileExtension || ''}`,
+                                }
                             }
-                        }
-                    });
+                        }], { itemData: { item: i } });
+                    returnData.push(...executionData);
                 }
                 catch (downloadError) {
                     throw new n8n_workflow_1.NodeApiError(this.getNode(), downloadError, {
@@ -248,9 +248,8 @@ async function exportToFile(i) {
                 }
             }
             else {
-                returnData.push({
-                    json: statusResponse,
-                });
+                const executionData = this.helpers.constructExecutionMetaData([{ json: statusResponse }], { itemData: { item: i } });
+                returnData.push(...executionData);
             }
         }
         else if (exportStatus === 'Failed') {

@@ -31,8 +31,8 @@ export async function generateAuthUrl(
 	}
 	
 	// Return generated URL
-	returnData.push({
-		json: {
+	const executionData = this.helpers.constructExecutionMetaData(
+		this.helpers.returnJsonArray({
 			authUrl,
 			baseUrl,
 			clientId,
@@ -41,8 +41,10 @@ export async function generateAuthUrl(
 			responseMode,
 			scope,
 			state,
-		},
-	});
+		}),
+		{ itemData: { item: i } }
+	);
+	returnData.push(...executionData);
 	
 	return returnData;
 }

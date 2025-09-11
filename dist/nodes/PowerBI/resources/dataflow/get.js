@@ -15,7 +15,8 @@ async function get(index) {
     try {
         const endpoint = `/groups/${groupId}/dataflows/${dataflowId}`;
         const responseData = await GenericFunctions_1.powerBiApiRequest.call(this, 'GET', endpoint);
-        return [{ json: responseData }];
+        const executionData = this.helpers.constructExecutionMetaData([{ json: responseData }], { itemData: { item: index } });
+        return executionData;
     }
     catch (error) {
         if (error.statusCode === 403) {
