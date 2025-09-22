@@ -32,23 +32,15 @@ export async function refreshToken(
 		formData.append('grant_type', grantType);
 		formData.append('scope', scope);
 		
-		// Make request to get token
-		const response = await fetch(tokenUrl, {
+		// Make request to get token using n8n helper
+		const tokenData = await this.helpers.httpRequest({
 			method: 'POST',
+			url: tokenUrl,
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded',
 			},
 			body: formData.toString(),
 		});
-		
-		// Check if response was successful
-		if (!response.ok) {
-			const errorData = await response.json();
-			throw new Error(`Failed to refresh token: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`);
-		}
-		
-		// Process and return token data
-		const tokenData = await response.json();
 		
 		const executionData = this.helpers.constructExecutionMetaData(
 			this.helpers.returnJsonArray(tokenData),

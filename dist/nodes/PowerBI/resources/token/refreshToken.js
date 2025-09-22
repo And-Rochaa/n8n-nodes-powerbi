@@ -18,18 +18,14 @@ async function refreshToken(i) {
         formData.append('redirect_uri', redirectUri);
         formData.append('grant_type', grantType);
         formData.append('scope', scope);
-        const response = await fetch(tokenUrl, {
+        const tokenData = await this.helpers.httpRequest({
             method: 'POST',
+            url: tokenUrl,
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: formData.toString(),
         });
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(`Failed to refresh token: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`);
-        }
-        const tokenData = await response.json();
         const executionData = this.helpers.constructExecutionMetaData(this.helpers.returnJsonArray(tokenData), { itemData: { item: i } });
         returnData.push(...executionData);
         return returnData;
