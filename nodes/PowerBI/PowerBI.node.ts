@@ -57,11 +57,6 @@ import {
 	reportFields,
 } from './descriptions/ReportDescription';
 
-import {
-	tokenOperations,
-	tokenFields,
-} from './descriptions/TokenDescription';
-
 // Importing execution functions removed - now implemented directly
 
 export class PowerBi implements INodeType {
@@ -86,9 +81,6 @@ export class PowerBi implements INodeType {
 					show: {
 						authentication: ['oAuth2'],
 					},
-					hide: {
-						resource: ['token'],
-					},
 				},
 			},
 			{
@@ -97,9 +89,6 @@ export class PowerBi implements INodeType {
 				displayOptions: {
 					show: {
 						authentication: ['apiKey'],
-					},
-					hide: {
-						resource: ['token'],
 					},
 				},
 			},
@@ -126,11 +115,6 @@ export class PowerBi implements INodeType {
 					},
 				],
 				default: 'oAuth2',
-				displayOptions: {
-					hide: {
-						resource: ['token'],
-					},
-				},
 			},
 			{
 				displayName: 'Resource',
@@ -165,10 +149,6 @@ export class PowerBi implements INodeType {
 					{
 						name: 'Report',
 						value: 'report',
-					},
-					{
-						name: 'Token',
-						value: 'token',
 					},
 				],
 				default: 'dashboard',
@@ -334,10 +314,6 @@ export class PowerBi implements INodeType {
 			// REPORT OPERATIONS
 			...reportOperations,
 			...reportFields,
-
-			// TOKEN OPERATIONS
-			...tokenOperations,
-			...tokenFields,
 		],
 	};
 	// Methods to load options
@@ -475,15 +451,6 @@ export class PowerBi implements INodeType {
 							if (operation in resources.dataflow) {
 								// Execute the corresponding operation
 								const results = await resources.dataflow[operation].call(this, i);
-								returnData.push(...results);
-							}
-							break;
-							
-						case 'token':
-							// Using modularized resources for token operations
-							if (operation in resources.token) {
-								// Execute the corresponding operation
-								const results = await resources.token[operation].call(this, i);
 								returnData.push(...results);
 							}
 							break;

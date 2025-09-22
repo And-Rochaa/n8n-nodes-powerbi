@@ -58,7 +58,7 @@ export async function powerBiApiRequest(
 				authOptions.encoding = null;
 			}
 
-			const response = await this.helpers.requestWithAuthentication.call(
+			const response = await this.helpers.httpRequestWithAuthentication.call(
 				this,
 				credentialsType,
 				authOptions,
@@ -86,7 +86,7 @@ export async function powerBiApiRequest(
 				authOptions.encoding = null;
 			}
 
-			const response = await this.helpers.requestWithAuthentication.call(
+			const response = await this.helpers.httpRequestWithAuthentication.call(
 				this,
 				credentialsType,
 				authOptions,

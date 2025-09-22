@@ -10,7 +10,6 @@ const DatasetDescription_1 = require("./descriptions/DatasetDescription");
 const GatewayDescription_1 = require("./descriptions/GatewayDescription");
 const GroupDescription_1 = require("./descriptions/GroupDescription");
 const ReportDescription_1 = require("./descriptions/ReportDescription");
-const TokenDescription_1 = require("./descriptions/TokenDescription");
 class PowerBi {
     constructor() {
         this.description = {
@@ -34,9 +33,6 @@ class PowerBi {
                         show: {
                             authentication: ['oAuth2'],
                         },
-                        hide: {
-                            resource: ['token'],
-                        },
                     },
                 },
                 {
@@ -45,9 +41,6 @@ class PowerBi {
                     displayOptions: {
                         show: {
                             authentication: ['apiKey'],
-                        },
-                        hide: {
-                            resource: ['token'],
                         },
                     },
                 },
@@ -74,11 +67,6 @@ class PowerBi {
                         },
                     ],
                     default: 'oAuth2',
-                    displayOptions: {
-                        hide: {
-                            resource: ['token'],
-                        },
-                    },
                 },
                 {
                     displayName: 'Resource',
@@ -113,10 +101,6 @@ class PowerBi {
                         {
                             name: 'Report',
                             value: 'report',
-                        },
-                        {
-                            name: 'Token',
-                            value: 'token',
                         },
                     ],
                     default: 'dashboard',
@@ -268,8 +252,6 @@ class PowerBi {
                 ...GroupDescription_1.groupFields,
                 ...ReportDescription_1.reportOperations,
                 ...ReportDescription_1.reportFields,
-                ...TokenDescription_1.tokenOperations,
-                ...TokenDescription_1.tokenFields,
             ],
         };
         this.methods = {
@@ -370,12 +352,6 @@ class PowerBi {
                         case 'dataflow':
                             if (operation in resources_1.resources.dataflow) {
                                 const results = await resources_1.resources.dataflow[operation].call(this, i);
-                                returnData.push(...results);
-                            }
-                            break;
-                        case 'token':
-                            if (operation in resources_1.resources.token) {
-                                const results = await resources_1.resources.token[operation].call(this, i);
                                 returnData.push(...results);
                             }
                             break;

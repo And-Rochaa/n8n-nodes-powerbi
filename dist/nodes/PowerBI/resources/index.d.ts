@@ -45,10 +45,4 @@ export declare const resources: {
         getPages: typeof import("./report/getPages").getPages;
         exportToFile: typeof import("./report/exportToFile").exportToFile;
     };
-    token: {
-        generateAuthUrl: typeof import("./token/generateAuthUrl").generateAuthUrl;
-        getToken: typeof import("./token/getToken").getToken;
-        refreshToken: typeof import("./token/refreshToken").refreshToken;
-        getServicePrincipalToken: typeof import("./token/getServicePrincipalToken").getServicePrincipalToken;
-    };
 };

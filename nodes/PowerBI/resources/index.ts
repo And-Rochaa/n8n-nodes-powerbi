@@ -5,9 +5,9 @@ import { datasetOperations } from './dataset';
 import { gatewayOperations } from './gateway';
 import { groupOperations } from './group';
 import { reportOperations } from './report';
-import { token } from './token';
 
 // We export an object with all resources
+// Token operations have been removed due to security concerns
 export const resources = {
     admin: adminOperations,
     dashboard: dashboardOperations,
@@ -16,5 +16,4 @@ export const resources = {
     gateway: gatewayOperations,
     group: groupOperations,
     report: reportOperations,
-    token,
 };
