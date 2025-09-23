@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.addRows = void 0;
+const n8n_workflow_1 = require("n8n-workflow");
 const GenericFunctions_1 = require("../../GenericFunctions");
 async function addRows(i) {
     const returnData = [];
@@ -13,7 +14,7 @@ async function addRows(i) {
         rows = JSON.parse(data);
     }
     catch (error) {
-        throw new Error(`Could not parse rows JSON: ${error}`);
+        throw new n8n_workflow_1.NodeOperationError(this.getNode(), `Could not parse rows JSON: ${error}`);
     }
     const endpoint = groupId && groupId !== 'me' ?
         `/groups/${groupId}/datasets/${datasetId}/tables/${tableName}/rows` : `/datasets/${datasetId}/tables/${tableName}/rows`;

@@ -45,12 +45,6 @@ class PowerBi {
                     },
                 },
             ],
-            requestDefaults: {
-                baseURL: 'https://api.powerbi.com/v1.0/myorg',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            },
             properties: [
                 {
                     displayName: 'Authentication',

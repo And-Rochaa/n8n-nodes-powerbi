@@ -1,11 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listDataflows = void 0;
+const n8n_workflow_1 = require("n8n-workflow");
 const GenericFunctions_1 = require("../../GenericFunctions");
 async function listDataflows(index) {
     const groupId = this.getNodeParameter('groupId', index);
     if (!groupId) {
-        throw new Error('Workspace ID is required');
+        throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'Workspace ID is required');
     }
     const endpoint = `/groups/${groupId}/dataflows`;
     try {
@@ -23,7 +24,7 @@ async function listDataflows(index) {
     }
     catch (error) {
         const errorMessage = error.message || error.toString();
-        throw new Error(`Error getting dataflows (Workspace: ${groupId}): ${errorMessage}. Please verify that you have adequate permissions in the workspace.`);
+        throw new n8n_workflow_1.NodeOperationError(this.getNode(), `Error getting dataflows (Workspace: ${groupId}): ${errorMessage}. Please verify that you have adequate permissions in the workspace.`);
     }
 }
 exports.listDataflows = listDataflows;

@@ -56,6 +56,22 @@ async function powerBiApiRequest(method, endpoint, body = {}, qs = {}, requestOp
         }
     }
     catch (error) {
+        if (error.response && error.response.body) {
+            try {
+                const errorBody = error.response.body;
+                if (typeof errorBody === 'object' && errorBody.error) {
+                    const errorDetails = errorBody.error;
+                    const errorCode = errorDetails.code || '';
+                    const errorMessage = errorDetails.message || '';
+                    const additionalInfo = errorDetails.details ?
+                        `: ${JSON.stringify(errorDetails.details)}` : '';
+                    const enhancedMessage = `${errorMessage} [${errorCode}]${additionalInfo}`;
+                    throw new n8n_workflow_1.NodeApiError(this.getNode(), error, { message: enhancedMessage });
+                }
+            }
+            catch (parsingError) {
+            }
+        }
         throw new n8n_workflow_1.NodeApiError(this.getNode(), error);
     }
 }

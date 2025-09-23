@@ -101,6 +101,37 @@ export async function powerBiApiRequest(
 			return response as JsonObject;
 		}
 	} catch (error) {
+		// Enhanced error handling for Power BI API errors
+		if (error.response && error.response.body) {
+			// Try to extract detailed Power BI error information
+			try {
+				const errorBody = error.response.body;
+				
+				// Check if it's a structured Power BI error
+				if (typeof errorBody === 'object' && errorBody.error) {
+					// Extract the detailed error message if available
+					const errorDetails = errorBody.error;
+					const errorCode = errorDetails.code || '';
+					const errorMessage = errorDetails.message || '';
+					const additionalInfo = errorDetails.details ? 
+						`: ${JSON.stringify(errorDetails.details)}` : '';
+					
+					// Create enhanced error message
+					const enhancedMessage = `${errorMessage} [${errorCode}]${additionalInfo}`;
+					
+					// Throw NodeApiError with enhanced information
+					throw new NodeApiError(
+						this.getNode(),
+						error as JsonObject,
+						{ message: enhancedMessage }
+					);
+				}
+			} catch (parsingError) {
+				// If error parsing fails, continue with standard error handling
+			}
+		}
+		
+		// Default error handling if we couldn't extract detailed information
 		throw new NodeApiError(this.getNode(), error as JsonObject);
 	}
 }

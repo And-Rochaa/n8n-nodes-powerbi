@@ -10,6 +10,17 @@ import {
 	IDataObject,
 } from 'n8n-workflow';
 
+// Extended interface to support additional n8n tool properties
+interface IExtendedNodeTypeDescription extends INodeTypeDescription {
+	usableAsTool?: boolean;
+	codex?: {
+		categories: string[];
+		subcategories: Record<string, string[]>;
+		alias: string[];
+	};
+	triggerPanel?: Record<string, any>;
+}
+
 import {
 	powerBiApiRequest,
 	getGroups,
@@ -60,7 +71,7 @@ import {
 // Importing execution functions removed - now implemented directly
 
 export class PowerBi implements INodeType {
-	description: INodeTypeDescription = {
+	description: IExtendedNodeTypeDescription = {
 		displayName: 'Power BI',
 		name: 'powerBi',
 		icon: 'file:powerbi.svg',
@@ -93,12 +104,6 @@ export class PowerBi implements INodeType {
 				},
 			},
 		],
-		requestDefaults: {
-			baseURL: 'https://api.powerbi.com/v1.0/myorg',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		},
 		properties: [
 			{
 				displayName: 'Authentication',
@@ -351,12 +356,9 @@ export class PowerBi implements INodeType {
 	
 	// Adds the usableAsTool property dynamically
 	constructor() {
-		// @ts-ignore
 		this.description.usableAsTool = true;
 		
-		// @ts-ignore
 		this.description.displayName = 'Power BI';
-				// @ts-ignore
 		this.description.codex = {
 			categories: ['Power BI'],
 			subcategories: {
@@ -367,9 +369,7 @@ export class PowerBi implements INodeType {
 		};
 		
 		// If necessary, add other properties required for tools
-		// @ts-ignore
 		if (!this.description.triggerPanel) {
-			// @ts-ignore
 			Object.defineProperty(this.description, 'triggerPanel', {
 				value: {},
 				configurable: true

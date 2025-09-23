@@ -3,6 +3,7 @@ import {
 	INodeExecutionData,
 	IDataObject,
 	JsonObject,
+	NodeOperationError,
 } from 'n8n-workflow';
 
 /**
@@ -19,7 +20,7 @@ export async function getInfo(
 	
 	// Check if workspaces were selected
 	if (!workspaces || workspaces.length === 0) {
-		throw new Error('You must select at least one workspace');
+		throw new NodeOperationError(this.getNode(), 'You must select at least one workspace');
 	}
 	
 	// Get options

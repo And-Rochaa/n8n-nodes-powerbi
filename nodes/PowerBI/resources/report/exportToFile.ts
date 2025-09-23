@@ -339,7 +339,7 @@ export async function exportToFile(
 					
 					// Final check and safe conversion to Buffer
 					if (!fileBuffer) {
-						throw new Error('Could not extract file content from the response');
+						throw new NodeOperationError(this.getNode(), 'Could not extract file content from the response');
 					}
 					
 					// Convert to Buffer with error handling
@@ -347,7 +347,7 @@ export async function exportToFile(
 						const buffer = Buffer.isBuffer(fileBuffer) ? fileBuffer : Buffer.from(fileBuffer);
 						base64Data = buffer.toString('base64');
 					} catch (bufferError: any) {
-						throw new Error(`Failed to process the file: ${bufferError.message}`);
+						throw new NodeOperationError(this.getNode(), `Failed to process the file: ${bufferError.message}`);
 					}
 					
 					// Determine the MIME type based on the file extension

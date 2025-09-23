@@ -1,11 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getInfo = void 0;
+const n8n_workflow_1 = require("n8n-workflow");
 async function getInfo(i) {
     const returnData = [];
     const workspaces = this.getNodeParameter('workspaces', i);
     if (!workspaces || workspaces.length === 0) {
-        throw new Error('You must select at least one workspace');
+        throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'You must select at least one workspace');
     }
     const datasetSchema = this.getNodeParameter('datasetSchema', i);
     const datasetExpressions = this.getNodeParameter('datasetExpressions', i);

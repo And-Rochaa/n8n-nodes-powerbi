@@ -1,6 +1,7 @@
 import {
 	IExecuteFunctions,
 	INodeExecutionData,
+	NodeOperationError,
 } from 'n8n-workflow';
 import { powerBiApiRequest } from '../../GenericFunctions';
 
@@ -12,11 +13,11 @@ export async function getDatasourceUsers(
 	const datasourceId = this.getNodeParameter('datasourceId', index) as string;
 
 	if (!gatewayId) {
-		throw new Error('Gateway ID is required');
+		throw new NodeOperationError(this.getNode(), 'Gateway ID is required');
 	}
 
 	if (!datasourceId) {
-		throw new Error('Datasource ID is required');
+		throw new NodeOperationError(this.getNode(), 'Datasource ID is required');
 	}
 
 	const endpoint = `/gateways/${gatewayId}/datasources/${datasourceId}/users`;
@@ -47,6 +48,6 @@ export async function getDatasourceUsers(
 	} catch (error) {
 		// Better error handling with more details
 		const errorMessage = error.message || error.toString();
-		throw new Error(`Error getting data source users (Gateway: ${gatewayId}, Datasource: ${datasourceId}): ${errorMessage}. Please verify that you have administrator permissions on the gateway and that the IDs are correct.`);
+		throw new NodeOperationError(this.getNode(), `Error getting data source users (Gateway: ${gatewayId}, Datasource: ${datasourceId}): ${errorMessage}. Please verify that you have administrator permissions on the gateway and that the IDs are correct.`);
 	}
 }

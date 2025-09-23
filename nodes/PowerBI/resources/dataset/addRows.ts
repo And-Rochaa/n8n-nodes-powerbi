@@ -1,6 +1,7 @@
 import {
 	IExecuteFunctions,
 	INodeExecutionData,
+	NodeOperationError,
 } from 'n8n-workflow';
 
 import { powerBiApiRequest } from '../../GenericFunctions';
@@ -24,7 +25,7 @@ export async function addRows(
 	try {
 		rows = JSON.parse(data);
 	} catch (error) {
-		throw new Error(`Could not parse rows JSON: ${error}`);
+		throw new NodeOperationError(this.getNode(), `Could not parse rows JSON: ${error}`);
 	}
 	
 	// Construct the endpoint based on whether a group ID is provided

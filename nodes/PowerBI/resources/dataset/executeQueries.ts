@@ -1,6 +1,7 @@
 import {
 	IExecuteFunctions,
 	INodeExecutionData,
+	NodeOperationError,
 } from 'n8n-workflow';
 
 import { powerBiApiRequest } from '../../GenericFunctions';
@@ -46,19 +47,31 @@ export async function executeQueries(
 		requestBody.impersonatedUserName = impersonatedUserName.trim();
 	}
 	
-	// Make API call
-	const responseData = await powerBiApiRequest.call(
-		this,
-		'POST',
-		endpoint,
-		requestBody,
-	);
-	
-	const executionData = this.helpers.constructExecutionMetaData(
-		this.helpers.returnJsonArray(responseData),
-		{ itemData: { item: i } }
-	);
-	returnData.push(...executionData);
+	// Make API call with specific error handling for DAX queries
+	try {
+		const responseData = await powerBiApiRequest.call(
+			this,
+			'POST',
+			endpoint,
+			requestBody,
+		);
+		
+		const executionData = this.helpers.constructExecutionMetaData(
+			this.helpers.returnJsonArray(responseData),
+			{ itemData: { item: i } }
+		);
+		returnData.push(...executionData);
 
-	return returnData;
+		return returnData;
+	} catch (error) {
+		// Check for DAX-specific error messages in the exception
+		if (error.message && error.message.includes('DAX')) {
+			throw new NodeOperationError(
+				this.getNode(), 
+				`DAX query execution failed: ${error.message}`
+			);
+		}
+		// Re-throw other errors
+		throw error;
+	}
 }

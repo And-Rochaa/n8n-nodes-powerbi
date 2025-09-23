@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.executeQueries = void 0;
+const n8n_workflow_1 = require("n8n-workflow");
 const GenericFunctions_1 = require("../../GenericFunctions");
 async function executeQueries(i) {
     const returnData = [];
@@ -26,10 +27,18 @@ async function executeQueries(i) {
     if (impersonatedUserName && impersonatedUserName.trim() !== '') {
         requestBody.impersonatedUserName = impersonatedUserName.trim();
     }
-    const responseData = await GenericFunctions_1.powerBiApiRequest.call(this, 'POST', endpoint, requestBody);
-    const executionData = this.helpers.constructExecutionMetaData(this.helpers.returnJsonArray(responseData), { itemData: { item: i } });
-    returnData.push(...executionData);
-    return returnData;
+    try {
+        const responseData = await GenericFunctions_1.powerBiApiRequest.call(this, 'POST', endpoint, requestBody);
+        const executionData = this.helpers.constructExecutionMetaData(this.helpers.returnJsonArray(responseData), { itemData: { item: i } });
+        returnData.push(...executionData);
+        return returnData;
+    }
+    catch (error) {
+        if (error.message && error.message.includes('DAX')) {
+            throw new n8n_workflow_1.NodeOperationError(this.getNode(), `DAX query execution failed: ${error.message}`);
+        }
+        throw error;
+    }
 }
 exports.executeQueries = executeQueries;
 //# sourceMappingURL=executeQueries.js.map

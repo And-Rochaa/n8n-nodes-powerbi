@@ -1,6 +1,7 @@
 import {
 	IExecuteFunctions,
 	INodeExecutionData,
+	NodeOperationError,
 } from 'n8n-workflow';
 import { powerBiApiRequest } from '../../GenericFunctions';
 
@@ -11,7 +12,7 @@ export async function listDataflows(
 	const groupId = this.getNodeParameter('groupId', index) as string;
 
 	if (!groupId) {
-		throw new Error('Workspace ID is required');
+		throw new NodeOperationError(this.getNode(), 'Workspace ID is required');
 	}
 
 	const endpoint = `/groups/${groupId}/dataflows`;
@@ -46,6 +47,6 @@ export async function listDataflows(
 	} catch (error) {
 		// Better error handling with more details
 		const errorMessage = error.message || error.toString();
-		throw new Error(`Error getting dataflows (Workspace: ${groupId}): ${errorMessage}. Please verify that you have adequate permissions in the workspace.`);
+		throw new NodeOperationError(this.getNode(), `Error getting dataflows (Workspace: ${groupId}): ${errorMessage}. Please verify that you have adequate permissions in the workspace.`);
 	}
 }

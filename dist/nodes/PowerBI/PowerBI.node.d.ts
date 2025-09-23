@@ -1,6 +1,15 @@
 import { IExecuteFunctions, ILoadOptionsFunctions, INodeExecutionData, INodeType, INodeTypeDescription } from 'n8n-workflow';
+interface IExtendedNodeTypeDescription extends INodeTypeDescription {
+    usableAsTool?: boolean;
+    codex?: {
+        categories: string[];
+        subcategories: Record<string, string[]>;
+        alias: string[];
+    };
+    triggerPanel?: Record<string, any>;
+}
 export declare class PowerBi implements INodeType {
-    description: INodeTypeDescription;
+    description: IExtendedNodeTypeDescription;
     methods: {
         loadOptions: {
             getGroups(this: ILoadOptionsFunctions): Promise<any>;

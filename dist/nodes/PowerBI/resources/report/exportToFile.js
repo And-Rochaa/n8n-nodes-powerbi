@@ -201,7 +201,7 @@ async function exportToFile(i) {
                         fileBuffer = fileResponse;
                     }
                     if (!fileBuffer) {
-                        throw new Error('Could not extract file content from the response');
+                        throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'Could not extract file content from the response');
                     }
                     let base64Data;
                     try {
@@ -209,7 +209,7 @@ async function exportToFile(i) {
                         base64Data = buffer.toString('base64');
                     }
                     catch (bufferError) {
-                        throw new Error(`Failed to process the file: ${bufferError.message}`);
+                        throw new n8n_workflow_1.NodeOperationError(this.getNode(), `Failed to process the file: ${bufferError.message}`);
                     }
                     let mimeType = 'application/octet-stream';
                     const fileExtension = (_a = statusResponse.resourceFileExtension) === null || _a === void 0 ? void 0 : _a.toLowerCase();
