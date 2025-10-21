@@ -163,19 +163,7 @@ async function exportToFile(i) {
         let statusResponse = exportResponse;
         let elapsedTime = 0;
         while (exportStatus !== 'Succeeded' && exportStatus !== 'Failed' && elapsedTime < maxWaitTime) {
-            await new Promise(resolve => {
-                let elapsed = 0;
-                const check = () => {
-                    elapsed += 100;
-                    if (elapsed >= pollingInterval * 1000) {
-                        resolve(undefined);
-                    }
-                    else {
-                        Promise.resolve().then(check);
-                    }
-                };
-                check();
-            });
+            await new Promise(resolve => setTimeout(resolve, pollingInterval * 1000));
             elapsedTime += pollingInterval;
             statusResponse = await GenericFunctions_1.powerBiApiRequest.call(this, 'GET', statusEndpoint, {});
             exportStatus = statusResponse.status;
@@ -186,31 +174,34 @@ async function exportToFile(i) {
                 try {
                     const fileResponse = await GenericFunctions_1.powerBiApiRequest.call(this, 'GET', statusResponse.resourceLocation.replace('https://api.powerbi.com/v1.0/myorg', ''), {}, {}, { json: false, returnFullResponse: true });
                     let fileBuffer;
-                    if (fileResponse && typeof fileResponse === 'object') {
-                        if (Buffer.isBuffer(fileResponse)) {
-                            fileBuffer = fileResponse;
+                    if (fileResponse && typeof fileResponse === 'object' && 'body' in fileResponse) {
+                        const body = fileResponse.body;
+                        if (Buffer.isBuffer(body)) {
+                            fileBuffer = body;
                         }
-                        else if ('body' in fileResponse && fileResponse.body) {
-                            fileBuffer = fileResponse.body;
+                        else if (body instanceof ArrayBuffer) {
+                            fileBuffer = Buffer.from(body);
+                        }
+                        else if (typeof body === 'string') {
+                            fileBuffer = Buffer.from(body, 'binary');
                         }
                         else {
-                            fileBuffer = fileResponse;
+                            throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'Unexpected body type');
                         }
                     }
-                    else {
+                    else if (Buffer.isBuffer(fileResponse)) {
                         fileBuffer = fileResponse;
                     }
-                    if (!fileBuffer) {
+                    else if (fileResponse instanceof ArrayBuffer) {
+                        fileBuffer = Buffer.from(fileResponse);
+                    }
+                    else if (typeof fileResponse === 'string') {
+                        fileBuffer = Buffer.from(fileResponse, 'binary');
+                    }
+                    else {
                         throw new n8n_workflow_1.NodeOperationError(this.getNode(), 'Could not extract file content from the response');
                     }
-                    let base64Data;
-                    try {
-                        const buffer = Buffer.isBuffer(fileBuffer) ? fileBuffer : Buffer.from(fileBuffer);
-                        base64Data = buffer.toString('base64');
-                    }
-                    catch (bufferError) {
-                        throw new n8n_workflow_1.NodeOperationError(this.getNode(), `Failed to process the file: ${bufferError.message}`);
-                    }
+                    const base64Data = fileBuffer.toString('base64');
                     let mimeType = 'application/octet-stream';
                     const fileExtension = (_a = statusResponse.resourceFileExtension) === null || _a === void 0 ? void 0 : _a.toLowerCase();
                     if (fileExtension === '.pdf') {
@@ -225,17 +216,14 @@ async function exportToFile(i) {
                     else if (fileExtension === '.xlsx') {
                         mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
                     }
+                    const fileName = `${statusResponse.reportName}${statusResponse.resourceFileExtension || ''}`;
                     const executionData = this.helpers.constructExecutionMetaData([{
                             json: {
                                 ...statusResponse,
                                 fileBase64: base64Data,
                             },
                             binary: {
-                                data: {
-                                    mimeType,
-                                    data: base64Data,
-                                    fileName: `${statusResponse.reportName}${statusResponse.resourceFileExtension || ''}`,
-                                }
+                                data: await this.helpers.prepareBinaryData(fileBuffer, fileName, mimeType),
                             }
                         }], { itemData: { item: i } });
                     returnData.push(...executionData);
@@ -267,9 +255,10 @@ async function exportToFile(i) {
             });
         }
         else {
+            const percentComplete = statusResponse.percentComplete || 0;
             throw new n8n_workflow_1.NodeApiError(this.getNode(), statusResponse, {
                 message: 'Timeout exceeded',
-                description: `The export did not complete within the maximum wait time (${maxWaitTime} seconds)`,
+                description: `The export did not complete within the maximum wait time (${maxWaitTime} seconds). Progress: ${percentComplete}%. Try increasing the Maximum Wait Time or check if the report is too large.`,
             });
         }
         return returnData;

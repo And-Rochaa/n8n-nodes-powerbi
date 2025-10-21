@@ -281,19 +281,8 @@ export async function exportToFile(
 		let elapsedTime = 0;
 		
 		while (exportStatus !== 'Succeeded' && exportStatus !== 'Failed' && elapsedTime < maxWaitTime) {
-			// Wait for the polling interval before the next check
-			await new Promise(resolve => {
-				let elapsed = 0;
-				const check = () => {
-					elapsed += 100;
-					if (elapsed >= pollingInterval * 1000) {
-						resolve(undefined);
-					} else {
-						Promise.resolve().then(check);
-					}
-				};
-				check();
-			});
+			// Wait for the polling interval before the next check using setTimeout
+			await new Promise(resolve => setTimeout(resolve, pollingInterval * 1000));
 			elapsedTime += pollingInterval;
 			
 			// Check the current export job status
@@ -323,32 +312,37 @@ export async function exportToFile(
 					);
 		
 					
-					// Extract the response body containing the file buffer with extra validation
-					let fileBuffer;
-							if (fileResponse && typeof fileResponse === 'object') {
-						if (Buffer.isBuffer(fileResponse)) {
-							fileBuffer = fileResponse;
-						} else if ('body' in fileResponse && fileResponse.body) {
-							fileBuffer = fileResponse.body;
-						} else {
-							fileBuffer = fileResponse;
-						}
-					} else {
-						fileBuffer = fileResponse;
-					}
+					// Extract the response body containing the file buffer
+					let fileBuffer: Buffer;
 					
-					// Final check and safe conversion to Buffer
-					if (!fileBuffer) {
+					if (fileResponse && typeof fileResponse === 'object' && 'body' in fileResponse) {
+						const body = fileResponse.body;
+						
+						if (Buffer.isBuffer(body)) {
+							fileBuffer = body;
+						} else if (body instanceof ArrayBuffer) {
+							// Convert ArrayBuffer to Buffer (like HTTP Request v4.2)
+							fileBuffer = Buffer.from(body);
+						} else if (typeof body === 'string') {
+							// Fallback: if body is string, convert to buffer using binary encoding
+							fileBuffer = Buffer.from(body, 'binary');
+						} else {
+							throw new NodeOperationError(this.getNode(), 'Unexpected body type');
+						}
+					} else if (Buffer.isBuffer(fileResponse)) {
+						fileBuffer = fileResponse;
+					} else if (fileResponse instanceof ArrayBuffer) {
+						// Convert ArrayBuffer to Buffer
+						fileBuffer = Buffer.from(fileResponse);
+					} else if (typeof fileResponse === 'string') {
+						// Fallback: if response is string, convert to buffer using binary encoding
+						fileBuffer = Buffer.from(fileResponse, 'binary');
+					} else {
 						throw new NodeOperationError(this.getNode(), 'Could not extract file content from the response');
 					}
 					
-					// Convert to Buffer with error handling
-					let base64Data;					try {
-						const buffer = Buffer.isBuffer(fileBuffer) ? fileBuffer : Buffer.from(fileBuffer);
-						base64Data = buffer.toString('base64');
-					} catch (bufferError: any) {
-						throw new NodeOperationError(this.getNode(), `Failed to process the file: ${bufferError.message}`);
-					}
+					// Convert to base64 for fileBase64 field
+					const base64Data = fileBuffer.toString('base64');
 					
 					// Determine the MIME type based on the file extension
 					let mimeType = 'application/octet-stream'; // Default
@@ -363,18 +357,16 @@ export async function exportToFile(
 					} else if (fileExtension === '.xlsx') {
 						mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 					}
-							// Return the status data and the file in base64
+					
+					const fileName = `${statusResponse.reportName}${statusResponse.resourceFileExtension || ''}`;
+							// Return the status data and the file in binary format
 					const executionData = this.helpers.constructExecutionMetaData([{
 						json: {
 							...statusResponse,
 							fileBase64: base64Data,
 						},
 						binary: {
-							data: {
-								mimeType,
-								data: base64Data,
-								fileName: `${statusResponse.reportName}${statusResponse.resourceFileExtension || ''}`,
-							}
+							data: await this.helpers.prepareBinaryData(fileBuffer, fileName, mimeType),
 						}
 					}], { itemData: { item: i } });
 					returnData.push(...executionData);				} catch (downloadError) {
@@ -408,9 +400,11 @@ export async function exportToFile(
 				description: errorDescription,
 			});
 		} else {
+			// Include progress information in timeout error
+			const percentComplete = statusResponse.percentComplete || 0;
 			throw new NodeApiError(this.getNode(), statusResponse, {
 				message: 'Timeout exceeded',
-				description: `The export did not complete within the maximum wait time (${maxWaitTime} seconds)`,
+				description: `The export did not complete within the maximum wait time (${maxWaitTime} seconds). Progress: ${percentComplete}%. Try increasing the Maximum Wait Time or check if the report is too large.`,
 			});
 		}
 				return returnData;	} catch (error) {

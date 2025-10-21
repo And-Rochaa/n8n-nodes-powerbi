@@ -43,19 +43,22 @@ export async function powerBiApiRequest(
 			delete options.body;
 		}
 		
-		// Get authentication type from node parameter (like Calendly)
+		// Get authentication type from node parameter
 		const authentication = this.getNodeParameter('authentication', 0, 'oAuth2') as string;
 		
 		const credentialsType = authentication === 'apiKey' ? 'powerBiApi' : 'powerBiApiOAuth2Api';
 		
 		if (authentication === 'oAuth2') {
-			// Use OAuth2 authentication with requestWithAuthentication
-			const authOptions = {
+			// Use OAuth2 authentication with httpRequestWithAuthentication
+			const authOptions: any = {
 				...options,
 			};
 			
+			// For binary files, use arraybuffer response type (like HTTP Request v4.2)
 			if (options.json === false) {
-				authOptions.encoding = null;
+				delete authOptions.json;
+				authOptions.encoding = 'arraybuffer';
+				authOptions.returnFullResponse = true;
 			}
 
 			const response = await this.helpers.httpRequestWithAuthentication.call(
@@ -77,13 +80,16 @@ export async function powerBiApiRequest(
 			}
 			return response as JsonObject;
 		} else {
-			// Use Bearer token authentication with requestWithAuthentication (same as OAuth2)
-			const authOptions = {
+			// Use Bearer token authentication with httpRequestWithAuthentication
+			const authOptions: any = {
 				...options,
 			};
 			
+			// For binary files, use arraybuffer response type (like HTTP Request v4.2)
 			if (options.json === false) {
-				authOptions.encoding = null;
+				delete authOptions.json;
+				authOptions.encoding = 'arraybuffer';
+				authOptions.returnFullResponse = true;
 			}
 
 			const response = await this.helpers.httpRequestWithAuthentication.call(
@@ -91,7 +97,7 @@ export async function powerBiApiRequest(
 				credentialsType,
 				authOptions,
 				{
-					// No special OAuth2 options for Bearer token, but still pass empty object for consistency
+					// No special OAuth2 options for Bearer token
 				}
 			);
 

@@ -27,7 +27,9 @@ async function powerBiApiRequest(method, endpoint, body = {}, qs = {}, requestOp
                 ...options,
             };
             if (options.json === false) {
-                authOptions.encoding = null;
+                delete authOptions.json;
+                authOptions.encoding = 'arraybuffer';
+                authOptions.returnFullResponse = true;
             }
             const response = await this.helpers.httpRequestWithAuthentication.call(this, credentialsType, authOptions, {
                 oauth2: {
@@ -46,7 +48,9 @@ async function powerBiApiRequest(method, endpoint, body = {}, qs = {}, requestOp
                 ...options,
             };
             if (options.json === false) {
-                authOptions.encoding = null;
+                delete authOptions.json;
+                authOptions.encoding = 'arraybuffer';
+                authOptions.returnFullResponse = true;
             }
             const response = await this.helpers.httpRequestWithAuthentication.call(this, credentialsType, authOptions, {});
             if (requestOptions.returnFullResponse) {
