@@ -25,7 +25,7 @@ async function getInfo(i) {
     const options = {
         method: 'POST',
         body: requestBody,
-        uri: fullUrl,
+        url: fullUrl,
         json: true,
         headers: {
             'Content-Type': 'application/json',

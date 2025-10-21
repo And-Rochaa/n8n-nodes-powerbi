@@ -16,13 +16,13 @@ export class PowerBiApiOAuth2Api implements ICredentialType {
         {
             displayName: 'Authorization URL',
             name: 'authUrl',
-            type: 'hidden',
+            type: 'string',
             default: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
         },
         {
             displayName: 'Access Token URL',
             name: 'accessTokenUrl',
-            type: 'hidden',
+            type: 'string',
             default: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
         },
         {

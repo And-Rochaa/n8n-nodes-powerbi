@@ -48,13 +48,13 @@ export async function getInfo(
 	const options = {
 		method: 'POST',
 		body: requestBody,
-		uri: fullUrl,
+		url: fullUrl,
 		json: true,
 		headers: {
 			'Content-Type': 'application/json',
 		},
 	};
-		// Use direct authentication to ensure the POST method is used correctly
+	// Use direct authentication to ensure the POST method is used correctly
 	const responseData = await this.helpers.httpRequestWithAuthentication.call(
 		this,
 		'powerBiApiOAuth2Api',
