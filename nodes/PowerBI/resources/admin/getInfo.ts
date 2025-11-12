@@ -6,6 +6,8 @@ import {
 	NodeOperationError,
 } from 'n8n-workflow';
 
+import { powerBiApiRequest } from '../../GenericFunctions';
+
 /**
  * Executes the getInfo operation to retrieve detailed information about workspaces
  */
@@ -31,7 +33,6 @@ export async function getInfo(
 	const getArtifactUsers = false; // Optional, not implemented in the interface yet
 	
 	// Build URL with query parameters as specified in the documentation
-	const url = 'https://api.powerbi.com/v1.0/myorg/admin/workspaces/getInfo';
 	const queryString = [
 		`datasetSchema=${datasetSchema ? 'True' : 'False'}`,
 		`datasetExpressions=${datasetExpressions ? 'True' : 'False'}`,
@@ -39,26 +40,16 @@ export async function getInfo(
 		`datasourceDetails=${datasourceDetails ? 'True' : 'False'}`,
 	].join('&');
 	
-	const fullUrl = `${url}?${queryString}`;
-	
 	// Set up request body with the list of workspace IDs
 	const requestBody = { workspaces };
 	
-	// Make the request to the admin endpoint using the POST method
-	const options = {
-		method: 'POST',
-		body: requestBody,
-		url: fullUrl,
-		json: true,
-		headers: {
-			'Content-Type': 'application/json',
-		},
-	};
-	// Use direct authentication to ensure the POST method is used correctly
-	const responseData = await this.helpers.httpRequestWithAuthentication.call(
+	// Make the request to the admin endpoint using powerBiApiRequest
+	// This respects the user's authentication choice (OAuth2 or Bearer Token)
+	const responseData = await powerBiApiRequest.call(
 		this,
-		'powerBiApiOAuth2Api',
-		options
+		'POST',
+		`/admin/workspaces/getInfo?${queryString}`,
+		requestBody
 	);
 	
 	const executionData = this.helpers.constructExecutionMetaData(
