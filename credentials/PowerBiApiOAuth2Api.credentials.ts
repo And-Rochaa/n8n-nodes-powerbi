@@ -34,8 +34,10 @@ export class PowerBiApiOAuth2Api implements ICredentialType {
         {
             displayName: 'Auth URI Query Parameters',
             name: 'authQueryParameters',
-            type: 'hidden',
-            default: 'response_type=code&prompt=consent',
+            type: 'string',
+            default: '',
+            placeholder: 'prompt=consent',
+            description: 'Additional query parameters for the authorization URL. Use "prompt=consent" to force consent screen for admin approval, or leave empty for default behavior (recommended for regular users).',
         },
         {
             displayName: 'Authentication',
