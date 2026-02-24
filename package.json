@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-powerbi",
-  "version": "2.3.8",
+  "version": "2.3.9",
   "description": "n8n nodes for integration with Power BI APIs",
   "keywords": [
     "n8n",
@@ -16,7 +16,7 @@
   "homepage": "https://github.com/And-Rochaa/n8n-nodes-powerbi",
   "author": {
     "name": "Anderson Rocha",
-    "email": "anderson@inovadados.com.br"
+    "email": "anderson@inovadados.net.br"
   },
   "repository": {
     "type": "git",
