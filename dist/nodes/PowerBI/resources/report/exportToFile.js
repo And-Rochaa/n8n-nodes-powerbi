@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.exportToFile = void 0;
 const n8n_workflow_1 = require("n8n-workflow");
+const promises_1 = require("node:timers/promises");
 const GenericFunctions_1 = require("../../GenericFunctions");
 async function exportToFile(i) {
     var _a;
@@ -163,7 +164,7 @@ async function exportToFile(i) {
         let statusResponse = exportResponse;
         let elapsedTime = 0;
         while (exportStatus !== 'Succeeded' && exportStatus !== 'Failed' && elapsedTime < maxWaitTime) {
-            await new Promise(resolve => setTimeout(resolve, pollingInterval * 1000));
+            await (0, promises_1.setTimeout)(pollingInterval * 1000);
             elapsedTime += pollingInterval;
             statusResponse = await GenericFunctions_1.powerBiApiRequest.call(this, 'GET', statusEndpoint, {});
             exportStatus = statusResponse.status;

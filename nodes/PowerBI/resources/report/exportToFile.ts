@@ -6,6 +6,7 @@ import {
 	NodeOperationError,
 } from 'n8n-workflow';
 
+import { setTimeout as sleep } from 'node:timers/promises';
 import { powerBiApiRequest } from '../../GenericFunctions';
 
 // Interfaces for Power BI types
@@ -281,8 +282,8 @@ export async function exportToFile(
 		let elapsedTime = 0;
 		
 		while (exportStatus !== 'Succeeded' && exportStatus !== 'Failed' && elapsedTime < maxWaitTime) {
-			// Wait for the polling interval before the next check using setTimeout
-			await new Promise(resolve => setTimeout(resolve, pollingInterval * 1000));
+			// Wait for the polling interval before the next check
+			await sleep(pollingInterval * 1000);
 			elapsedTime += pollingInterval;
 			
 			// Check the current export job status
