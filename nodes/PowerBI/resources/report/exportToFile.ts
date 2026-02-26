@@ -4,9 +4,8 @@ import {
 	IDataObject,
 	NodeApiError,
 	NodeOperationError,
+	sleep,
 } from 'n8n-workflow';
-
-import { setTimeout as sleep } from 'node:timers/promises';
 import { powerBiApiRequest } from '../../GenericFunctions';
 
 // Interfaces for Power BI types

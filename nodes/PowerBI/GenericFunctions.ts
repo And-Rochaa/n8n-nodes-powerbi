@@ -160,7 +160,7 @@ export async function powerBiApiRequestAllItems(
 
 	do {
 		responseData = await powerBiApiRequest.call(this, method, endpoint, body, query);
-		returnData.push.apply(returnData, responseData[propertyName] as IDataObject[]);
+		returnData.push(...(responseData[propertyName] as IDataObject[]));
 		if (responseData.nextLink) {
 			// Extract the skiptoken from the nextLink URL
 			const skipTokenMatch = (responseData.nextLink as string).match(/\$skiptoken=([^&]+)/);

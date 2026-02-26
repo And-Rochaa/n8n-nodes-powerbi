@@ -86,7 +86,7 @@ async function powerBiApiRequestAllItems(propertyName, method, endpoint, body = 
     query.top = 100;
     do {
         responseData = await powerBiApiRequest.call(this, method, endpoint, body, query);
-        returnData.push.apply(returnData, responseData[propertyName]);
+        returnData.push(...responseData[propertyName]);
         if (responseData.nextLink) {
             const skipTokenMatch = responseData.nextLink.match(/\$skiptoken=([^&]+)/);
             if (skipTokenMatch && skipTokenMatch[1]) {
