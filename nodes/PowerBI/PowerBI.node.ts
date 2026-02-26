@@ -71,11 +71,13 @@ import {
 // Importing execution functions removed - now implemented directly
 
 export class PowerBi implements INodeType {
+
 	description: IExtendedNodeTypeDescription = {
 		displayName: 'Power BI',
 		name: 'powerBi',
 		icon: 'file:powerbi.svg',
 		group: ['transform'],
+		usableAsTool: true,
 		version: 1,
 		subtitle: '={{$parameter["resource"] + ": " + $parameter["operation"]}}',
 		description: 'Work with the Power BI API',
@@ -385,7 +387,7 @@ export class PowerBi implements INodeType {
 		const length = items.length;
 		
 		let responseData;
-		let endpoint = '';
+		const endpoint = '';
 
 		try {
 			// Execution based on selected resource and operation

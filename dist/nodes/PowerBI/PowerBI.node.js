@@ -17,6 +17,7 @@ class PowerBi {
             name: 'powerBi',
             icon: 'file:powerbi.svg',
             group: ['transform'],
+            usableAsTool: true,
             version: 1,
             subtitle: '={{$parameter["resource"] + ": " + $parameter["operation"]}}',
             description: 'Work with the Power BI API',
@@ -302,7 +303,7 @@ class PowerBi {
         const operation = this.getNodeParameter('operation', 0);
         const length = items.length;
         let responseData;
-        let endpoint = '';
+        const endpoint = '';
         try {
             for (let i = 0; i < length; i++) {
                 try {

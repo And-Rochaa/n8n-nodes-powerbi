@@ -51,12 +51,14 @@ class PowerBiApiOAuth2Api {
                 displayName: 'Token Key',
                 name: 'tokenKey',
                 type: 'hidden',
+                typeOptions: { password: true },
                 default: 'access_token',
             },
             {
                 displayName: 'Refresh Token Key',
                 name: 'refreshTokenKey',
                 type: 'hidden',
+                typeOptions: { password: true },
                 default: 'refresh_token',
             },
         ];
