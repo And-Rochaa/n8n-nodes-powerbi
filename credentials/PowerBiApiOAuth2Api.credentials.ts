@@ -59,6 +59,14 @@ export class PowerBiApiOAuth2Api implements ICredentialType {
             typeOptions: { password: true },
             default: 'refresh_token',
         },
+        // eslint-disable-next-line @n8n/community-nodes/credential-password-field
+        {
+            displayName: 'Token Expired Status Code',
+            name: 'tokenExpiredStatusCode',
+            type: 'number',
+            default: 403,
+            description: 'HTTP status code that indicates the token has expired. Power BI returns 403 instead of the standard 401.',
+        },
     ];
 
     test: ICredentialTestRequest = {
