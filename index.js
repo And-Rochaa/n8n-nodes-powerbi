@@ -5,6 +5,6 @@ module.exports = {
     PowerBiApi: require('./dist/credentials/PowerBiApi.credentials').PowerBiApi,
   },
   nodes: {
-    PowerBi: require('./dist/nodes/PowerBI/PowerBI.node').PowerBi,
+    PowerBi: require('./dist/nodes/PowerBI/PowerBi.node').PowerBi,
   },
 };
