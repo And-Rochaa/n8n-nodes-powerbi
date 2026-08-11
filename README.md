@@ -100,9 +100,18 @@ Comprehensive node that supports two authentication methods:
 This node supports two authentication methods:
 
 ### 1. OAuth2 Authentication
-- **Use case**: Applications acting on behalf of a user through interactive authentication flow
+- **Use case**: Applications acting on behalf of a user through interactive authentication flow, or app-only automation via a Service Principal
 - **Credential type**: Power BI OAuth2 API
 - **Token management**: Automatic refresh when tokens expire
+
+#### OAuth2 Grant Types
+
+The `Power BI OAuth2 API` credential supports two grant types, selectable from the **Grant Type** field:
+
+- **Authorization Code** *(default)*: Interactive, delegated authentication. A user signs in once, and the node acts on their behalf with their permissions.
+- **Client Credentials**: App-only authentication using a Service Principal. No user interaction is required — the app authenticates using its own Client ID and Client Secret, with permissions granted directly to the app registration (see [Configure API Permissions](#2-configure-api-permissions) below).
+
+Use Client Credentials when you need unattended automation (scheduled workflows, backend jobs) that should not depend on any individual user's session or permissions.
 
 ### 2. Bearer Token Authentication  
 - **Use case**: Direct API integration with pre-obtained tokens
@@ -185,6 +194,21 @@ Note the following values that will be needed to configure the node in n8n:
 - **Client Secret**: The value you copied when creating the client secret
 - **Tenant ID**: Found in **Overview** > **Directory (tenant) ID**
 
+### 5. Additional Setup for Client Credentials (Service Principal)
+
+If you plan to use the **Client Credentials** grant type, two extra steps are required beyond the standard app registration:
+
+1. **Enable Service Principals in the Power BI Admin Portal**
+   - Go to [https://app.powerbi.com/admin-portal](https://app.powerbi.com/admin-portal) → **Tenant settings** → **Developer settings**.
+   - Enable **"Allow service principals to use Power BI APIs"**, either for the whole organization or for a specific security group containing your app registration.
+   - This setting can take up to 15 minutes to propagate.
+   - Only a **Power BI Administrator** (not just an Entra ID admin) can access this setting.
+
+2. **Add the Service Principal to the target workspace(s)**
+   - In the Power BI workspace you want to access, go to **Access** → **Add people or groups**.
+   - Search for your app registration by name or Client ID, and grant it **Member**, **Contributor**, or **Admin** access as needed.
+   - Without this step, API calls scoped to a workspace (e.g. `/groups/{groupId}/...`) will fail even if authentication succeeds.
+
 ## Using the Node
 
 ### Power BI Node Configuration
@@ -197,7 +221,11 @@ Note the following values that will be needed to configure the node in n8n:
 1. Create a "Power BI OAuth2 API" credential with:
    - **Client ID**: The registered application ID
    - **Client Secret**: The generated client secret
-   - **Scope**: Leave blank or use `https://analysis.windows.net/powerbi/api/.default`
+   - **Grant Type**: `Authorization Code` (delegated) or `Client Credentials` (Service Principal)
+   - **Scope**: `https://analysis.windows.net/powerbi/api/.default offline_access` for Authorization Code, or `https://analysis.windows.net/powerbi/api/.default` (without `offline_access`) for Client Credentials
+
+2. **For Client Credentials only**, also set:
+   - **Access Token URL**: Replace `common` with your tenant ID, e.g. `https://login.microsoftonline.com/<your-tenant-id>/oauth2/v2.0/token`
 
 #### For Bearer Token Authentication:
 1. Create a "Power BI API" credential with:
