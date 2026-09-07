@@ -1,6 +1,8 @@
 import {
 	IExecuteFunctions,
 	INodeExecutionData,
+	JsonObject,
+	NodeApiError,
 	NodeOperationError,
 } from 'n8n-workflow';
 
@@ -72,6 +74,6 @@ export async function executeQueries(
 			);
 		}
 		// Re-throw other errors
-		throw error;
+		throw new NodeApiError(this.getNode(), error as JsonObject);
 	}
 }

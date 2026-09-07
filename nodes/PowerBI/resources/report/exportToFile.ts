@@ -2,6 +2,7 @@ import {
 	IExecuteFunctions,
 	INodeExecutionData,
 	IDataObject,
+	JsonObject,
 	NodeApiError,
 	NodeOperationError,
 	sleep,
@@ -427,6 +428,6 @@ export async function exportToFile(
 				httpCode: error.response.status ? error.response.status.toString() : '500',
 			});
 		}
-		throw error;
+		throw new NodeApiError(this.getNode(), error as JsonObject);
 	}
 }

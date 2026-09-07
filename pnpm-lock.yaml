@@ -7,10 +7,6 @@ settings:
 importers:
 
   .:
-    dependencies:
-      n8n-workflow:
-        specifier: '*'
-        version: 1.24.0
     devDependencies:
       '@n8n/eslint-plugin-community-nodes':
         specifier: ^0.8.0
@@ -33,6 +29,9 @@ importers:
       gulp:
         specifier: ^4.0.2
         version: 4.0.2
+      n8n-workflow:
+        specifier: 1.24.0
+        version: 1.24.0
       prettier:
         specifier: ^2.7.1
         version: 2.8.8

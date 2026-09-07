@@ -1,6 +1,7 @@
 import {
 	IExecuteFunctions,
 	INodeExecutionData,
+	JsonObject,
 	NodeApiError,
 } from 'n8n-workflow';
 
@@ -52,6 +53,6 @@ export async function list(
 				httpCode: error.response.status ? error.response.status.toString() : '500',
 			});
 		}
-		throw error;
+		throw new NodeApiError(this.getNode(), error as JsonObject);
 	}
 }

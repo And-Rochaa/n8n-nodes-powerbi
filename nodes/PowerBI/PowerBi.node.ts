@@ -5,6 +5,7 @@ import {
 	INodeType,
 	INodeTypeDescription,
 	JsonObject,
+	NodeApiError,
 	NodeOperationError,
 	NodeConnectionType,
 	IDataObject,
@@ -84,8 +85,8 @@ export class PowerBi implements INodeType {
 		defaults: {
 			name: 'Power BI',
 		},
-		inputs: ['main'],
-		outputs: ['main'],
+		inputs: [NodeConnectionType.Main],
+		outputs: [NodeConnectionType.Main],
 		credentials: [
 			{
 				name: 'powerBiApiOAuth2Api',
@@ -469,7 +470,7 @@ export class PowerBi implements INodeType {
 						returnData.push(...executionData);
 						continue;
 					}
-					throw error;
+					throw new NodeApiError(this.getNode(), error as JsonObject);
 				}
 			}
 			
@@ -478,7 +479,7 @@ export class PowerBi implements INodeType {
 			if (this.continueOnFail()) {
 				return [this.helpers.returnJsonArray({ error: error.message })];
 			}
-			throw error;
+			throw new NodeApiError(this.getNode(), error as JsonObject);
 		}
 	}
 }

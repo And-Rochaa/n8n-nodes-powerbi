@@ -281,7 +281,7 @@ async function exportToFile(i) {
                 httpCode: error.response.status ? error.response.status.toString() : '500',
             });
         }
-        throw error;
+        throw new n8n_workflow_1.NodeApiError(this.getNode(), error);
     }
 }
 exports.exportToFile = exportToFile;

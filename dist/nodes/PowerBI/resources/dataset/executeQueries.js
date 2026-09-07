@@ -37,7 +37,7 @@ async function executeQueries(i) {
         if (error.message && error.message.includes('DAX')) {
             throw new n8n_workflow_1.NodeOperationError(this.getNode(), `DAX query execution failed: ${error.message}`);
         }
-        throw error;
+        throw new n8n_workflow_1.NodeApiError(this.getNode(), error);
     }
 }
 exports.executeQueries = executeQueries;

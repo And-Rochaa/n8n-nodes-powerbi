@@ -24,8 +24,8 @@ class PowerBi {
             defaults: {
                 name: 'Power BI',
             },
-            inputs: ['main'],
-            outputs: ['main'],
+            inputs: ["main"],
+            outputs: ["main"],
             credentials: [
                 {
                     name: 'powerBiApiOAuth2Api',
@@ -360,7 +360,7 @@ class PowerBi {
                         returnData.push(...executionData);
                         continue;
                     }
-                    throw error;
+                    throw new n8n_workflow_1.NodeApiError(this.getNode(), error);
                 }
             }
             return [returnData];
@@ -369,7 +369,7 @@ class PowerBi {
             if (this.continueOnFail()) {
                 return [this.helpers.returnJsonArray({ error: error.message })];
             }
-            throw error;
+            throw new n8n_workflow_1.NodeApiError(this.getNode(), error);
         }
     }
 }
